@@ -123,6 +123,14 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 		game.images["level"] = new Image();
         game.images["level"].src = "./swamp.jpg";
         game.images["level"].onload = function(){ game.loadedResources += 1; }
+
+        game.images["gameover"] = new Image();
+        game.images["gameover"].src = "./gameover.jpg";
+        game.images["gameover"].onload = function(){ game.loadedResources += 1; }
+
+        game.images["welcome"] = new Image();
+        game.images["welcome"].src = "./welcome.jpg";
+        game.images["welcome"].onload = function(){ game.loadedResources += 1; }
 		
 		
 		game.images["player"] = new Image();
@@ -276,6 +284,11 @@ canvas{ background: url("swamp.jpg") no-repeat; }
         game.init();
         game.state = game.states.LOADING;
       
+        game.loadedResources = 0;
+        game.totalResources = 5;
+
+        game.resourcesLoaded = function(){ return game.loadedResources == game.totalResources; }
+
 
       
 
@@ -285,25 +298,32 @@ canvas{ background: url("swamp.jpg") no-repeat; }
             game.time = +(new Date());
             game.elapsedTime = game.time - game.previousTime;
             game.totalTime += game.elapsedTime;
-			 //var levelImage =game.images["level"];
-            _renderingContext.drawImage(game.images["level"], 0, 0, 800, 600);
-			
 
-            //_renderingContext.fillStyle = "rgb(0, 0, 0)";
-            //_renderingContext.fillRect(0, 0, 800, 600);
 
             switch(game.state)
             {
                 case game.states.LOADING:
+                    
+
+                    // draw
+                    (function(){
+                        var loadingText = "LOADING";
+                        var loadingLen = _renderingContext.measureText(loadingText);
+                        _renderingContext.save();
+                        _renderingContext.fillStyle = "rgb(255, 255, 255)";
+                        _renderingContext.fillText(loadingText, game.width/2 - loadingLen.width/2, 290);
+                        _renderingContext.restore();
+                    })();
+
                     (function(){
                         
                         if(game.resourcesLoaded()){
                             
-                            var welcomeText = "WELCOME TO STUPID ZOMBIES - HIT ENTER TO BEGIN";
-                            var welcomeLen = _renderingContext.measureText(welcomeText);
+                             var welcome =game.images["welcome"];
+                             _renderingContext.drawImage(welcome, 0, 0, 800, 600);
                             _renderingContext.save();
-                            _renderingContext.fillStyle = "rgb(255, 255, 255)";
-                            _renderingContext.fillText(welcomeText, game.width/2 - welcomeLen.width/2, 290);
+                            //_renderingContext.fillStyle = "rgb(255, 255, 255)";
+                            //_renderingContext.fillText(welcomeText, game.width/2 - welcomeLen.width/2, 290);
                             _renderingContext.restore();
 
                             if(keyboard.keyPressed("enter")){
@@ -315,26 +335,26 @@ canvas{ background: url("swamp.jpg") no-repeat; }
                         }
                     })();
 
-                    // draw
-                    //(function(){
-                    //    var loadingText = "LOADING";
-                    //    var loadingLen = _renderingContext.measureText(loadingText);
-                    //    _renderingContext.save();
-                    //    _renderingContext.fillStyle = "rgb(255, 255, 255)";
-                    //    _renderingContext.fillText(loadingText, game.width/2 - loadingLen.width/2, 290);
-                    //    _renderingContext.restore();
-                    //})();
 
                     break;
 
                 case game.states.PLAYING:
-                    
+                        var levelImage =game.images["level"];
+                        _renderingContext.drawImage(levelImage, 0, 0, 800, 600);
+                     //_renderingContext.fillStyle = "rgb(0, 0, 0)";
+                   // _renderingContext.fillRect(0, 0, 800, 600);
                     game.update();
                     game.draw();
                     break;
                 case game.states.GAMEOVER:
                     // update
                     (function(){
+
+                        
+                            //_renderingContext.fillStyle = "rgb(255, 255, 255)";
+                            //_renderingContext.fillText(welcomeText, game.width/2 - welcomeLen.width/2, 290);
+                            _renderingContext.restore();
+
                         if(keyboard.keyPressed("enter")){
                             game.init();
 				
@@ -344,11 +364,22 @@ canvas{ background: url("swamp.jpg") no-repeat; }
                     // draw
                     (function () {
                         var scoreText = "SCORE: " + game.score;
-                        var scoreLen = _renderingContext.measureText(scoreText);
+                        //var scoreLen = _renderingContext.measureText(scoreText);
 
                         _renderingContext.save();
-                        _renderingContext.fillStyle = "rgb(255, 255, 255)";
-                        _renderingContext.fillText(scoreText, game.width/2 - scoreLen.width/2, 290);
+                         var gameover =game.images["gameover"];
+                        _renderingContext.drawImage(gameover, 0, 0, 800, 600);
+                      
+
+                       // _renderingContext.fillStyle = "rgb(255, 255, 255)";
+                       _renderingContext.font = '40pt Calibri';
+                       _renderingContext.fillStyle = 'red';
+                        _renderingContext.fillText(scoreText, 368, 229);
+
+                        _renderingContext.font = '20pt Calibri';
+                       _renderingContext.fillStyle = 'white';
+                        _renderingContext.fillText('Loser, hit [enter] to try again', 340, 350);
+
                         _renderingContext.restore();
                     })();
 
