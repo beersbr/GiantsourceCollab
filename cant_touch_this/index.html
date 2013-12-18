@@ -142,34 +142,35 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 		function Shoot() {
             	
 				
-				//console.log('DIRECTION = ' + game.player.currentDirection);
-				var vx = 0;
-				var vy = 0;
-				switch (game.player.currentDirection) {
-					// Top
-					case 'left':
-						this.rect = new Rect(game.player.rect.x, game.player.rect.y, 25, 3);
-						
-						vx = -100;
-						break;
-						// Left
-					case 'right':
-						this.rect= new Rect(game.player.rect.x, game.player.rect.y, 25, 3);
-						vx = 100;
-						break;
-						// Bottom
-					case 'up':
-						this.rect = new Rect(game.player.rect.x, game.player.rect.y, 3, 25);
-						vy = -100;
-						break;
-						// Right
-					case 'down':
-						this.rect = new Rect(game.player.rect.x, (game.player.rect.y+(game.player.rect.h/2)), 3, 25);
-						vy = 100;
-						
-						break;
-	
-				} // end switch
+    				//console.log('DIRECTION = ' + game.player.currentDirection);
+    				var vx = 0;
+    				var vy = 0;
+    				switch (game.player.shootDirection) {
+    					// Top
+    					case 'left':
+    						this.rect = new Rect(game.player.rect.x, game.player.rect.y, 25, 3);
+    						
+    						vx = -100;
+    						break;
+    						// Left
+    					case 'right':
+    						this.rect= new Rect(game.player.rect.x, game.player.rect.y, 25, 3);
+    						vx = 100;
+    						break;
+    						// Bottom
+    					case 'up':
+    						this.rect = new Rect(game.player.rect.x, game.player.rect.y, 3, 25);
+    						vy = -100;
+    						break;
+    						// Right
+    					case 'down':
+    						this.rect = new Rect(game.player.rect.x, (game.player.rect.y+(game.player.rect.h/2)), 3, 25);
+    						vy = 100;
+    						
+    						break;
+    	
+    				} // end switch
+                
 				
 				this.draw = function () {
 					_renderingContext.save();
@@ -178,7 +179,8 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 						_renderingContext.fillStyle = "rgb(0, 0, 255)";
 					 	_renderingContext.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
 						_renderingContext.restore();
-				}
+				
+                 }
 
 				this.update = function () {
 					var moveSpeedx = vx * (game.elapsedTime / 500);
@@ -198,11 +200,12 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 		}
 		
 		
-		 function Player() {
+		function Player() {
           
             var image = game.images["player"];
          	this.rect = new Rect(390, 290, 41, 101);
 			this.currentDirecton = null;
+            this.shootDirection = null;
 			this.reloading = false;
 			this.zombiesKilled = 0;
             this.draw = function () {
@@ -211,6 +214,23 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 
                 //	_renderingContext.fillStyle = "rgb(0, 0, 255)";
                 // 	_renderingContext.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+                _renderingContext.restore();
+            }
+
+        }
+
+
+        function LoadLevel() {
+          
+            var image = game.images["level"];
+           
+            
+            this.draw = function () {
+                _renderingContext.save();
+                
+                 _renderingContext.drawImage(image, 0, 0, image.width, image.height);
+                //  _renderingContext.fillStyle = "rgb(0, 0, 255)";
+                //  _renderingContext.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
                 _renderingContext.restore();
             }
 
@@ -258,12 +278,15 @@ canvas{ background: url("swamp.jpg") no-repeat; }
       
 
         game.run = function () {
+           // LoadLevel();
             game.previousTime = game.time;
             game.time = +(new Date());
             game.elapsedTime = game.time - game.previousTime;
             game.totalTime += game.elapsedTime;
+			 //var levelImage =game.images["level"];
+            //_renderingContext.drawImage(levelImage, 0, 0, 800, 600);
 			
-			
+
             _renderingContext.fillStyle = "rgb(0, 0, 0)";
             _renderingContext.fillRect(0, 0, 800, 600);
 
@@ -271,8 +294,22 @@ canvas{ background: url("swamp.jpg") no-repeat; }
             {
                 case game.states.LOADING:
                     (function(){
+                        
                         if(game.resourcesLoaded()){
-                            game.state = game.states.PLAYING;
+                            
+                            var welcomeText = "WELCOME TO STUPID ZOMBIES - HIT ENTER TO BEGIN";
+                            var welcomeLen = _renderingContext.measureText(welcomeText);
+                            _renderingContext.save();
+                            _renderingContext.fillStyle = "rgb(255, 255, 255)";
+                            _renderingContext.fillText(welcomeText, game.width/2 - welcomeLen.width/2, 290);
+                            _renderingContext.restore();
+
+                            if(keyboard.keyPressed("enter")){
+                                game.init();
+                
+                            }
+
+                            //game.state = game.states.PLAYING;
                         }
                     })();
 
@@ -289,6 +326,7 @@ canvas{ background: url("swamp.jpg") no-repeat; }
                     break;
 
                 case game.states.PLAYING:
+                    
                     game.update();
                     game.draw();
                     break;
@@ -355,8 +393,28 @@ canvas{ background: url("swamp.jpg") no-repeat; }
                 game.player.rect.y += moveSpeed;
 				game.player.currentDirection = 'down';
             }
-			
-			if (keyboard.keyIsDown("p")) {
+
+            //Shooting
+			var shoot = false;
+             if (keyboard.keyIsDown("left_arrow")) {
+                shoot = true;
+                game.player.shootDirection = 'left';
+            }
+            if (keyboard.keyIsDown("right_arrow")) {
+                shoot = true;
+                game.player.shootDirection = 'right';
+            }
+            if (keyboard.keyIsDown("up_arrow")) {
+                shoot = true;
+                game.player.shootDirection = 'up';
+            }
+            if (keyboard.keyIsDown("down_arrow")) {
+                shoot = true;
+                game.player.shootDirection = 'down';
+
+            }
+
+			if (shoot) {
 				
 				//console.log('enter');
 				
