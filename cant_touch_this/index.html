@@ -3,7 +3,7 @@
 <head>
 	<title></title>
 <style>
-canvas{ background-color: black; }
+canvas{ background: url("swamp.jpg") no-repeat; }
 </style>
 
 	<script src="keyboard.js"></script>
@@ -29,10 +29,11 @@ canvas{ background-color: black; }
 
         function Enemy() {
             var rand = RandomInt(3);
-            this.rect = new Rect(0, 0, 20 + RandomInt(20), 20 + RandomInt(20));
+           
             var vx = 0;
             var vy = 0;
             var image = game.images["enemy"];
+			 this.rect = new Rect(0, 0, image.width,image.height);
             switch (rand) {
                 // Top
                 case 0:
@@ -105,6 +106,24 @@ canvas{ background-color: black; }
 
         var _renderingContext = null;
         var keyboard = new KeyboardHandler();
+		
+		
+		game.images = {};
+		
+		game.images["enemy"] = new Image();
+        game.images["enemy"].src = "./enemy2.png";
+        game.images["enemy"].onload = function(){ game.loadedResources += 1; }
+		
+		game.images["level"] = new Image();
+        game.images["level"].src = "./swamp.png";
+        game.images["level"].onload = function(){ game.loadedResources += 1; }
+		
+		
+		game.images["player"] = new Image();
+        game.images["player"].src = "./player.png";
+        game.images["player"].onload = function(){ game.loadedResources += 1; }
+		
+		
 
         function Rect(x, y, w, h) {
             this.x = x || 0;
@@ -118,6 +137,83 @@ canvas{ background-color: black; }
                 _renderingContext.fillRect(this.x, this.y, this.w, this.h);
                 _renderingContext.restore();
             }
+        }
+		
+		function Shoot() {
+            	
+				
+				//console.log('DIRECTION = ' + game.player.currentDirection);
+				var vx = 0;
+				var vy = 0;
+				switch (game.player.currentDirection) {
+					// Top
+					case 'left':
+						this.rect = new Rect(game.player.rect.x, game.player.rect.y, 25, 3);
+						
+						vx = -100;
+						break;
+						// Left
+					case 'right':
+						this.rect= new Rect(game.player.rect.x, game.player.rect.y, 25, 3);
+						vx = 100;
+						break;
+						// Bottom
+					case 'up':
+						this.rect = new Rect(game.player.rect.x, game.player.rect.y, 3, 25);
+						vy = -100;
+						break;
+						// Right
+					case 'down':
+						this.rect = new Rect(game.player.rect.x, (game.player.rect.y+(game.player.rect.h/2)), 3, 25);
+						vy = 100;
+						
+						break;
+	
+				} // end switch
+				
+				this.draw = function () {
+					_renderingContext.save();
+					//_renderingContext.drawImage(image, 0, 0, image.width, image.height, this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+	
+						_renderingContext.fillStyle = "rgb(0, 0, 255)";
+					 	_renderingContext.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+						_renderingContext.restore();
+				}
+
+				this.update = function () {
+					var moveSpeedx = vx * (game.elapsedTime / 500);
+					var moveSpeedy = vy * (game.elapsedTime / 500);
+	
+					this.rect.x += moveSpeedx;
+					this.rect.y += moveSpeedy;
+	
+					if (this.x < 0 || this.x > game.width || this.y < 0 || this.y > game.height)  { return false;
+						
+					}
+					
+					return true;
+	
+					
+				}
+		}
+		
+		
+		 function Player() {
+          
+            var image = game.images["player"];
+         	this.rect = new Rect(390, 290, 41, 101);
+			this.currentDirecton = null;
+			this.reloading = false;
+			this.zombiesKilled = 0;
+            this.draw = function () {
+                _renderingContext.save();
+                _renderingContext.drawImage(image, 0, 0, image.width, image.height,this.rect.x,this.rect.y,this.rect.w,this.rect.h);
+
+                //	_renderingContext.fillStyle = "rgb(0, 0, 255)";
+                // 	_renderingContext.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+                _renderingContext.restore();
+            }
+
         }
 
         Object.defineProperty(game, "renderingContext", {
@@ -139,33 +235,35 @@ canvas{ background-color: black; }
         game.state = game.states.PLAYING;
 	
         game.init = function() {
-
-            game.rect = new Rect(390, 290, 20, 20);
+			
+			game.player = new Player();
+            //game.rect = new Rect(390, 290, 20, 20);
             game.time = +(new Date());
             game.totalTime = 0;
             game.score = 0;
             game.state = game.states.PLAYING;
             enemies = [];
+			bullets = [];
         }
-
+		
+		
         game.init();
         game.state = game.states.LOADING;
-        game.images = {};
+      
         game.loadedResources = 0;
-        game.totalResources = 1;
+        game.totalResources = 2;
 
         game.resourcesLoaded = function(){ return game.loadedResources == game.totalResources; }
 
-        game.images["enemy"] = new Image();
-        game.images["enemy"].src = "./enemy.png";
-        game.images["enemy"].onload = function(){ game.loadedResources += 1; }
+      
 
         game.run = function () {
             game.previousTime = game.time;
             game.time = +(new Date());
             game.elapsedTime = game.time - game.previousTime;
             game.totalTime += game.elapsedTime;
-
+			
+			
             _renderingContext.fillStyle = "rgb(0, 0, 0)";
             _renderingContext.fillRect(0, 0, 800, 600);
 
@@ -222,32 +320,68 @@ canvas{ background-color: black; }
         }
 
         game.update = function () {
-            var moveSpeed = 100 * (game.elapsedTime / 1000);
-            game.score = game.totalTime;
+            var moveSpeed;
+            game.score = game.totalTime +(game.player.zombiesKilled*1000);
+			
+			var scoreText = "SCORE: " + game.score;
+            var scoreLen = _renderingContext.measureText(scoreText);
 
+             _renderingContext.fillStyle = "rgb(255, 255, 255)";
+             _renderingContext.fillText(scoreText, 25, 10);
+						
+						
+			
+			if (keyboard.keyIsDown("shift")) {
+                moveSpeed = 200 * (game.elapsedTime / 1000);
+            } else {
+				 moveSpeed = 100 * (game.elapsedTime / 1000);
+				
+			}
+			
             // Update character movement
             if (keyboard.keyIsDown("a")) {
-                game.rect.x -= moveSpeed;
+                game.player.rect.x -= moveSpeed;
+				game.player.currentDirection = 'left';
             }
             if (keyboard.keyIsDown("d")) {
-                game.rect.x += moveSpeed;
+                game.player.rect.x += moveSpeed;
+				game.player.currentDirection = 'right';
             }
             if (keyboard.keyIsDown("w")) {
-                game.rect.y -= moveSpeed;
+                game.player.rect.y -= moveSpeed;
+				game.player.currentDirection = 'up';
             }
             if (keyboard.keyIsDown("s")) {
-                game.rect.y += moveSpeed;
+                game.player.rect.y += moveSpeed;
+				game.player.currentDirection = 'down';
+            }
+			
+			if (keyboard.keyIsDown("p")) {
+				
+				//console.log('enter');
+				
+			   if (!game.player.reloading) {
+				   game.player.reloading = true;
+				   bullets.push(new Shoot());
+				   
+			   } else {
+				   
+					 setTimeout(function() {
+						 game.player.reloading = false;
+					 },500)
+			   }
+               
             }
 
             // Update enemies
-            if (RandomInt(game.totalTime) < game.totalTime * 0.10 )
+            if (RandomInt(game.totalTime) < game.totalTime * 0.05 )
                 enemies.push(new Enemy());
             // Loop through each enemy
             for (var i = 0; i < enemies.length; ++i){
        	 
                 // Check if player and enemy collided
                 //console.log(enemies[i]);
-                if(collide(game.rect,enemies[i].rect)) game.state = game.states.GAMEOVER;
+                if(collide(game.player.rect,enemies[i].rect)) game.state = game.states.GAMEOVER;
 
                 if(!enemies[i].update()){
                     // If the enemy is off the screen
@@ -256,15 +390,47 @@ canvas{ background-color: black; }
 
 
             }
+			
+			 // Loop through each bullets
+            for (var i = 0; i < bullets.length; ++i){
+       	 			 for (var z = 0; z < enemies.length; ++z){
+						 
+						 try {	
+						 if(collide(bullets[i].rect,enemies[z].rect))  {
+								 bullets.splice(i, 1);
+								 enemies.splice(z, 1);
+								 game.player.zombiesKilled++;
+						
+							}
+						 }catch(err){}
+					 }
+                // Check if player and enemy collided
+                //console.log(enemies[i]);
+               
+			try {	
+                if(!bullets[i].update()){
+                    // If the enemy is off the screen
+                    bullets.splice(i, 1);
+                }
+			}catch(err){}
+
+
+            }
+			
 
 
         }
 
         game.draw = function () {
-            game.rect.draw();
+            game.player.draw();
 
             for (var i = 0; i < enemies.length; ++i)
                 enemies[i].draw();
+			
+			try {	
+			for (var i = 0; i < bullets.length; ++i)
+                bullets[i].draw();
+			}catch(err){}
         }
 
         return game;
