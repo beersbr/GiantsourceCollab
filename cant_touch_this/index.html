@@ -1,0 +1,299 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title>
+<style>
+canvas{ background-color: black; }
+</style>
+
+	<script src="keyboard.js"></script>
+
+<script>
+
+    requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
+            	window.webkitRequestAnimationFrame ||
+            	window.mozRequestAnimationFrame ||
+            	window.oRequestAnimationFrame ||
+            	window.msRequestAnimationFrame ||
+            	function (/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+            	    window.setTimeout(callback, 1000 / 60);
+            	};
+    })();
+
+
+
+    GAME = (function () {
+
+
+
+        function Enemy() {
+            var rand = RandomInt(3);
+            this.rect = new Rect(0, 0, 20 + RandomInt(20), 20 + RandomInt(20));
+            var vx = 0;
+            var vy = 0;
+            var image = game.images["enemy"];
+            switch (rand) {
+                // Top
+                case 0:
+                    this.rect.x = RandomInt(game.width);
+                    this.rect.y = 0;
+                    vy = 100 + RandomInt(100);
+                    break;
+                    // Left
+                case 1:
+                    this.rect.x = 0;
+                    this.rect.y = RandomInt(game.height);
+                    vx = 100 + RandomInt(100);
+                    break;
+                    // Bottom
+                case 2:
+                    this.rect.x = RandomInt(game.width);
+                    this.rect.y = game.height;
+                    vy = -100 - RandomInt(100);
+                    break;
+                    // Right
+                case 3:
+                    this.rect.x = game.width;
+                    this.rect.y = RandomInt(game.height);
+                    vx = -100 - RandomInt(100);
+                    break;
+
+            } // end switch
+
+            this.draw = function () {
+                _renderingContext.save();
+                _renderingContext.drawImage(image, 0, 0, image.width, image.height, this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+
+                //	_renderingContext.fillStyle = "rgb(0, 0, 255)";
+                // 	_renderingContext.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
+                _renderingContext.restore();
+            }
+
+            this.update = function () {
+                var moveSpeedx = vx * (game.elapsedTime / 1000);
+                var moveSpeedy = vy * (game.elapsedTime / 1000);
+
+                this.rect.x += moveSpeedx;
+                this.rect.y += moveSpeedy;
+
+                if (this.x < 0 || this.x > game.width || this.y < 0 || this.y > game.height) return false;
+
+                return true;
+            }
+        }
+
+        function RandomInt(max) {
+            return parseInt(Math.random() * max);
+        }
+
+        function collide(rect1, rect2) {
+            if (rect1.x > rect2.x + rect2.w) return false;
+            if (rect1.x + rect1.w < rect2.x) return false;
+            if (rect1.y > rect2.y + rect2.h) return false;
+            if (rect1.y + rect1.h < rect2.y) return false;
+            return true;
+        }
+
+
+        var startTime = 0.0;
+
+        var game = {};
+
+        game.width = 800;
+        game.height = 600;
+
+        var _renderingContext = null;
+        var keyboard = new KeyboardHandler();
+
+        function Rect(x, y, w, h) {
+            this.x = x || 0;
+            this.y = y || 0;
+            this.w = w || 0;
+            this.h = h || 0;
+
+            this.draw = function () {
+                _renderingContext.save();
+                _renderingContext.fillStyle = "rgb(255, 0, 255)";
+                _renderingContext.fillRect(this.x, this.y, this.w, this.h);
+                _renderingContext.restore();
+            }
+        }
+
+        Object.defineProperty(game, "renderingContext", {
+            set: function (e) {
+
+                var temp = _renderingContext;
+                _renderingContext = e.getContext("2d");
+                _renderingContext.canvas = temp;
+            },
+            get: function () {
+                return _renderingContext;
+            }
+        });
+
+        game.states = {};
+        game.states.PLAYING = 1;
+        game.states.GAMEOVER = 2;
+        game.states.LOADING = 3;
+        game.state = game.states.PLAYING;
+	
+        game.init = function() {
+
+            game.rect = new Rect(390, 290, 20, 20);
+            game.time = +(new Date());
+            game.totalTime = 0;
+            game.score = 0;
+            game.state = game.states.PLAYING;
+            enemies = [];
+        }
+
+        game.init();
+        game.state = game.states.LOADING;
+        game.images = {};
+        game.loadedResources = 0;
+        game.totalResources = 1;
+
+        game.resourcesLoaded = function(){ return game.loadedResources == game.totalResources; }
+
+        game.images["enemy"] = new Image();
+        game.images["enemy"].src = "./enemy.png";
+        game.images["enemy"].onload = function(){ game.loadedResources += 1; }
+
+        game.run = function () {
+            game.previousTime = game.time;
+            game.time = +(new Date());
+            game.elapsedTime = game.time - game.previousTime;
+            game.totalTime += game.elapsedTime;
+
+            _renderingContext.fillStyle = "rgb(0, 0, 0)";
+            _renderingContext.fillRect(0, 0, 800, 600);
+
+            switch(game.state)
+            {
+                case game.states.LOADING:
+                    (function(){
+                        if(game.resourcesLoaded()){
+                            game.state = game.states.PLAYING;
+                        }
+                    })();
+
+                    // draw
+                    (function(){
+                        var loadingText = "LOADING";
+                        var loadingLen = _renderingContext.measureText(loadingText);
+                        _renderingContext.save();
+                        _renderingContext.fillStyle = "rgb(255, 255, 255)";
+                        _renderingContext.fillText(loadingText, game.width/2 - loadingLen.width/2, 290);
+                        _renderingContext.restore();
+                    })();
+
+                    break;
+
+                case game.states.PLAYING:
+                    game.update();
+                    game.draw();
+                    break;
+                case game.states.GAMEOVER:
+                    // update
+                    (function(){
+                        if(keyboard.keyPressed("enter")){
+                            game.init();
+				
+                        }
+                    })();
+
+                    // draw
+                    (function(){
+                        var scoreText = "SCORE: " + game.score;
+                        var scoreLen = _renderingContext.measureText(scoreText);
+
+                        _renderingContext.save();
+                        _renderingContext.fillStyle = "rgb(255, 255, 255)";
+                        _renderingContext.fillText(scoreText, game.width/2 - scoreLen.width/2, 290);
+                        _renderingContext.restore();
+                    })();
+
+                    break;
+            }
+
+            keyboard.cleaner();
+            requestAnimFrame(game.run);
+        }
+
+        game.update = function () {
+            var moveSpeed = 100 * (game.elapsedTime / 1000);
+            game.score = game.totalTime;
+
+            // Update character movement
+            if (keyboard.keyIsDown("a")) {
+                game.rect.x -= moveSpeed;
+            }
+            if (keyboard.keyIsDown("d")) {
+                game.rect.x += moveSpeed;
+            }
+            if (keyboard.keyIsDown("w")) {
+                game.rect.y -= moveSpeed;
+            }
+            if (keyboard.keyIsDown("s")) {
+                game.rect.y += moveSpeed;
+            }
+
+            // Update enemies
+            if (RandomInt(game.totalTime) < game.totalTime * 0.10 )
+                enemies.push(new Enemy());
+            // Loop through each enemy
+            for (var i = 0; i < enemies.length; ++i){
+       	 
+                // Check if player and enemy collided
+                //console.log(enemies[i]);
+                if(collide(game.rect,enemies[i].rect)) game.state = game.states.GAMEOVER;
+
+                if(!enemies[i].update()){
+                    // If the enemy is off the screen
+                    enemies.splice(i, 1);
+                }
+
+
+            }
+
+
+        }
+
+        game.draw = function () {
+            game.rect.draw();
+
+            for (var i = 0; i < enemies.length; ++i)
+                enemies[i].draw();
+        }
+
+        return game;
+
+    })();
+
+
+
+
+
+
+    window.onload = function () {
+        GAME.renderingContext = document.getElementById("canvas");
+
+        GAME.run();
+
+    }
+</script>
+</head>
+
+<body>
+<canvas id="canvas" width="800px" height="600px"></canvas>
+</body>
+</html>
+
+
+
+
+
+
+
+
