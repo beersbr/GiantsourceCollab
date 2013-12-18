@@ -110,12 +110,18 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 		
 		game.images = {};
 		
+
+		game.loadedResources = 0;
+		game.totalResources = 3;
+
+		game.resourcesLoaded = function () { return game.loadedResources == game.totalResources; }
+
 		game.images["enemy"] = new Image();
         game.images["enemy"].src = "./enemy2.png";
         game.images["enemy"].onload = function(){ game.loadedResources += 1; }
 		
 		game.images["level"] = new Image();
-        game.images["level"].src = "./swamp.png";
+        game.images["level"].src = "./swamp.jpg";
         game.images["level"].onload = function(){ game.loadedResources += 1; }
 		
 		
@@ -270,10 +276,6 @@ canvas{ background: url("swamp.jpg") no-repeat; }
         game.init();
         game.state = game.states.LOADING;
       
-        game.loadedResources = 0;
-        game.totalResources = 2;
-
-        game.resourcesLoaded = function(){ return game.loadedResources == game.totalResources; }
 
       
 
@@ -284,11 +286,11 @@ canvas{ background: url("swamp.jpg") no-repeat; }
             game.elapsedTime = game.time - game.previousTime;
             game.totalTime += game.elapsedTime;
 			 //var levelImage =game.images["level"];
-            //_renderingContext.drawImage(levelImage, 0, 0, 800, 600);
+            _renderingContext.drawImage(game.images["level"], 0, 0, 800, 600);
 			
 
-            _renderingContext.fillStyle = "rgb(0, 0, 0)";
-            _renderingContext.fillRect(0, 0, 800, 600);
+            //_renderingContext.fillStyle = "rgb(0, 0, 0)";
+            //_renderingContext.fillRect(0, 0, 800, 600);
 
             switch(game.state)
             {
@@ -340,7 +342,7 @@ canvas{ background: url("swamp.jpg") no-repeat; }
                     })();
 
                     // draw
-                    (function(){
+                    (function () {
                         var scoreText = "SCORE: " + game.score;
                         var scoreLen = _renderingContext.measureText(scoreText);
 
