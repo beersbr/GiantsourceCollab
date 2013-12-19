@@ -294,24 +294,23 @@ canvas{ background: url("swamp.jpg") no-repeat; }
             }
 
             if (GAME.Keyboard.keyIsDown("left_arrow")) {
-                this.shoot(new Vector(-1, 0));
+                this.shoot(new VECTOR.Vector(-1, 0));
             }
             if (GAME.Keyboard.keyIsDown("right_arrow")) {
-                this.shoot(new Vector(1, 0));
+                this.shoot(new VECTOR.Vector(1, 0));
             }
             if (GAME.Keyboard.keyIsDown("up_arrow")) {
-                this.shoot(new Vector(0, 1));
+                this.shoot(new VECTOR.Vector(0, 1));
             }
             if (GAME.Keyboard.keyIsDown("down_arrow")) {
-                this.shoot(new Vector(0, -1));
+                this.shoot(new VECTOR.Vector(0, -1));
             }
 		
             this.velocity = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
             this.position = VECTOR.add(this.position, this.velocity);
-            console.log(this.position);
         }
 
-        this.Shoot = function(direction) {
+        this.shoot = function(direction) {
             if(! isShooting){
                 lastShotTime = +(new Date());
                 isShooting = true;
