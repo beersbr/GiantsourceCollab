@@ -3,13 +3,86 @@
 <head>
     <title></title>
 <style>
-canvas{ background: url("swamp.jpg") no-repeat; }
+canvas{ background-color:black; }
 </style>
 
     <script src="keyboard.js"></script>
 
 <script>
-
+	
+	var gameConfig = {
+		"settings": {
+			"title":"Stupid Zombies",
+			"width":800,
+			"height":600,	
+			
+			
+		},
+		"resources": {
+			"characters": {
+				"player1":{
+					"name": "Phillip",
+					"src": "player1Sprite.png",
+					"type":"Player"	
+					
+				},
+				"player2":{
+					"name": "Jorge",
+					"src": "player2Sprite.png",
+					"type":"Player",
+					"fx": {
+						
+						
+					}
+					
+					
+				},
+				"enemy1":{
+					"name": "Office Zombie",
+					"src": "zombieSprite.png",
+					"type":"Enemy"	
+					
+					
+				},
+				"enemy2": {
+					"name": "Boss Zombie",
+					"src": "zombie2Sprite.png",
+					"type":"Enemy"	
+					
+					
+				}
+				
+			},
+			"levels": {
+				"1" :{
+					"name":"Swamp",
+					"src":"swamp.jpg"	
+					
+				}
+				
+				
+			},
+			"screens": {
+				
+				"welcome": {
+					"name":"Welcome",
+					"src":"welcome.jpg"	
+				},
+				"gameover": {
+					"name":"Game Over",
+					"src":"gameover.jpg"	
+					
+				}
+				
+			}
+			
+			
+		}
+		
+		
+		
+	}
+	
     requestAnimFrame = (function () {
         return window.requestAnimationFrame ||
        		 window.webkitRequestAnimationFrame ||
@@ -143,12 +216,13 @@ canvas{ background: url("swamp.jpg") no-repeat; }
         if(!this.image) {
             // Some error
         }
-
+        //console.log(args);
         this.imageWidth = this.image.width;
         this.imageHeight = this.image.height;
 
         this.framesCount = this.imageWidth / this.frameWidth;
         this.currentFrame = 0;
+		//console.log('TOTAL FRAMES = '+ this.framesCount);
         this.currentFrameTime = 0;
         this.currentFrameElapsedTime = 0;
         this.currentFrameImage = document.createElement("canvas");
@@ -213,13 +287,79 @@ canvas{ background: url("swamp.jpg") no-repeat; }
         this.update = function (elapsedTime) { throw "NOT IMPLEMENTED"; };
         this.draw = function (renderContext) { throw "NOT IMPLEMENTED"; };
     }
+	
+	function Enemy(args) {
+             if(args == undefined) args = {};
+       		 InheritFrom(this, Entity, args);
 
+			this.image = RESOURCES.get(gameConfig.resources.characters['enemy1'].name);
+			this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 70, frameWidth: 70});
+			
+			var moveSpeed = 150;
+			
+			var rand = RandomInt(3);
+      	
+            switch (rand) {
+                // Top
+                case 0:
+                    this.position.x = RandomInt(GAME.width);
+                    this.position.y = 0;
+                    this.velocity.y = 100 + RandomInt(100);
+                    break;
+                    // Left
+                case 1:
+                    this.position.x = 0;
+                    this.position.y = RandomInt(GAME.height);
+                    this.velocity.x = 100 + RandomInt(100);
+                    break;
+                    // Bottom
+                case 2:
+                    this.position.x = RandomInt(GAME.width);
+                    this.position.y = GAME.height;
+                    this.velocity.y = -100 - RandomInt(100);
+                    break;
+                    // Right
+                case 3:
+                    this.position.x = GAME.width;
+                    this.position.y = RandomInt(GAME.height);
+                    this.velocity.x = -100 - RandomInt(100);
+                    break;
+
+            } // end switch
+
+            this.draw = function (rc) {
+				 rc.save();
+           	 	var image = this.sprite.render();
+            	rc.fillStyle = "rgb(255, 0, 255)";
+				rc.drawImage(image, this.position.x, this.position.y, this.size.x, this.size.y);
+				
+				rc.restore();
+				
+            }
+
+            this.update = function () {
+              	
+                var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
+                var moveSpeedy = this.velocity.y * (GAME.elapsedTime / 1000);
+
+                this.position.x += moveSpeedx;
+                this.position.y += moveSpeedy;
+
+
+                if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
+
+                return true;
+            }
+        }
+	
+	
     function Player(args){
         if(args == undefined) args = {};
         InheritFrom(this, Entity, args);
-
-        this.image = RESOURCES.get("player");
-        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 70, frameWidth: 70});
+        //console.log(args);
+        this.image = RESOURCES.get(args.selectedPlayer);
+        
+        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 101, frameWidth: 41});
 
 
         var moveSpeed = 150, // pixels/second
@@ -338,93 +478,7 @@ canvas{ background: url("swamp.jpg") no-repeat; }
         }
     }// end of player
 
-
-    GAME = (function () {
-
-
-
-        function Enemy() {
-            var rand = RandomInt(3);
-      	 
-            var vx = 0;
-            var vy = 0;
-            var image = game.images["enemy"];
-            this.rect = new Rect(0, 0, image.width,image.height);
-            switch (rand) {
-                // Top
-                case 0:
-                    this.rect.x = RandomInt(game.width);
-                    this.rect.y = 0;
-                    vy = 100 + RandomInt(100);
-                    break;
-                    // Left
-                case 1:
-                    this.rect.x = 0;
-                    this.rect.y = RandomInt(game.height);
-                    vx = 100 + RandomInt(100);
-                    break;
-                    // Bottom
-                case 2:
-                    this.rect.x = RandomInt(game.width);
-                    this.rect.y = game.height;
-                    vy = -100 - RandomInt(100);
-                    break;
-                    // Right
-                case 3:
-                    this.rect.x = game.width;
-                    this.rect.y = RandomInt(game.height);
-                    vx = -100 - RandomInt(100);
-                    break;
-
-            } // end switch
-
-            this.draw = function () {
-                _renderingContext.save();
-                _renderingContext.drawImage(image, 0, 0, image.width, image.height, this.rect.x, this.rect.y, this.rect.w, this.rect.h);
-
-                //    _renderingContext.fillStyle = "rgb(0, 0, 255)";
-                //     _renderingContext.fillRect(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
-                _renderingContext.restore();
-            }
-
-            this.update = function () {
-                var moveSpeedx = vx * (GAME.elapsedTime / 1000);
-                var moveSpeedy = vy * (GAME.elapsedTime / 1000);
-
-                this.rect.x += moveSpeedx;
-                this.rect.y += moveSpeedy;
-
-                if (this.x < 0 || this.x > game.width || this.y < 0 || this.y > game.height) return false;
-
-                return true;
-            }
-        }
-
-        
-
-        function collide(rect1, rect2) {
-            if (rect1.x > rect2.x + rect2.w) return false;
-            if (rect1.x + rect1.w < rect2.x) return false;
-            if (rect1.y > rect2.y + rect2.h) return false;
-            if (rect1.y + rect1.h < rect2.y) return false;
-            return true;
-        }
-
-
-        var startTime = 0.0;
-
-        var game = {};
-        
-
-        game.width = 800;
-        game.height = 600;
-
-        var _renderingContext = null;
-        game.Keyboard = new KeyboardHandler();
-   	 
-        game.selectedPlayer = 0;
-   	
-        function getCursorPosition(e) {
+	 function getCursorPosition(e) {
             var x;
             var y;
             if (e.pageX != undefined && e.pageY != undefined) {
@@ -443,6 +497,39 @@ canvas{ background: url("swamp.jpg") no-repeat; }
             return [x,y];
         }
 
+
+
+        function collide(obj1, obj2) {
+          
+
+            if (obj1.position.x > obj2.position.x + obj2.size.x) return false;
+            if (obj1.position.x + obj1.size.x < obj2.position.x) return false;
+            if (obj1.position.y > obj2.position.y + obj2.size.y) return false;
+            if (obj1.position.y + obj1.size.y < obj2.position.y) return false;
+
+            return true;
+        }
+	
+	
+	
+    GAME = (function () {
+
+
+        var startTime = 0.0;
+
+        var game = {};
+        
+
+        game.width = gameConfig.settings.width;
+        game.height =gameConfig.settings.height;
+
+        var _renderingContext = null;
+        game.Keyboard = new KeyboardHandler();
+   	 
+        //game.selectedPlayer = 0;
+   	
+       
+
         Object.defineProperty(game, "renderingContext", {
             set: function (e) {
 
@@ -457,14 +544,16 @@ canvas{ background: url("swamp.jpg") no-repeat; }
         });
 
         game.states = {};
+		game.selectedPlayer =gameConfig.resources.characters['player1'].name;
+		game.currentLevel = 1;
         game.states.PLAYING = 1;
         game.states.GAMEOVER = 2;
         game.states.LOADING = 3;
         game.state = game.states.LOADING;
     
         game.init = function() {
-   		 
-            game.player = new Player({x: 100, y: 200, w: 70, h: 70});
+   		       
+            game.player = new Player({x: 100, y: 200, w: 41, h: 101,selectedPlayer:game.selectedPlayer});
             game.time = +(new Date());
             game.totalTime = 0;
             game.score = 0;
@@ -500,14 +589,24 @@ canvas{ background: url("swamp.jpg") no-repeat; }
                     _renderingContext.restore();
                 
                     if (RESOURCES.isLoaded()) {
-                        game.state = game.states.PLAYING;
-                        game.init();
+						
+						 var screenImage = RESOURCES.get(gameConfig.resources.screens['welcome'].name);
+                    	_renderingContext.drawImage(screenImage, 0, 0, 800, 600);
+						
+						 if(GAME.Keyboard.keyPressed("enter")){
+							game.state = game.states.PLAYING; 
+                        	game.init();
+   			 
+                    	}
+						
+                        
+                       // game.init();
                     }
 
                     break;
 
                 case game.states.PLAYING:
-                    var levelImage = RESOURCES.get("level");
+                    var levelImage = RESOURCES.get(gameConfig.resources.levels[GAME.currentLevel].name);
                     _renderingContext.drawImage(levelImage, 0, 0, 800, 600);
 
                     game.update();
@@ -515,10 +614,24 @@ canvas{ background: url("swamp.jpg") no-repeat; }
                     break;
                 case game.states.GAMEOVER:
 
-                    if(keyboard.keyPressed("enter")){
-                        game.init();
-   			 
-                    }
+                     var screenImage = RESOURCES.get(gameConfig.resources.screens['gameover'].name);
+                      _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
+
+                      var scoreText = "SCORE: " + game.score;
+                   
+                     _renderingContext.font = '40pt Calibri';
+                     _renderingContext.fillStyle = 'red';
+                     _renderingContext.fillText(scoreText, 368, 229);
+
+                    _renderingContext.font = '20pt Calibri';
+                    _renderingContext.fillStyle = 'white';
+                    _renderingContext.fillText('Loser, hit [enter] to try again', 340, 350);
+                        
+                         if(GAME.Keyboard.keyPressed("enter")){
+                            game.state = game.states.PLAYING; 
+                            game.init();
+             
+                        }
 
                     break;
             }
@@ -529,19 +642,43 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 
         game.update = function () {
             game.score = game.totalTime +(game.player.zombiesKilled*1000);
-   		 
+   		   
             var scoreText = "SCORE: " + game.score;
             var scoreLen = _renderingContext.measureText(scoreText);
-
+            _renderingContext.font = '14pt Calibri';
             _renderingContext.fillStyle = "rgb(255, 255, 255)";
-            _renderingContext.fillText(scoreText, 25, 10);
+            _renderingContext.fillText(scoreText, 25, 20);
    			
             game.player.update();
-   		 
+			if (RandomInt(game.totalTime) < game.totalTime * 0.10 ) {
+
+                if (enemies.length < 10)
+                    enemies.push(new Enemy({w:70,h:70})); 
+
+            }
+            
+            for (var i = 0; i < enemies.length; ++i){
+           
+               // Check if player and enemy collided
+               if(collide(game.player,enemies[i])) game.state = game.states.GAMEOVER;
+                if(!enemies[i].update()){
+                    // If the enemy is off the screen
+                    enemies.splice(i, 1);
+                }
+
+
+            }
+			
+			
+   		 	
         }
 
         game.draw = function () {
             game.player.draw(_renderingContext);
+
+            for (var i = 0; i < enemies.length; ++i)
+                enemies[i].draw(_renderingContext);
+            
         }
         return game;
 
@@ -550,8 +687,11 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 
     window.onload = function () {
         GAME.renderingContext = document.getElementById("canvas");
-        RESOURCES.markResource("level", "./swamp.jpg", RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource("player", "./zombieSprite.png", RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.levels['1'].name, "./"+gameConfig.resources.levels['1'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.characters['player1'].name, "./"+gameConfig.resources.characters['player1'].src, RESOURCES.TYPES.IMAGE);
+		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./"+gameConfig.resources.characters['enemy1'].src, RESOURCES.TYPES.IMAGE);
+		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
+		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
 
         GAME.run();
 
@@ -562,6 +702,9 @@ canvas{ background: url("swamp.jpg") no-repeat; }
 <body>
 <canvas id="canvas" width="800px" height="600px"></canvas>
     <img id="debug" />
+	
+	
+	
 </body>
 </html>
 
