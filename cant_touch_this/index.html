@@ -5,7 +5,7 @@
 <style>
 canvas{ background-color:black; }
 </style>
-
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="keyboard.js"></script>
     <script src="tools.js"></script>
 
@@ -131,10 +131,40 @@ canvas{ background-color:black; }
         resources.TYPES.AUDIO = 1;
         resources.TYPES.IMAGE = 2;
 
-        function onResourceLoaded(event){
+        function onResourceLoaded(event, type, key){
             resourcesLoaded += 1;
-            console.log("LOADED: ", event);
+
+            if (type == "audio") {
+                $(resourceCache[key]).unbind("loadeddata");
+                resourceCache[key] = new audio(resourceCache[key]);
+            }
+
             return true;
+        }
+
+        // this is just an audio tag wrapper that creates a bunch of the same audio tag 
+        // so we can play more than one instance of that sound at a time... actually we can 
+        // play maxChannels many :D
+        function audio(audio) {
+            this.maxChannels = 20;
+            this.channels = [];
+
+            this.audio = audio;
+            this.currentChannel = 0;
+
+            for (var i = 0; i < this.maxChannels; i++) {
+                this.channels[i] = new Audio();
+                this.preload = true;
+                this.channels[i].src = this.audio.src;
+            }
+
+            this.play = function () {
+
+                this.channels[this.currentChannel].load();
+                this.channels[this.currentChannel].play();
+                this.currentChannel = (this.currentChannel + 1) % this.maxChannels;
+            }
+            this.load = function () { }
         }
 
         resources.isLoaded = function(){
@@ -159,11 +189,10 @@ canvas{ background-color:black; }
                 case resources.TYPES.AUDIO:
                     resourcesCount += 1;
                     object = new Audio();
-                    //object.preload = true;
+                    object.preload = true;
                     
                     resourceCache[resourceKey] = object;
-                    object.onload = onResourceLoaded;
-                    object.onloadeddata = onResourceLoaded;
+                    $(object).on("loadeddata", function (event) { onResourceLoaded(event, "audio", resourceKey); });
                     object.src = resourcePath;
                     object.load();
                     o = object;
@@ -463,7 +492,6 @@ canvas{ background-color:black; }
             if(! isShooting){
                 lastShotTime = +(new Date());
                 isShooting = true;
-                console.log("SPAWNING: ", this.position.x, this.position.y);
                 // spawn a bullet with the direction 
                 GAME.bullets.push(new Bullet({direction:direction, position: this.position}));
                 var shootAudio = RESOURCES.get('player1Shoot');
