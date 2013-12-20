@@ -23,6 +23,7 @@ canvas{ background-color:black; }
 		"resources": {
             "gameFx" : {
 
+
                 "die" : ""
 
             },
@@ -306,9 +307,14 @@ canvas{ background-color:black; }
              if(args == undefined) args = {};
        		 InheritFrom(this, Entity, args);
 
-			this.image = RESOURCES.get(gameConfig.resources.characters['enemy1'].name);
+             console.log('NAME = ' + args.name);
+			this.image = RESOURCES.get(gameConfig.resources.characters[args.name].name);
 			this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 70, frameWidth: 70});
 			
+            //var spawnAudio = RESOURCES.get(gameConfig.resources.characters[args.name].name+"Spawn");
+            
+            //spawnAudio.play();
+
 			var moveSpeed = 150;
 			
 			var rand = RandomInt(3);
@@ -702,8 +708,8 @@ canvas{ background-color:black; }
             game.player.update();
 			if (RandomInt(game.totalTime) < game.totalTime * 0.10 ) {
 
-                if (enemies.length < 10)
-                    enemies.push(new Enemy({w:70,h:70})); 
+                if (enemies.length < 10) 
+                    enemies.push(new Enemy({name:'enemy1',w:70,h:70})); 
 
             }
             
@@ -745,6 +751,7 @@ canvas{ background-color:black; }
 		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./"+gameConfig.resources.characters['enemy1'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
+       // RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
 
