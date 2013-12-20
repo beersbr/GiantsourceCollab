@@ -1,5 +1,6 @@
 function Node(data){
     this.data = data;
+    this.index = NaN;
     this.next = null, this.prev = null;
 }
 
@@ -25,17 +26,26 @@ function List(){
     this.head = null;
     this.tail = null;
 
+    this.length = 0;
+
+    // insert at (index)
+    // get at (index)
+    // remove at (index)
+
     this.push = function(data){
         if(this.head == null){
             this.head = new Node(data);
             this.tail = this.head;
+            this.tail.length = this.length;
         }
         else{
             this.tail.next = new Node(data);
             this.tail.next.prev = this.tail;
             this.tail = this.tail.next;
+            this.tail.index = this.length;
         }
 
+        this.length += 1;
         return true;
     }
 
