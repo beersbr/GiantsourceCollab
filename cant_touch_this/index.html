@@ -371,7 +371,7 @@ canvas{ background-color:black; }
             this.velocity.x += bulletSpeed;
             this.velocity.y += bulletSpeed;
 
-            var bullet = new Rect(GAME.player.rect.x,GAME.player.rect.y+(GAME.player.rect.h/2),3,25);
+            var bullet = new Rect(GAME.player.position.x,GAME.player.position.y+(GAME.player.size.h/2),3,25);
 
             this.draw = function (rc) {
                
