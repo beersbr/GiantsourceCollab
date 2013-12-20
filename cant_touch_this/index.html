@@ -289,8 +289,6 @@ canvas{ background-color:black; }
 	function Enemy(args) {
              if(args == undefined) args = {};
        		 InheritFrom(this, Entity, args);
-
-             console.log('NAME = ' + args.name);
 			this.image = RESOURCES.get(gameConfig.resources.characters[args.name].name);
 			this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 70, frameWidth: 70});
 			
@@ -350,6 +348,40 @@ canvas{ background-color:black; }
                 //this.position.x += moveSpeedx;
                 //this.position.y += moveSpeedy;
 
+
+                if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
+
+                return true;
+            }
+    }
+
+
+    function Bullet(args) {
+            if(args == undefined) args = {};
+            InheritFrom(this, Entity, args);
+
+            var bulletSpeed = 500;
+
+            this.velocity.x += bulletSpeed;
+            this.velocity.y += bulletSpeed;
+
+            var bullet = new Rect(GAME.player.rect.x,GAME.player.rect.y+(GAME.player.rect.h/2),3,25);
+
+            this.draw = function (rc) {
+               
+                rc.save();
+                rc.fillStyle = "rgb(0, 0, 255)";
+                rc.fillRect(this.bullet.x, this.bullet.y, this.bullet.w, this.bullet.h);
+               
+                rc.restore();
+            }
+
+            this.update = function () {
+                
+                var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
+                       
+
+                this.position = VECTOR.add(this.position, moveSpeed);
 
                 if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
 
@@ -459,7 +491,8 @@ canvas{ background-color:black; }
                 isShooting = true;
 
                 // spawn a bullet with the direction 
-                console.log("SHOT");
+               game.bullets.push(new Bullet({velocity:direction}));
+
             }
             else {
                 lastShotElapsedTime += GAME.elapsedTime;
@@ -657,6 +690,7 @@ canvas{ background-color:black; }
             _renderingContext.fillText(scoreText, 25, 20);
    			
             game.player.update();
+
 			if (RandomInt(game.totalTime) < game.totalTime * 0.10 ) {
 
                 if (enemies.length < 10) 
@@ -702,7 +736,7 @@ canvas{ background-color:black; }
 		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./"+gameConfig.resources.characters['enemy1'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
-       // RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
 
