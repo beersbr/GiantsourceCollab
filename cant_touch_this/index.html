@@ -151,6 +151,7 @@ canvas{ background-color:black; }
 
             this.audio = audio;
             this.currentChannel = 0;
+            this.volume = 1;
 
             for (var i = 0; i < this.maxChannels; i++) {
                 this.channels[i] = new Audio();
@@ -161,9 +162,11 @@ canvas{ background-color:black; }
             this.play = function () {
 
                 this.channels[this.currentChannel].load();
+                this.channels[this.currentChannel].volume = this.volume;
                 this.channels[this.currentChannel].play();
                 this.currentChannel = (this.currentChannel + 1) % this.maxChannels;
             }
+
             this.load = function () { }
         }
 
@@ -412,7 +415,7 @@ canvas{ background-color:black; }
             nonSprintElapsedTime = 0;
 
         var isShooting = false,
-            shootInterval = 200, // in milliseconds
+            shootInterval = 500, // in milliseconds
             shootDirection = null,
             lastShotTime = -1,
             lastShotElapsedTime = -1;
@@ -457,30 +460,27 @@ canvas{ background-color:black; }
             if (GAME.Keyboard.keyIsDown("a")) {
                 this.velocity.x -= frameMoveSpeed;
             }
-
             if (GAME.Keyboard.keyIsDown("d")) {
                 this.velocity.x += frameMoveSpeed;
-
             }
-
             if (GAME.Keyboard.keyIsDown("w")) {
                 this.velocity.y -= frameMoveSpeed;
             }
-
             if (GAME.Keyboard.keyIsDown("s")) {
                 this.velocity.y += frameMoveSpeed;
             }
 
+            // only shoot in one direction at a time, so we use if else
             if (GAME.Keyboard.keyIsDown("left_arrow")) {
                 this.shoot(VECTOR.LEFT);
             }
-            if (GAME.Keyboard.keyIsDown("right_arrow")) {
+            else if (GAME.Keyboard.keyIsDown("right_arrow")) {
                 this.shoot(VECTOR.RIGHT);
             }
-            if (GAME.Keyboard.keyIsDown("up_arrow")) {
+            else if (GAME.Keyboard.keyIsDown("up_arrow")) {
                 this.shoot(VECTOR.UP);
             }
-            if (GAME.Keyboard.keyIsDown("down_arrow")) {
+            else if (GAME.Keyboard.keyIsDown("down_arrow")) {
                 this.shoot(VECTOR.DOWN);
             }
 		
