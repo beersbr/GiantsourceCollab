@@ -261,10 +261,10 @@ canvas{ background-color:black; }
        		 InheritFrom(this, Entity, args);
 			this.image = RESOURCES.get(gameConfig.resources.characters[args.name].name);
 			this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 70, frameWidth: 70});
-			
-            //var spawnAudio = RESOURCES.get(gameConfig.resources.characters[args.name].name+"Spawn");
+			console.log('enemy1Spawn');
+            var spawnAudio = RESOURCES.get('enemy1Spawn');
             
-            //spawnAudio.play();
+            spawnAudio.play();
 
 			var moveSpeed = 150;
 			
