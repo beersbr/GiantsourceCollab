@@ -337,14 +337,16 @@ canvas{ background-color:black; }
 
         this.size = new VECTOR.Vector(args.direction.x * 25 || 5, args.direction.y * 25 || 5);
 
-        this.bulletSpeed = 300;
+        this.bulletSpeed = 150;
 
+        this.direction = args.direction;
         this.velocity = VECTOR.multiplyScalar(args.direction, this.bulletSpeed)
         this.position = args.position;
              
         this.draw = function (rc) {
 
             var r = this.toRect();
+
             rc.save();
             rc.fillStyle = "rgb(0, 0, 255)";
             rc.fillRect(r.x, r.y, r.w, r.h);
@@ -645,28 +647,26 @@ canvas{ background-color:black; }
 
                             // this is where things get tricky, you can manipulate an array while iteration over it
                             // this is where we can use a linked list and just use an iterator instead of an index
-                            game.bullets.splice(i, 1);
-                            enemies.splice(z, 1);
+                            //game.bullets.splice(i, 1);
+                            //enemies.splice(z, 1);
 
                         } else {
 
                              if (!game.bullets[i].update()){
                                 // If the bullet is off the screen
-                                 game.bullets.splice(i, 1);
+                                 //game.bullets.splice(i, 1);
                             }
 
                         }
 
                  }   
-
-                
             }
             
             for (var i = 0; i < enemies.length; ++i){
            
                 // Check if player and enemy collided
                 
-                //if (!GODMODE)
+                if (!GODMODE)
                 if (collideRect(game.player.toRect(), enemies[i].toRect()))
                     game.state = game.states.GAMEOVER;
 
