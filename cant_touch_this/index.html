@@ -334,13 +334,21 @@ canvas{ background-color:black; }
             if(args == undefined) args = {};
             InheritFrom(this, Entity, args);
 
-             this.bulletSpeed = 500;
+             this.bulletSpeed = 300;
 
             this.velocity.x = args.direction.x * this.bulletSpeed;
             this.velocity.y = args.direction.y * this.bulletSpeed;
+            var bulletH = 3,
+                bulletW = 15;
+
+            if (args.direction.x == 0) {
+                bulletH = 15;
+                bulletW = 3;
+                
+            } 
 
             //console.log(this.position);
-            this.bullet = new Rect(GAME.player.position.x,GAME.player.position.y,3,25);
+            this.bullet = new Rect(GAME.player.position.x,GAME.player.position.y,bulletW,bulletH);
              
             this.draw = function (rc) {
 
@@ -348,8 +356,6 @@ canvas{ background-color:black; }
                 rc.save();
                 rc.fillStyle = "rgb(0, 0, 255)";
                 rc.fillRect(this.bullet.x, this.bullet.y, this.bullet.w, this.bullet.h);
-                
-
                 rc.restore();
             }
 
