@@ -475,16 +475,16 @@ canvas{ background-color:black; }
             }
 
             if (GAME.Keyboard.keyIsDown("left_arrow")) {
-                this.shoot(new VECTOR.Vector(-1, 0));
+                this.shoot(VECTOR.LEFT);
             }
             if (GAME.Keyboard.keyIsDown("right_arrow")) {
-                this.shoot(new VECTOR.Vector(1, 0));
+                this.shoot(VECTOR.RIGHT);
             }
             if (GAME.Keyboard.keyIsDown("up_arrow")) {
-                this.shoot(new VECTOR.Vector(0, 1));
+                this.shoot(VECTOR.UP);
             }
             if (GAME.Keyboard.keyIsDown("down_arrow")) {
-                this.shoot(new VECTOR.Vector(0, -1));
+                this.shoot(VECTOR.DOWN);
             }
 		
             this.velocity = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
