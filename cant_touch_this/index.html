@@ -29,7 +29,8 @@ canvas{ background-color:black; }
 				"player1":{
 					"name": "Phillip",
 					"src": "player1Sprite.png",
-					"type":"Player"	
+					"type":"Player",
+                    "fx": {"shoot":"shotgun.ogg"}
 				},
 				"player2":{
 					"name": "Jorge",
@@ -262,12 +263,13 @@ canvas{ background-color:black; }
 			this.image = RESOURCES.get(gameConfig.resources.characters[args.name].name);
 			this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 70, frameWidth: 70});
 			console.log('enemy1Spawn');
+           
             var spawnAudio = RESOURCES.get('enemy1Spawn');
             
             spawnAudio.play();
 
 			var moveSpeed = 150;
-			
+			var hitPoints = 1;
 			var rand = RandomInt(3);
       	
             switch (rand) {
@@ -332,27 +334,20 @@ canvas{ background-color:black; }
             if(args == undefined) args = {};
             InheritFrom(this, Entity, args);
 
-            this.velocity.x = args.direction.x;
-            this.velocity.y = args.direction.y;
+             this.bulletSpeed = 500;
 
-            var bulletSpeed = 500;
+            this.velocity.x = args.direction.x * this.bulletSpeed;
+            this.velocity.y = args.direction.y * this.bulletSpeed;
 
-            this.velocity.x = this.velocity.x * bulletSpeed;
-            this.velocity.y = this.velocity.y * bulletSpeed;
-
-            this.position.x = GAME.player.position.x;
-            this.position.y = GAME.player.position.y;
-           
-            console.log('PLAYER POSITION ' + GAME.player.position.x);
-
+            //console.log(this.position);
             this.bullet = new Rect(GAME.player.position.x,GAME.player.position.y,3,25);
-           
+             
             this.draw = function (rc) {
 
-                console.log(this.bullet);
+                //console.log(this.bullet);
                 rc.save();
                 rc.fillStyle = "rgb(0, 0, 255)";
-                rc.fillRect(this.position.x, this.position.y, this.bullet.w, this.bullet.h);
+                rc.fillRect(this.bullet.x, this.bullet.y, this.bullet.w, this.bullet.h);
                 
 
                 rc.restore();
@@ -360,14 +355,15 @@ canvas{ background-color:black; }
 
             this.update = function () {
                 
-                var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
+                //var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
+                //* (this.bulletSpeed * (GAME.elapsedTime / 1000))
+                //console.log(this.bulletSpeed);
 
+                //console.log(this.velocity);
+               // console.log(this.position);
 
-                console.log(this.velocity);
-                console.log(this.position);
-
-                this.bullet.x += moveSpeed;  
-                this.bullet.y += moveSpeed;  
+                this.bullet.x += this.velocity.x * (GAME.elapsedTime / 1000) 
+                this.bullet.y += this.velocity.y * (GAME.elapsedTime / 1000)
 
 
                 return true;
@@ -478,6 +474,9 @@ canvas{ background-color:black; }
                 console.log(direction)
                 // spawn a bullet with the direction 
                 GAME.bullets.push(new Bullet({direction:direction}));
+                var shootAudio = RESOURCES.get('player1Shoot');
+                shootAudio.volume = 0.3;
+                shootAudio.play();
 
             }
             else {
@@ -648,10 +647,27 @@ canvas{ background-color:black; }
             }
 
             for (var i = 0; i < game.bullets.length; ++i) {
-                 if (!game.bullets[i].update()){
-                    // If the enemy is off the screen
-                    game.bullets.splice(i, 1);
-                }
+                    
+                 for (var z = 0; z < enemies.length; ++z){
+                        
+                        if (collideRect(game.bullets[i].toRect(), enemies[z].toRect())) {
+
+                             game.bullets.splice(i, 1);
+                             enemies.splice(z, 1);
+
+
+                        } else {
+
+                             if (!game.bullets[i].update()){
+                                // If the enemy is off the screen
+                                game.bullets.splice(i, 1);
+                            }
+
+                        }
+
+                 }   
+
+                
             }
             
             for (var i = 0; i < enemies.length; ++i){
@@ -696,6 +712,7 @@ canvas{ background-color:black; }
 		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
         RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('player1Shoot', "./"+gameConfig.resources.characters['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
 
