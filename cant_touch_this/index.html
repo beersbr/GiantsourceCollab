@@ -17,6 +17,11 @@ canvas{ background-color:black; }
 			"height":600,	
 		},
 		"resources": {
+            "gameFx" : {
+
+                "die" : ""
+
+            },
 			"characters": {
 				"player1":{
 					"name": "Phillip",
@@ -32,7 +37,10 @@ canvas{ background-color:black; }
 				"enemy1":{
 					"name": "Office Zombie",
 					"src": "zombieSprite.png",
-					"type":"Enemy"	
+					"type":"Enemy",
+                    "fx" : {
+                        "spawn": "zombieRising.wav"
+                    }	
 					
 					
 				},
@@ -356,12 +364,12 @@ canvas{ background-color:black; }
             nonSprintElapsedTime = 0;
 
         var isShooting = false,
-        shootInterval = 200, // in milliseconds
-        shootDirection = null,
-        lastShotTime = -1,
-        lastShotElapsedTime = -1;
+            shootInterval = 200, // in milliseconds
+            shootDirection = null,
+            lastShotTime = -1,
+            lastShotElapsedTime = -1;
 
-        this.zombiesKilled = 0;
+            this.zombiesKilled = 0;
       
         this.update = function(){
 
