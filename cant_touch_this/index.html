@@ -14,11 +14,8 @@ canvas{ background-color:black; }
 		"settings": {
 			"title":"Stupid Zombies",
 			"width":800,
-<<<<<<< Updated upstream
 			"height":600,	
-=======
-			"height":600,
->>>>>>> Stashed changes
+
 		},
 		"resources": {
             "gameFx" : {
@@ -37,28 +34,22 @@ canvas{ background-color:black; }
 					"name": "Jorge",
 					"src": "player2Sprite.png",
 					"type":"Player",
-<<<<<<< Updated upstream
 					"fx": {}
-=======
-					"fx": {
 
-					}
->>>>>>> Stashed changes
+
 				},
 				"enemy1":{
 					"name": "Office Zombie",
 					"src": "zombieSprite.png",
-<<<<<<< Updated upstream
+
 					"type":"Enemy",
                     "fx" : {
                         "spawn": "zombieRising.wav"
                     }	
-					
-					
-=======
+
 					"type":"Enemy"	
 
->>>>>>> Stashed changes
+
 				},
 				"enemy2": {
 					"name": "Boss Zombie",
@@ -84,10 +75,6 @@ canvas{ background-color:black; }
 					
 				}	
 			}
-<<<<<<< Updated upstream
-			
-=======
->>>>>>> Stashed changes
 		}
 	}
 	
@@ -497,25 +484,7 @@ canvas{ background-color:black; }
         }
     }// end of player
 
-<<<<<<< Updated upstream
-	function getCursorPosition(e) {
-            var x;
-            var y;
-            if (e.pageX != undefined && e.pageY != undefined) {
-                x = e.pageX;
-                y = e.pageY;
-            }
-            else {
-                x = e.clientX + document.body.scrollLeft +
-                        document.documentElement.scrollLeft;
-                y = e.clientY + document.body.scrollTop +
-                        document.documentElement.scrollTop;
-            }
-            x -= canvas.offsetLeft;
-            y -= canvas.offsetTop;
-       	 
-            return [x,y];
-=======
+
     function getCursorPosition(e) {
         var x;
         var y;
@@ -533,7 +502,7 @@ canvas{ background-color:black; }
         y -= canvas.offsetTop;
        	 
         return [x,y];
->>>>>>> Stashed changes
+
     }
 
     function collideRect(r1, r2) {
@@ -544,21 +513,8 @@ canvas{ background-color:black; }
         return true;
     }
 
-<<<<<<< Updated upstream
 
-    function collide(obj1, obj2) {
-          
 
-            if (obj1.position.x > obj2.position.x + obj2.size.x) return false;
-            if (obj1.position.x + obj1.size.x < obj2.position.x) return false;
-            if (obj1.position.y > obj2.position.y + obj2.size.y) return false;
-            if (obj1.position.y + obj1.size.y < obj2.position.y) return false;
-
-            return true;
-    }
-	
-	
-=======
     function collide(obj1, obj2) {
         if (obj1.position.x > obj2.position.x + obj2.size.x) return false;
         if (obj1.position.x + obj1.size.x < obj2.position.x) return false;
@@ -566,7 +522,7 @@ canvas{ background-color:black; }
         if (obj1.position.y + obj1.size.y < obj2.position.y) return false;
         return true;
     }
->>>>>>> Stashed changes
+
 	
     GAME = (function () {
 
