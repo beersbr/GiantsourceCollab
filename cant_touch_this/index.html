@@ -355,7 +355,9 @@ canvas{ background-color:black; }
                 //this.position.y += moveSpeedy;
 
 
-                if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
+                if (this.position.x < 0 || this.position.x > GAME.width ||
+                    this.position.y < 0 || this.position.y > GAME.height)
+                    return false;
 
                 return true;
             }
@@ -375,21 +377,22 @@ canvas{ background-color:black; }
 
             this.draw = function (rc) {
                
+                var r = this.toRect();
+
                 rc.save();
                 rc.fillStyle = "rgb(0, 0, 255)";
-                rc.fillRect(this.bullet.x, this.bullet.y, this.bullet.w, this.bullet.h);
-               
+                rc.fillRect(r.x, r.y, r.w, r.h);
                 rc.restore();
             }
 
             this.update = function () {
                 
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
-                       
-
                 this.position = VECTOR.add(this.position, moveSpeed);
 
-                if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
+                if (this.position.x < 0 || this.position.x > GAME.width ||
+                    this.position.y < 0 || this.position.y > GAME.height)
+                    return false;
 
                 return true;
             }
