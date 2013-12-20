@@ -475,7 +475,9 @@ canvas{ background-color:black; }
             var r = this.toRect();
             rc.save();
             var image = this.sprite.render();
-            rc.fillStyle = "rgb(255, 0, 255)";
+            rc.drawImage(image, r.x, r.y, r.w, r.h);
+            //rc.fillStyle = "rgb(255, 0, 255)";
+            //rc.fillRect(r.x, r.y, r.w, r.h);
             rc.restore();
         }
     }// end of player
@@ -552,7 +554,7 @@ canvas{ background-color:black; }
         });
 
         game.states = {};
-		game.selectedPlayer =gameConfig.resources.characters['player1'].name;
+		game.selectedPlayer = gameConfig.resources.characters['player1'].name;
 		game.currentLevel = 1;
         game.states.PLAYING = 1;
         game.states.GAMEOVER = 2;
@@ -574,9 +576,6 @@ canvas{ background-color:black; }
         game.totalResources = 6;
 
         game.resourcesLoaded = function(){ return game.loadedResources == game.totalResources; }
-
-
- 	 
 
         game.run = function () {
             game.previousTime = game.time;
