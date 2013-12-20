@@ -15,8 +15,6 @@ canvas{ background-color:black; }
 			"title":"Stupid Zombies",
 			"width":800,
 			"height":600,	
-			
-			
 		},
 		"resources": {
 			"characters": {
@@ -24,18 +22,12 @@ canvas{ background-color:black; }
 					"name": "Phillip",
 					"src": "player1Sprite.png",
 					"type":"Player"	
-					
 				},
 				"player2":{
 					"name": "Jorge",
 					"src": "player2Sprite.png",
 					"type":"Player",
-					"fx": {
-						
-						
-					}
-					
-					
+					"fx": {}
 				},
 				"enemy1":{
 					"name": "Office Zombie",
@@ -48,8 +40,6 @@ canvas{ background-color:black; }
 					"name": "Boss Zombie",
 					"src": "zombie2Sprite.png",
 					"type":"Enemy"	
-					
-					
 				}
 				
 			},
@@ -57,10 +47,7 @@ canvas{ background-color:black; }
 				"1" :{
 					"name":"Swamp",
 					"src":"swamp.jpg"	
-					
 				}
-				
-				
 			},
 			"screens": {
 				
@@ -76,11 +63,7 @@ canvas{ background-color:black; }
 				
 			}
 			
-			
 		}
-		
-		
-		
 	}
 	
     requestAnimFrame = (function () {
@@ -250,6 +233,7 @@ canvas{ background-color:black; }
         this.x = x || 0;
         this.y = y || 0;
     }
+
     function Rect(x, y, w, h){
         this.x = x || 0;
         this.y = y || 0;
@@ -350,7 +334,7 @@ canvas{ background-color:black; }
 
                 return true;
             }
-        }
+    }
 	
 	
     function Player(args){
@@ -478,7 +462,7 @@ canvas{ background-color:black; }
         }
     }// end of player
 
-	 function getCursorPosition(e) {
+	function getCursorPosition(e) {
             var x;
             var y;
             if (e.pageX != undefined && e.pageY != undefined) {
@@ -495,11 +479,11 @@ canvas{ background-color:black; }
             y -= canvas.offsetTop;
        	 
             return [x,y];
-        }
+    }
 
 
 
-        function collide(obj1, obj2) {
+    function collide(obj1, obj2) {
           
 
             if (obj1.position.x > obj2.position.x + obj2.size.x) return false;
@@ -508,7 +492,7 @@ canvas{ background-color:black; }
             if (obj1.position.y + obj1.size.y < obj2.position.y) return false;
 
             return true;
-        }
+    }
 	
 	
 	
@@ -702,9 +686,6 @@ canvas{ background-color:black; }
 <body>
 <canvas id="canvas" width="800px" height="600px"></canvas>
     <img id="debug" />
-	
-	
-	
 </body>
 </html>
 
