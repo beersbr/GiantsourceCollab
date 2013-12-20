@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GiantsourceCollab", ".", "{522CFA5A-3A61-4DAB-B00C-F90F5C7EBC4B}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/GiantsourceCollab"
+		Debug.AspNetCompiler.PhysicalPath = "..\GiantsourceCollab\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\GiantsourceCollab\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/GiantsourceCollab"
+		Release.AspNetCompiler.PhysicalPath = "..\GiantsourceCollab\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\GiantsourceCollab\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "61101"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{522CFA5A-3A61-4DAB-B00C-F90F5C7EBC4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{522CFA5A-3A61-4DAB-B00C-F90F5C7EBC4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

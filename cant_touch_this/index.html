@@ -14,7 +14,11 @@ canvas{ background-color:black; }
 		"settings": {
 			"title":"Stupid Zombies",
 			"width":800,
+<<<<<<< Updated upstream
 			"height":600,	
+=======
+			"height":600,
+>>>>>>> Stashed changes
 		},
 		"resources": {
             "gameFx" : {
@@ -32,24 +36,34 @@ canvas{ background-color:black; }
 					"name": "Jorge",
 					"src": "player2Sprite.png",
 					"type":"Player",
+<<<<<<< Updated upstream
 					"fx": {}
+=======
+					"fx": {
+
+					}
+>>>>>>> Stashed changes
 				},
 				"enemy1":{
 					"name": "Office Zombie",
 					"src": "zombieSprite.png",
+<<<<<<< Updated upstream
 					"type":"Enemy",
                     "fx" : {
                         "spawn": "zombieRising.wav"
                     }	
 					
 					
+=======
+					"type":"Enemy"	
+
+>>>>>>> Stashed changes
 				},
 				"enemy2": {
 					"name": "Boss Zombie",
 					"src": "zombie2Sprite.png",
 					"type":"Enemy"	
 				}
-				
 			},
 			"levels": {
 				"1" :{
@@ -67,10 +81,12 @@ canvas{ background-color:black; }
 					"name":"Game Over",
 					"src":"gameover.jpg"	
 					
-				}
-				
+				}	
 			}
+<<<<<<< Updated upstream
 			
+=======
+>>>>>>> Stashed changes
 		}
 	}
 	
@@ -278,6 +294,12 @@ canvas{ background-color:black; }
 
         this.update = function (elapsedTime) { throw "NOT IMPLEMENTED"; };
         this.draw = function (renderContext) { throw "NOT IMPLEMENTED"; };
+
+        this.toRect = function () {
+            var hw = this.size.x / 2;
+            var hh = this.size.y / 2;
+            return (new Rect(this.position.x - hw, this.position.y - hh, this.size.x, this.size.y));
+        }
     }
 	
 	function Enemy(args) {
@@ -320,22 +342,24 @@ canvas{ background-color:black; }
             } // end switch
 
             this.draw = function (rc) {
-				 rc.save();
+                var r = this.toRect();
+				rc.save();
            	 	var image = this.sprite.render();
-            	rc.fillStyle = "rgb(255, 0, 255)";
-				rc.drawImage(image, this.position.x, this.position.y, this.size.x, this.size.y);
-				
+				rc.drawImage(image, r.x, r.y, r.w, r.h);
 				rc.restore();
-				
             }
 
             this.update = function () {
               	
-                var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
-                var moveSpeedy = this.velocity.y * (GAME.elapsedTime / 1000);
+                var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
-                this.position.x += moveSpeedx;
-                this.position.y += moveSpeedy;
+                //var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
+                //var moveSpeedy = this.velocity.y * (GAME.elapsedTime / 1000);
+
+                this.position = VECTOR.add(this.position, moveSpeed);
+
+                //this.position.x += moveSpeedx;
+                //this.position.y += moveSpeedy;
 
 
                 if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
@@ -395,9 +419,7 @@ canvas{ background-color:black; }
                     else{
                         frameMoveSpeed = sprintSpeed;
                     }
-	
                 }
-
             }
             else { 
                 // Not sprinting
@@ -460,16 +482,16 @@ canvas{ background-color:black; }
         }
 
 
-        this.draw = function(rc){
+        this.draw = function (rc) {
+            var r = this.toRect();
             rc.save();
             var image = this.sprite.render();
             rc.fillStyle = "rgb(255, 0, 255)";
-            //rc.fillRect(this.position.x - this.size.x / 2, this.position.y - this.size.y / 2, this.size.x, this.size.y);
-            rc.drawImage(image, this.position.x - this.size.x / 2, this.position.y - this.size.y / 2, this.size.x, this.size.y);
             rc.restore();
         }
     }// end of player
 
+<<<<<<< Updated upstream
 	function getCursorPosition(e) {
             var x;
             var y;
@@ -487,9 +509,36 @@ canvas{ background-color:black; }
             y -= canvas.offsetTop;
        	 
             return [x,y];
+=======
+    function getCursorPosition(e) {
+        var x;
+        var y;
+        if (e.pageX != undefined && e.pageY != undefined) {
+            x = e.pageX;
+            y = e.pageY;
+        }
+        else {
+            x = e.clientX + document.body.scrollLeft +
+                    document.documentElement.scrollLeft;
+            y = e.clientY + document.body.scrollTop +
+                    document.documentElement.scrollTop;
+        }
+        x -= canvas.offsetLeft;
+        y -= canvas.offsetTop;
+       	 
+        return [x,y];
+>>>>>>> Stashed changes
     }
 
+    function collideRect(r1, r2) {
+        if (r1.x > r2.x + r2.w) return false;
+        if (r1.x + r1.w < r2.x) return false;
+        if (r1.y > r2.y + r2.h) return false;
+        if (r1.y + r1.h < r2.y) return false;
+        return true;
+    }
 
+<<<<<<< Updated upstream
 
     function collide(obj1, obj2) {
           
@@ -503,6 +552,15 @@ canvas{ background-color:black; }
     }
 	
 	
+=======
+    function collide(obj1, obj2) {
+        if (obj1.position.x > obj2.position.x + obj2.size.x) return false;
+        if (obj1.position.x + obj1.size.x < obj2.position.x) return false;
+        if (obj1.position.y > obj2.position.y + obj2.size.y) return false;
+        if (obj1.position.y + obj1.size.y < obj2.position.y) return false;
+        return true;
+    }
+>>>>>>> Stashed changes
 	
     GAME = (function () {
 
@@ -651,9 +709,12 @@ canvas{ background-color:black; }
             
             for (var i = 0; i < enemies.length; ++i){
            
-               // Check if player and enemy collided
-               if(collide(game.player,enemies[i])) game.state = game.states.GAMEOVER;
-                if(!enemies[i].update()){
+                // Check if player and enemy collided
+                
+                if (collideRect(game.player.toRect(), enemies[i].toRect()))
+                    game.state = game.states.GAMEOVER;
+
+                if (!enemies[i].update()){
                     // If the enemy is off the screen
                     enemies.splice(i, 1);
                 }
