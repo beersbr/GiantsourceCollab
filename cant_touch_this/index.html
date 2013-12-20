@@ -22,7 +22,7 @@ canvas{ background-color:black; }
             "gameFx" : {
 
 
-                "die" : ""
+                "gameover" : "gameover.ogg"
 
             },
 			"characters": {
@@ -42,7 +42,14 @@ canvas{ background-color:black; }
 				},
 				"enemy1":{
 					"name": "Office Zombie",
-					"src": "zombieSprite.png",
+					"sprite": {
+
+                        "src": "zombieSprite.png",
+                        "w":70,
+                        "h":70
+
+
+                    },
 					"type":"Enemy",
                     "fx" : {
                         "spawn": "zombieRising.ogg"
@@ -50,9 +57,17 @@ canvas{ background-color:black; }
 
 				},
 				"enemy2": {
-					"name": "Boss Zombie",
-					"src": "zombie2Sprite.png",
-					"type":"Enemy"	
+					"name": "Girl Zombie",
+					"sprite": {
+
+                        "src": "zombie2Sprite.png",
+                        "w":70,
+                        "h":69
+                    },
+					"type":"Enemy",
+                    "fx" : {
+                        "spawn": "brains.ogg"
+                    }	
 				}
 			},
 			"levels": {
@@ -294,10 +309,10 @@ canvas{ background-color:black; }
              if(args == undefined) args = {};
        		 InheritFrom(this, Entity, args);
 			this.image = RESOURCES.get(gameConfig.resources.characters[args.name].name);
-			this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 70, frameWidth: 70});
-			console.log('enemy1Spawn');
+			this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: args.h, frameWidth: args.w});
+			//console.log(args);
            
-            var spawnAudio = RESOURCES.get('enemy1Spawn');
+            var spawnAudio = RESOURCES.get(args.name+'Spawn');
             
             spawnAudio.play();
 
@@ -561,6 +576,8 @@ canvas{ background-color:black; }
         game.states.PLAYING = 1;
         game.states.GAMEOVER = 2;
         game.states.LOADING = 3;
+
+        game.enemyCnt = 0;
         game.state = game.states.LOADING;
     
         game.init = function() {
@@ -572,6 +589,8 @@ canvas{ background-color:black; }
             game.state = game.states.PLAYING;
             enemies = [];
             game.bullets = [];
+            game.enemyCnt = 0;
+             game.states.gameoverPlayed  = false;
         }
  	 
         game.loadedResources = 0;
@@ -627,7 +646,13 @@ canvas{ background-color:black; }
                       _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
 
                       var scoreText = "SCORE: " + game.score;
-                   
+                      if (!game.states.gameoverPlayed) {
+                         game.states.gameoverPlayed = true;
+                          game.overAudio = RESOURCES.get('gameOverAudio');
+                
+                          game.overAudio.play();
+                      }
+
                      _renderingContext.font = '40pt Calibri';
                      _renderingContext.fillStyle = 'red';
                      _renderingContext.fillText(scoreText, 368, 229);
@@ -637,7 +662,8 @@ canvas{ background-color:black; }
                     _renderingContext.fillText('Loser, hit [enter] to try again', 340, 350);
                         
                          if(GAME.Keyboard.keyPressed("enter")){
-                            game.state = game.states.PLAYING; 
+                            game.state = game.states.PLAYING;
+                            
                             game.init();
              
                         }
@@ -660,10 +686,16 @@ canvas{ background-color:black; }
    			
             game.player.update();
 
-			if (RandomInt(game.totalTime) < game.totalTime * 0.10 ) {
-
-                if (enemies.length < 10) 
-                    enemies.push(new Enemy({name:'enemy1',w:70,h:70})); 
+			if (RandomInt(game.totalTime) < game.totalTime * 0.09 ) {
+                game.enemyCnt++;
+                if (game.enemyCnt == 15) {
+                    enemyType = 'enemy2'
+                    game.enemyCnt = 0;
+                } else {
+                    enemyType = 'enemy1'
+                }
+                enemies.push(new Enemy({name:enemyType,w:gameConfig.resources.characters[enemyType].sprite.w,h:gameConfig.resources.characters[enemyType].sprite.h})); 
+               
 
             }
 
@@ -728,16 +760,19 @@ canvas{ background-color:black; }
 
     window.onload = function () {
         GAME.renderingContext = document.getElementById("canvas");
-        RESOURCES.markResource(gameConfig.resources.levels['1'].name, "./"+gameConfig.resources.levels['1'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(gameConfig.resources.characters['player1'].name, "./"+gameConfig.resources.characters['player1'].src, RESOURCES.TYPES.IMAGE);
-		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./"+gameConfig.resources.characters['enemy1'].src, RESOURCES.TYPES.IMAGE);
-		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
-		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
-        RESOURCES.markResource('player1Shoot', "./"+gameConfig.resources.characters['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource(gameConfig.resources.levels['1'].name, "./resources/"+gameConfig.resources.levels['1'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.characters['player1'].name, "./resources/"+gameConfig.resources.characters['player1'].src, RESOURCES.TYPES.IMAGE);
+		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./resources/"+gameConfig.resources.characters['enemy1'].sprite.src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.characters['enemy2'].name, "./resources/"+gameConfig.resources.characters['enemy2'].sprite.src, RESOURCES.TYPES.IMAGE);
+		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./resources/"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
+		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./resources/"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource('gameOverAudio', "./resources/"+gameConfig.resources.gameFx['gameover'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy1Spawn', "./resources/"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy2Spawn', "./resources/"+gameConfig.resources.characters['enemy2'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('player1Shoot', "./resources/"+gameConfig.resources.characters['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
-        GODMODE = true;
+        GODMODE = false;
 
     }
 </script>
