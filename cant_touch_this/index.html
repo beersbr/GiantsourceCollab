@@ -7,6 +7,7 @@ canvas{ background-color:black; }
 </style>
 
     <script src="keyboard.js"></script>
+    <script src="tools.js"></script>
 
 <script>
 	
@@ -43,7 +44,7 @@ canvas{ background-color:black; }
 					"src": "zombieSprite.png",
 					"type":"Enemy",
                     "fx" : {
-                        "spawn": "zombieRising.wav"
+                        "spawn": "zombieRising.ogg"
                     }	
 
 				},
@@ -74,27 +75,6 @@ canvas{ background-color:black; }
 		}
 	}
 	
-    requestAnimFrame = (function () {
-        return window.requestAnimationFrame ||
-       		 window.webkitRequestAnimationFrame ||
-       		 window.mozRequestAnimationFrame ||
-       		 window.oRequestAnimationFrame ||
-       		 window.msRequestAnimationFrame ||
-       		 function (/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-       		     window.setTimeout(callback, 1000 / 60);
-       		 };
-    })();
-
-    function InheritFrom(context, obj, arguments){
-        context.__proto__ = new obj(arguments);
-        context.prototype = context.__proto__;
-        return true;
-    }
-
-    function RandomInt(max) {
-        return parseInt(Math.random() * max);
-    }
-
     VECTOR = (function(){
         var vector = {};
 
@@ -243,30 +223,7 @@ canvas{ background-color:black; }
         }
     }
 
-    function Point(x, y){
-        this.x = x || 0;
-        this.y = y || 0;
-    }
 
-    function Rect(x, y, w, h){
-        this.x = x || 0;
-        this.y = y || 0;
-        this.w = w || 1;
-        this.h = h || 1;
-	
-        Object.defineProperty(this, "cx", {
-            get: function(){
-                return (this.x + this.w/2);
-            }
-        });
-	
-        Object.defineProperty(this, "cy", {
-            get: function(){
-                return (this.y + this.h/2);
-            }
-        });
-
-    }
 
     function Entity(args){
         if(args == undefined) args = {};
@@ -366,30 +323,42 @@ canvas{ background-color:black; }
             if(args == undefined) args = {};
             InheritFrom(this, Entity, args);
 
+            this.velocity.x = args.direction.x;
+            this.velocity.y = args.direction.y;
+
             var bulletSpeed = 500;
 
-            this.velocity.x += bulletSpeed;
-            this.velocity.y += bulletSpeed;
+            this.velocity.x = this.velocity.x * bulletSpeed;
+            this.velocity.y = this.velocity.y * bulletSpeed;
 
-            var bullet = new Rect(GAME.player.position.x,GAME.player.position.y+(GAME.player.size.h/2),3,25);
+            this.position.x = GAME.player.position.x;
+            this.position.y = GAME.player.position.y;
+           
+            console.log('PLAYER POSITION ' + GAME.player.position.x);
 
+            this.bullet = new Rect(GAME.player.position.x,GAME.player.position.y,3,25);
+           
             this.draw = function (rc) {
-               
+                console.log(this.bullet);
                 rc.save();
                 rc.fillStyle = "rgb(0, 0, 255)";
-                rc.fillRect(this.bullet.x, this.bullet.y, this.bullet.w, this.bullet.h);
-               
+                rc.fillRect(this.position.x, this.position.y, this.bullet.w, this.bullet.h);
+                
                 rc.restore();
             }
 
             this.update = function () {
                 
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
-                       
 
-                this.position = VECTOR.add(this.position, moveSpeed);
+                console.log(this.velocity);
+                console.log(this.position);
 
-                if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
+                this.bullet.x += moveSpeed;  
+                this.bullet.y += moveSpeed;  
+                //this.position = VECTOR.add(this.position, moveSpeed);
+
+                //if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
 
                 return true;
             }
@@ -495,9 +464,10 @@ canvas{ background-color:black; }
             if(! isShooting){
                 lastShotTime = +(new Date());
                 isShooting = true;
-
+                console.log('DIRECTION');
+                console.log(direction)
                 // spawn a bullet with the direction 
-               GAME.bullets.push(new Bullet({velocity:direction}));
+                GAME.bullets.push(new Bullet({direction:direction}));
 
             }
             else {
@@ -522,44 +492,7 @@ canvas{ background-color:black; }
     }// end of player
 
 
-    function getCursorPosition(e) {
-        var x;
-        var y;
-        if (e.pageX != undefined && e.pageY != undefined) {
-            x = e.pageX;
-            y = e.pageY;
-        }
-        else {
-            x = e.clientX + document.body.scrollLeft +
-                    document.documentElement.scrollLeft;
-            y = e.clientY + document.body.scrollTop +
-                    document.documentElement.scrollTop;
-        }
-        x -= canvas.offsetLeft;
-        y -= canvas.offsetTop;
-       	 
-        return [x,y];
-
-    }
-
-    function collideRect(r1, r2) {
-        if (r1.x > r2.x + r2.w) return false;
-        if (r1.x + r1.w < r2.x) return false;
-        if (r1.y > r2.y + r2.h) return false;
-        if (r1.y + r1.h < r2.y) return false;
-        return true;
-    }
-
-
-
-    function collide(obj1, obj2) {
-        if (obj1.position.x > obj2.position.x + obj2.size.x) return false;
-        if (obj1.position.x + obj1.size.x < obj2.position.x) return false;
-        if (obj1.position.y > obj2.position.y + obj2.size.y) return false;
-        if (obj1.position.y + obj1.size.y < obj2.position.y) return false;
-        return true;
-    }
-
+   
 	
     GAME = (function () {
 
@@ -703,6 +636,13 @@ canvas{ background-color:black; }
                     enemies.push(new Enemy({name:'enemy1',w:70,h:70})); 
 
             }
+
+            for (var i = 0; i < game.bullets.length; ++i) {
+                 if (!game.bullets[i].update()){
+                    // If the enemy is off the screen
+                    game.bullets.splice(i, 1);
+                }
+            }
             
             for (var i = 0; i < enemies.length; ++i){
            
@@ -728,6 +668,9 @@ canvas{ background-color:black; }
 
             for (var i = 0; i < enemies.length; ++i)
                 enemies[i].draw(_renderingContext);
+
+             for (var i = 0; i < game.bullets.length; ++i)
+                game.bullets[i].draw(_renderingContext);
             
         }
         return game;
@@ -742,7 +685,7 @@ canvas{ background-color:black; }
 		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./"+gameConfig.resources.characters['enemy1'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
-        //RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
 
