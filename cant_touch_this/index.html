@@ -130,8 +130,9 @@ canvas{ background-color:black; }
         resources.TYPES.AUDIO = 1;
         resources.TYPES.IMAGE = 2;
 
-        function onResourceLoaded(){
+        function onResourceLoaded(event){
             resourcesLoaded += 1;
+            console.log("LOADED: ", event);
         }
 
         resources.isLoaded = function(){
@@ -150,16 +151,22 @@ canvas{ background-color:black; }
                     object = new Image();
                     object.src = resourcePath;
                     resourceCache[resourceKey] = object;
+                    object.onload = onResourceLoaded;
+
                     break;
                 case resources.TYPES.AUDIO:
                     resourcesCount += 1;
                     object = new Audio();
-                    object.src = resourcePath;
+                    object.preload = true;
+                    
                     resourceCache[resourceKey] = object;
+                    object.addEventListener("onload", onResourceLoaded, false);
+                    object.onloadeddata = onResourceLoaded;
+                    object.src = resourcePath;
+                    object.load();
+                    o = object;
                     break;
             }
-
-            object.onload = onResourceLoaded;
         }
 
         resources.get = function(resourceKey){
@@ -312,7 +319,9 @@ canvas{ background-color:black; }
                 //this.position.y += moveSpeedy;
 
 
-                if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
+                if (this.position.x < 0 || this.position.x > GAME.width ||
+                    this.position.y < 0 || this.position.y > GAME.height)
+                    return false;
 
                 return true;
             }
@@ -339,11 +348,13 @@ canvas{ background-color:black; }
             this.bullet = new Rect(GAME.player.position.x,GAME.player.position.y,3,25);
            
             this.draw = function (rc) {
+
                 console.log(this.bullet);
                 rc.save();
                 rc.fillStyle = "rgb(0, 0, 255)";
                 rc.fillRect(this.position.x, this.position.y, this.bullet.w, this.bullet.h);
                 
+
                 rc.restore();
             }
 
@@ -351,14 +362,13 @@ canvas{ background-color:black; }
                 
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
+
                 console.log(this.velocity);
                 console.log(this.position);
 
                 this.bullet.x += moveSpeed;  
                 this.bullet.y += moveSpeed;  
-                //this.position = VECTOR.add(this.position, moveSpeed);
 
-                //if (this.position.x < 0 || this.position.x > GAME.width || this.position.y < 0 || this.position.y > GAME.height) return false;
 
                 return true;
             }
