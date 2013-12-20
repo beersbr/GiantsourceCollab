@@ -134,6 +134,7 @@ canvas{ background-color:black; }
         function onResourceLoaded(event){
             resourcesLoaded += 1;
             console.log("LOADED: ", event);
+            return true;
         }
 
         resources.isLoaded = function(){
@@ -158,13 +159,12 @@ canvas{ background-color:black; }
                 case resources.TYPES.AUDIO:
                     resourcesCount += 1;
                     object = new Audio();
-                    object.preload = true;
+                    //object.preload = true;
                     
                     resourceCache[resourceKey] = object;
-                    object.addEventListener("onload", onResourceLoaded, false);
-                    object.onloadeddata = onResourceLoaded;
+                    object.addEventListener("onloaddata", onResourceLoaded, false);
                     object.src = resourcePath;
-                    object.load();
+                    //object.load();
                     o = object;
                     break;
             }
