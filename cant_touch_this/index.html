@@ -497,7 +497,7 @@ canvas{ background-color:black; }
                 isShooting = true;
 
                 // spawn a bullet with the direction 
-               game.bullets.push(new Bullet({velocity:direction}));
+               GAME.bullets.push(new Bullet({velocity:direction}));
 
             }
             else {
@@ -608,7 +608,7 @@ canvas{ background-color:black; }
             game.score = 0;
             game.state = game.states.PLAYING;
             enemies = [];
-            bullets = [];
+            game.bullets = [];
         }
  	 
         game.loadedResources = 0;
@@ -742,7 +742,7 @@ canvas{ background-color:black; }
 		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./"+gameConfig.resources.characters['enemy1'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        //RESOURCES.markResource('enemy1Spawn', "./"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
 
