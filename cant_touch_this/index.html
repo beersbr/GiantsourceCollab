@@ -51,6 +51,8 @@ canvas{ background-color:black; }
 
                     },
 					"type":"Enemy",
+                    "follow":false,
+                    "speed" : "random",
                     "fx" : {
                         "spawn": "zombieRising.ogg"
                     }	
@@ -64,7 +66,10 @@ canvas{ background-color:black; }
                         "w":70,
                         "h":69
                     },
+
 					"type":"Enemy",
+                    "follow":true,
+                    "speed" : 100,
                     "fx" : {
                         "spawn": "brains.ogg"
                     }	
@@ -316,39 +321,71 @@ canvas{ background-color:black; }
             
             spawnAudio.play();
 
-			var moveSpeed = 150;
+			
 			var hitPoints = 1;
 			var rand = RandomInt(3);
-      	
+            this.enemyName = args.name;
+            this.enemySpeed = (gameConfig.resources.characters[this.enemyName].speed == 'random' ? 100 + RandomInt(100) : gameConfig.resources.characters[this.enemyName].speed);
+      	    
             switch (rand) {
                 // Top
                 case 0:
                     this.position.x = RandomInt(GAME.width);
                     this.position.y = 0;
-                    this.velocity.y = 100 + RandomInt(100);
+                    this.velocity.y = this.enemySpeed
                     break;
                     // Left
                 case 1:
                     this.position.x = 0;
                     this.position.y = RandomInt(GAME.height);
-                    this.velocity.x = 100 + RandomInt(100);
+                    this.velocity.x = this.enemySpeed
                     break;
                     // Bottom
                 case 2:
                     this.position.x = RandomInt(GAME.width);
                     this.position.y = GAME.height;
-                    this.velocity.y = -100 - RandomInt(100);
+                    this.velocity.y = -this.enemySpeed;
                     break;
                     // Right
                 case 3:
                     this.position.x = GAME.width;
                     this.position.y = RandomInt(GAME.height);
-                    this.velocity.x = -100 - RandomInt(100);
+                    this.velocity.x = -this.enemySpeed;
                     break;
 
             } // end switch
 
+             this.followPlayer = function () {
+
+
+                    if (GAME.player.position.x <  this.position.x) {
+
+                            this.velocity.x = -this.enemySpeed;
+
+                    } else {
+
+                             this.velocity.x = this.enemySpeed;
+
+                    }
+
+                    if (GAME.player.position.y <  this.position.y) {
+
+                            this.velocity.y = -this.enemySpeed;
+
+
+                    } else {
+
+                             this.velocity.y = this.enemySpeed;
+
+                    }
+
+            }
+
+
             this.draw = function (rc) {
+
+                 if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
+
                 var r = this.toRect();
 				rc.save();
            	 	var image = this.sprite.render();
@@ -356,8 +393,11 @@ canvas{ background-color:black; }
 				rc.restore();
             }
 
+           
+
             this.update = function () {
-              	
+                
+                if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
                 //var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
@@ -639,6 +679,10 @@ canvas{ background-color:black; }
 
                     game.update();
                     game.draw();
+
+                    if(GAME.Keyboard.keyPressed("escape")){
+                        game.state = game.states.GAMEOVER; 
+                    }
                     break;
                 case game.states.GAMEOVER:
 
@@ -688,7 +732,7 @@ canvas{ background-color:black; }
 
 			if (RandomInt(game.totalTime) < game.totalTime * 0.09 ) {
                 game.enemyCnt++;
-                if (game.enemyCnt == 15) {
+                if (game.enemyCnt == 40) {
                     enemyType = 'enemy2'
                     game.enemyCnt = 0;
                 } else {
@@ -735,11 +779,7 @@ canvas{ background-color:black; }
                     // If the enemy is off the screen
                     enemies.splice(i, 1);
                 }
-
-
             }
-			
-			
    		 	
         }
 
@@ -772,7 +812,7 @@ canvas{ background-color:black; }
         RESOURCES.markResource('player1Shoot', "./resources/"+gameConfig.resources.characters['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
-        GODMODE = false;
+        GODMODE = true;
 
     }
 </script>
