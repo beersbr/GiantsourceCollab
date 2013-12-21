@@ -392,28 +392,9 @@ canvas{ background-color:black; }
 
              this.followPlayer = function () {
 
-
-                    if (GAME.player.position.x <  this.position.x) {
-
-                            this.velocity.x = -this.enemySpeed;
-
-                    } else {
-
-                             this.velocity.x = this.enemySpeed;
-
-                    }
-
-                    if (GAME.player.position.y <  this.position.y) {
-
-                            this.velocity.y = -this.enemySpeed;
-
-
-                    } else {
-
-                             this.velocity.y = this.enemySpeed;
-
-                    }
-
+                    var moveEnemy = VECTOR.subtract(GAME.player.position,  enemy.position);
+                    this.velocity = VECTOR.unit(moveEnemy);
+                   
             }
 
 
@@ -421,22 +402,7 @@ canvas{ background-color:black; }
 
                 if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
 
-                /*
-                for (var i = 0; i < GAME.quadrants.length; i++) {
-
-                    if (this.position.x <= GAME.quadrants[i].x) {
-
-                        if (this.position.y <= GAME.quadrants[i].y) {
-
-                            this.currentQuadrant = i;
-                            break;
-
-                        }
-
-                    }
-
-                }
-                */
+               
                 var r = this.toRect();
 				rc.save();
            	 	var image = this.sprite.render();
@@ -456,26 +422,7 @@ canvas{ background-color:black; }
 
                 this.position = VECTOR.add(this.position, moveSpeed);
 
-                //this.position.x += moveSpeedx;
-                //this.position.y += moveSpeedy;
-                /*
-                for (var i = 0; i < GAME.quadrants.length; i++) {
-
-                    if (this.position.x <= GAME.quadrants[i].x) {
-
-                        if (this.position.y <= GAME.quadrants[i].y) {
-
-                            this.currentQuadrant = i;
-                            break;
-
-                        }
-
-                    }
-
-                }
-
-                console.log('CURRENT QUAD ' + this.currentQuadrant);
-                */
+               
                 if (this.position.x < 0 || this.position.x > GAME.width ||
                     this.position.y < 0 || this.position.y > GAME.height)
                     return false;
