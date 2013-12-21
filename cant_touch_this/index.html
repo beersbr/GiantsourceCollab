@@ -14,21 +14,21 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
     <script src="sprite.js"></script>
     <script src="entity.js"></script>
 <script>
-	
-	var gameConfig = {
-		"settings": {
-			"title":"Stupid Zombies",
-			"width":800,
-			"height":600,
+    
+    var gameConfig = {
+        "settings": {
+            "title":"Stupid Zombies",
+            "width":800,
+            "height":600,
             "quadrant": {
 
                 "w":400,
                 "h":600
 
-            }	
+            }   
 
-		},
-		"resources": {
+        },
+        "resources": {
             "gameFx" : {
 
 
@@ -45,10 +45,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 },
 
             },
-			"characters": {
-				"player1":{
-					"name": "Phillip",
-					"sprite": {
+            "characters": {
+                "player1":{
+                    "name": "Phillip",
+                    "sprite": {
 
                         "src": "player1Sprite.png",
                         "w":41,
@@ -69,12 +69,12 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
                     },
 
-					"type":"Player",
+                    "type":"Player",
                     "fx": {"shoot":"shotgun.ogg"}
-				},
-				"player2":{
-					"name": "Jorge",
-					"sprite": {
+                },
+                "player2":{
+                    "name": "Jorge",
+                    "sprite": {
 
                         "src": "player2Sprite.png",
                         "w":62,
@@ -99,10 +99,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     "fx": {"shoot":"shotgun.ogg"}
 
 
-				},
-				"enemy1":{
-					"name": "Office Zombie",
-					"sprite": {
+                },
+                "enemy1":{
+                    "name": "Office Zombie",
+                    "sprite": {
 
                         "src": "zombieSprite.png",
                         "w":70,
@@ -116,17 +116,17 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
 
                     },
-					"type":"Enemy",
+                    "type":"Enemy",
                     "follow":false,
                     "speed" : "random",
                     "fx" : {
                         "spawn": "zombieRising.ogg"
-                    }	
+                    }   
 
-				},
-				"enemy2": {
-					"name": "Girl Zombie",
-					"sprite": {
+                },
+                "enemy2": {
+                    "name": "Girl Zombie",
+                    "sprite": {
 
                         "src": "zombie2Sprite.png",
                         "w":70,
@@ -139,38 +139,38 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                         }
                     },
 
-					"type":"Enemy",
+                    "type":"Enemy",
                     "follow":true,
                     "speed" : 200,
                     "fx" : {
                         "spawn": "brains.ogg"
-                    }	
-				}
-			},
-			"levels": {
-				"1" :{
-					"name":"Swamp",
-					"src":"swamp.jpg"	
-				}
-			},
-			"screens": {
-				
-				"welcome": {
-					"name":"Welcome",
-					"src":"welcome.jpg"	
-				},
-				"gameover": {
-					"name":"Game Over",
-					"src":"gameover.jpg"	
-					
-				}	
-			}
-		}
-	}
-	
+                    }   
+                }
+            },
+            "levels": {
+                "1" :{
+                    "name":"Swamp",
+                    "src":"swamp.jpg"   
+                }
+            },
+            "screens": {
+                
+                "welcome": {
+                    "name":"Welcome",
+                    "src":"welcome.jpg" 
+                },
+                "gameover": {
+                    "name":"Game Over",
+                    "src":"gameover.jpg"    
+                    
+                }   
+            }
+        }
+    }
+    
 
-	
-	function Enemy(args) {
+    
+    function Enemy(args) {
          if(args == undefined) args = {};
          InheritFrom(this, Entity, args);
          this.image = RESOURCES.get(gameConfig.resources.characters[args.name].name);
@@ -180,11 +180,11 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             spawnAudio.volume = 0.3;
             spawnAudio.play();
 
-			var hitPoints = 1;
-			var rand = RandomInt(3);
+            var hitPoints = 1;
+            var rand = RandomInt(3);
             this.enemyName = args.name;
             this.enemySpeed = (gameConfig.resources.characters[this.enemyName].speed == 'random' ? 100 + RandomInt(100) : gameConfig.resources.characters[this.enemyName].speed);
-      	    
+            
             switch (rand) {
                 // Top
                 case 0:
@@ -217,7 +217,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     var moveEnemy = VECTOR.subtract(GAME.player.position,  this.position);
                   
                     var newVel = VECTOR.unit(moveEnemy);
-                	this.velocity = VECTOR.multiplyScalar(newVel, this.enemySpeed);
+                    this.velocity = VECTOR.multiplyScalar(newVel, this.enemySpeed);
                    
             }
 
@@ -244,10 +244,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 }
                 */
                 var r = this.toRect();
-				rc.save();
-           	 	var image = this.sprite.render();
-				rc.drawImage(image, r.x, r.y, r.w, r.h);
-				rc.restore();
+                rc.save();
+                var image = this.sprite.render();
+                rc.drawImage(image, r.x, r.y, r.w, r.h);
+                rc.restore();
             }
 
 
@@ -272,7 +272,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         if(args == undefined) args = {};
         InheritFrom(this, Entity, args);
 
-        this.size = new VECTOR.Vector(gameConfig.resources.gameImages.bullet.w  || 5, gameConfig.resources.gameImages.bullet.h  || 5);
+        
+        //this.size = new VECTOR.Vector(args.direction.x * 25 || 5, args.direction.y * 25  || 5);
+         this.size = new VECTOR.Vector(gameConfig.resources.gameImages.bullet.w  || 5, gameConfig.resources.gameImages.bullet.h  || 5);
+
         this.image = RESOURCES.get('bullet');
         this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: gameConfig.resources.gameImages.bullet.h , frameWidth: gameConfig.resources.gameImages.bullet.w});
         this.bulletSpeed = 450;
@@ -413,7 +416,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             else if (GAME.Keyboard.keyIsDown("down_arrow") || GAME.Keyboard.keyIsDown("k")) {
                 this.shoot(VECTOR.DOWN);
             }
-		
+        
             this.velocity = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
             this.position = VECTOR.add(this.position, this.velocity);
         }
@@ -496,7 +499,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
 
    
-	
+    
     GAME = (function () {
 
 
@@ -510,9 +513,9 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
         var _renderingContext = null;
         game.Keyboard = new KeyboardHandler();
-   	 
+     
         //game.selectedPlayer = 0;
-   	
+    
        
 
         Object.defineProperty(game, "renderingContext", {
@@ -529,8 +532,8 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         });
 
         game.states = {};
-		game.selectedPlayer = 'player1';
-		game.currentLevel = 1;
+        game.selectedPlayer = 'player1';
+        game.currentLevel = 1;
         game.states.PLAYING = 1;
         game.states.GAMEOVER = 2;
         game.states.LOADING = 3;
@@ -539,7 +542,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         game.state = game.states.LOADING;
         
         game.init = function() {
-   		    
+            
 //            setupQuadrants();
 
             game.player = new Player({hitW:gameConfig.resources.characters[game.selectedPlayer].sprite.hitbox.w,hitH:gameConfig.resources.characters[game.selectedPlayer].sprite.hitbox.h,x: gameConfig.resources.characters[game.selectedPlayer].spawn.x, y: gameConfig.resources.characters[game.selectedPlayer].spawn.y, w: gameConfig.resources.characters[game.selectedPlayer].sprite.w, h: gameConfig.resources.characters[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
@@ -552,7 +555,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             game.enemyCnt = 0;
             game.states.gameoverPlayed  = false;
         }
- 	 
+     
         game.loadedResources = 0;
         game.totalResources = 6;
 
@@ -568,7 +571,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             switch(game.state)
             {
                 case game.states.LOADING:
-               	 
+                 
                     var loadingText = "LOADING";
                     var loadingLen = _renderingContext.measureText(loadingText);
                     _renderingContext.save();
@@ -577,16 +580,16 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     _renderingContext.restore();
                 
                     if (RESOURCES.isLoaded()) {
-						
-						 var screenImage = RESOURCES.get(gameConfig.resources.screens['welcome'].name);
-                    	_renderingContext.drawImage(screenImage, 0, 0, 800, 600);
-						
-						 if(GAME.Keyboard.keyPressed("enter")){
-							game.state = game.states.PLAYING; 
-                        	game.init();
-   			 
-                    	}
-						
+                        
+                         var screenImage = RESOURCES.get(gameConfig.resources.screens['welcome'].name);
+                        _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
+                        
+                         if(GAME.Keyboard.keyPressed("enter")){
+                            game.state = game.states.PLAYING; 
+                            game.init();
+             
+                        }
+                        
                         
                        // game.init();
                     }
@@ -614,7 +617,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                       if (!game.states.gameoverPlayed) {
                           game.states.gameoverPlayed = true;
                           game.overAudio = RESOURCES.get('gameOverAudio');
-                		  game.overAudio.volume = 0.2;
+                          game.overAudio.volume = 0.2;
                 
                           game.overAudio.play();
                       }
@@ -646,16 +649,16 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
         game.update = function () {
             game.score = game.totalTime +(game.player.zombiesKilled*1000);
-   		   
+           
              var scoreText = "SCORE: " + game.score + "   ZOMBIES KILLED: " +game.player.zombiesKilled;
             var scoreLen = _renderingContext.measureText(scoreText);
             _renderingContext.font = '14pt Calibri';
             _renderingContext.fillStyle = "rgb(255, 255, 255)";
             _renderingContext.fillText(scoreText, 25, 20);
-   			
+            
             game.player.update();
 
-			if (RandomInt(game.totalTime) < game.totalTime * 0.05) {
+            if (RandomInt(game.totalTime) < game.totalTime * 0.05) {
                 game.enemyCnt++;
 
                 if (game.enemyCnt == 40) {
@@ -733,10 +736,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         GAME.renderingContext = document.getElementById("canvas");
         RESOURCES.markResource(gameConfig.resources.levels['1'].name, "./resources/"+gameConfig.resources.levels['1'].src, RESOURCES.TYPES.IMAGE);
         RESOURCES.markResource(gameConfig.resources.characters['player1'].name, "./resources/"+gameConfig.resources.characters['player1'].sprite.src, RESOURCES.TYPES.IMAGE);
-		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./resources/"+gameConfig.resources.characters['enemy1'].sprite.src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./resources/"+gameConfig.resources.characters['enemy1'].sprite.src, RESOURCES.TYPES.IMAGE);
         RESOURCES.markResource(gameConfig.resources.characters['enemy2'].name, "./resources/"+gameConfig.resources.characters['enemy2'].sprite.src, RESOURCES.TYPES.IMAGE);
-		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./resources/"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
-		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./resources/"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./resources/"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./resources/"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
         RESOURCES.markResource('bullet', "./resources/"+gameConfig.resources.gameImages['bullet'].src, RESOURCES.TYPES.IMAGE);
         RESOURCES.markResource('gameOverAudio', "./resources/"+gameConfig.resources.gameFx['gameover'], RESOURCES.TYPES.AUDIO);
         RESOURCES.markResource('enemy1Spawn', "./resources/"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
