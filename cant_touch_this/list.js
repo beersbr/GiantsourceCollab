@@ -100,18 +100,20 @@ function List(){
         this.next = function(){
             if(this.node == undefined)
                 this.node = this.list.head;
+            else{
+                if(this.node == null)
+                    return false;
+
+                this.node = this.node.next;
+
+                return true;
+            }
 
             if(this.node == null)
                 return false;
 
-            if(this.node.next == null){
-                return false;
-            }
-            else{
-                this.node = this.node.next;
-            }
-
             this.value = this.node.data;
+
             return true;
         }
 
