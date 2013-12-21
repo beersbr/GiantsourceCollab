@@ -105,7 +105,7 @@ canvas{ background-color:black; }
 
 					"type":"Enemy",
                     "follow":true,
-                    "speed" : 100,
+                    "speed" : 200,
                     "fx" : {
                         "spawn": "brains.ogg"
                     }	
@@ -374,16 +374,15 @@ canvas{ background-color:black; }
 
             this.update = function () {
                 
-                if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
-                
+                if (gameConfig.resources.characters[this.enemyName].follow)this.followPlayer();
+                	
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
-                //var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
-                //var moveSpeedy = this.velocity.y * (GAME.elapsedTime / 1000);
+               		 //var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
+                	//var moveSpeedy = this.velocity.y * (GAME.elapsedTime / 1000);
 
-                this.position = VECTOR.add(this.position, moveSpeed);
-
-               
+                 this.position = VECTOR.add(this.position, moveSpeed);
+   
                 if (this.position.x < 0 || this.position.x > GAME.width ||
                     this.position.y < 0 || this.position.y > GAME.height)
                     return false;
