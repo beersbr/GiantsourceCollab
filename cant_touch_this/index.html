@@ -105,7 +105,7 @@ canvas{ background-color:black; }
 
 					"type":"Enemy",
                     "follow":true,
-                    "speed" : 100,
+                    "speed" : 200,
                     "fx" : {
                         "spawn": "brains.ogg"
                     }	
@@ -313,7 +313,7 @@ canvas{ background-color:black; }
 			//console.log(args);
            
             var spawnAudio = RESOURCES.get(args.name+'Spawn');
-            
+            spawnAudio.volume = 0.3;
             spawnAudio.play();
             this.currentQuadrant = null;
 			
@@ -351,29 +351,8 @@ canvas{ background-color:black; }
             } // end switch
 
              this.followPlayer = function () {
-
-
-                    if (GAME.player.position.x <  this.position.x) {
-
-                            this.velocity.x = -this.enemySpeed;
-
-                    } else {
-
-                             this.velocity.x = this.enemySpeed;
-
-                    }
-
-                    if (GAME.player.position.y <  this.position.y) {
-
-                            this.velocity.y = -this.enemySpeed;
-
-
-                    } else {
-
-                             this.velocity.y = this.enemySpeed;
-
-                    }
-
+                    var moveEnemy = VECTOR.subtract(GAME.player.position,  this.position);
+                    this.velocity = VECTOR.unit(moveEnemy);
             }
 
 
@@ -407,35 +386,12 @@ canvas{ background-color:black; }
 
 
             this.update = function () {
-
                 if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
-                var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
-                //var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
-                //var moveSpeedy = this.velocity.y * (GAME.elapsedTime / 1000);
+                var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
                 this.position = VECTOR.add(this.position, moveSpeed);
 
-                //this.position.x += moveSpeedx;
-                //this.position.y += moveSpeedy;
-                /*
-                for (var i = 0; i < GAME.quadrants.length; i++) {
-
-                    if (this.position.x <= GAME.quadrants[i].x) {
-
-                        if (this.position.y <= GAME.quadrants[i].y) {
-
-                            this.currentQuadrant = i;
-                            break;
-
-                        }
-
-                    }
-
-                }
-
-                console.log('CURRENT QUAD ' + this.currentQuadrant);
-                */
                 if (this.position.x < 0 || this.position.x > GAME.width ||
                     this.position.y < 0 || this.position.y > GAME.height)
                     return false;
@@ -487,9 +443,11 @@ canvas{ background-color:black; }
             isSprinting = false,
             sprintInterval = 2000, 
             sprintTime = 500,
+            sprintLength = 0,
             lastSprintTime = -1,
             sprintElapsedTime = 0,
-            nonSprintElapsedTime = 0;
+            nonSprintElapsedTime = 0,
+            runBarPercent = 100;
 
         var isShooting = false,
             shootInterval = 500, // in milliseconds
@@ -512,6 +470,7 @@ canvas{ background-color:black; }
                         isSprinting = true;
                         lastSprintTime = +(new Date());
                         nonSprintElapsedTime = 0;
+                        sprintLength += GAME.elapsedTime;
                     }
                 }
                 else{
@@ -522,6 +481,7 @@ canvas{ background-color:black; }
                     }
                     else{
                         frameMoveSpeed = sprintSpeed;
+                        sprintLength += GAME.elapsedTime;
                     }
                 }
             }
@@ -529,9 +489,13 @@ canvas{ background-color:black; }
                 // Not sprinting
                 isSprinting = false;
                 sprintElapsedTime = 0;
-                nonSprintElapsedTime += GAME.elapsedTime;
+                nonSprintElapsedTime += GAME.elapsedTime;            
+                if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
             } 
 
+            // Show run bar
+            this.runBar();
+            
             // Update character movement
 
             if (GAME.Keyboard.keyIsDown("a")) {
@@ -585,7 +549,49 @@ canvas{ background-color:black; }
                 }
             }
         }
-
+        
+        // Calculate percentage of run bar to show
+        this.runBar = function() {
+          
+          var runBar = {};
+          
+          // Run bar color
+          runBar.containerColor = "rgb(24, 24, 24)";
+          runBar.color = "rgb(24, 240, 204)";
+          
+          // Run bar coordinates
+          runBar.x = 25;
+          runBar.y = 30;
+          //runBar.w = 100;
+          runBar.h = 10;
+          
+          // If sprinting, decrease the bar
+          if(isSprinting){
+            runBarPercent = 100 - parseInt((sprintElapsedTime / sprintTime) * 100);
+          }
+          
+          // ElseIf not sprinting, but still within sprintTime
+          else if(nonSprintElapsedTime + sprintLength < sprintTime && lastSprintTime > 0){
+            runBarPercent = 100 - (parseInt(((nonSprintElapsedTime + sprintLength) / sprintTime) * 100));
+          }
+          
+          // Elseif not sprinting, 
+          else if(nonSprintElapsedTime > 0 && nonSprintElapsedTime < sprintInterval && lastSprintTime > 0){
+            runBarPercent = parseInt((nonSprintElapsedTime / sprintInterval) * 100);
+          }
+          
+          
+          runBar.w = runBarPercent
+          
+          // Display Run bar container
+          GAME.renderingContext.fillStyle = runBar.containerColor;
+          GAME.renderingContext.fillRect(runBar.x-1,runBar.y-1,102,runBar.h+2); 
+          
+          // Display Run bar
+          GAME.renderingContext.fillStyle = runBar.color;
+          GAME.renderingContext.fillRect(runBar.x,runBar.y,runBar.w,runBar.h); 
+          
+        }
 
         this.draw = function (rc) {
             var r = this.toRect();
@@ -717,6 +723,7 @@ canvas{ background-color:black; }
                       if (!game.states.gameoverPlayed) {
                          game.states.gameoverPlayed = true;
                           game.overAudio = RESOURCES.get('gameOverAudio');
+                		  game.overAudio.volume = 0.2;
                 
                           game.overAudio.play();
                       }

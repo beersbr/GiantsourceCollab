@@ -9,7 +9,7 @@ VECTOR = (function(){
         // .magnitude
         Object.defineProperty(this, "magnitude", {
             get: function(){
-                return (Math.sqrt(this.x*this.y + this.y*this.y));
+                return (Math.sqrt(this.x*this.x + this.y*this.y));
             }
         });
     }
