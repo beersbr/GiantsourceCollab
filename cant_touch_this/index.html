@@ -10,7 +10,9 @@ canvas{ background-color:black; width: 100%; height: 100%; }
     <script src="tools.js"></script>
     <script src="list.js"></script>
     <script src="vector.js"></script>
-
+    <script src="resources.js"></script>
+    <script src="sprite.js"></script>
+    <script src="entity.js"></script>
 <script>
 	
 	var gameConfig = {
@@ -133,177 +135,6 @@ canvas{ background-color:black; width: 100%; height: 100%; }
 	}
 	
 
- 
-    RESOURCES = (function(){
-        var resources = {};
-
-        var resourcesCount = 0,
-            resourcesLoaded = 0,
-            resourcesAreLoaded = false,
-            resourceCache = {};
-
-        resources.TYPES = {};
-        resources.TYPES.AUDIO = 1;
-        resources.TYPES.IMAGE = 2;
-
-        function onResourceLoaded(event, type, key){
-            resourcesLoaded += 1;
-
-            if (type == "audio") {
-                $(resourceCache[key]).unbind("loadeddata");
-                resourceCache[key] = new audio(resourceCache[key]);
-            }
-
-            return true;
-        }
-
-        // this is just an audio tag wrapper that creates a bunch of the same audio tag 
-        // so we can play more than one instance of that sound at a time... actually we can 
-        // play maxChannels many :D
-        function audio(audio) {
-            this.maxChannels = 20;
-            this.channels = [];
-
-            this.audio = audio;
-            this.currentChannel = 0;
-            this.volume = 1;
-
-            for (var i = 0; i < this.maxChannels; i++) {
-                this.channels[i] = new Audio();
-                this.preload = true;
-                this.channels[i].src = this.audio.src;
-            }
-
-            this.play = function () {
-
-                this.channels[this.currentChannel].load();
-                this.channels[this.currentChannel].volume = this.volume;
-                this.channels[this.currentChannel].play();
-                this.currentChannel = (this.currentChannel + 1) % this.maxChannels;
-            }
-
-            this.load = function () { }
-        }
-
-        resources.isLoaded = function(){
-            if(resourcesCount == resourcesLoaded){
-                resourcesAreLoaded = true;
-            }
-            return resourcesAreLoaded;
-        }
-
-        resources.markResource = function(resourceKey, resourcePath, resourceType){
-            var object = null;
-
-            switch(resourceType){
-                case resources.TYPES.IMAGE: 
-                    resourcesCount += 1;
-                    object = new Image();
-                    object.src = resourcePath;
-                    resourceCache[resourceKey] = object;
-                    object.onload = onResourceLoaded;
-
-                    break;
-                case resources.TYPES.AUDIO:
-                    resourcesCount += 1;
-                    object = new Audio();
-                    object.preload = true;
-                    
-                    resourceCache[resourceKey] = object;
-                    $(object).on("loadeddata", function (event) { onResourceLoaded(event, "audio", resourceKey); });
-                    object.src = resourcePath;
-                    object.load();
-                    o = object;
-                    break;
-            }
-        }
-
-        resources.get = function(resourceKey){
-            if(!resourcesAreLoaded)
-                throw "Resources aren't loaded yet :(";
-
-            return resourceCache[resourceKey];
-        }
-
-        return resources;
-    })();
-
-    function Sprite(args){
-        if(args == undefined) args = {}
-
-        this.frameWidth = args.frameWidth || -1;
-        this.frameHeight = args.frameHeight || -1;
-        this.image = args.image || null;
-        this.frameTime = args.frameTime || -1; //1000/60 * 4;
-
-        // error handling => didnt pass in frame width and height and image
-        if(this.frameWidth < 0) {
-            // Some error
-        }
-        if(this.frameHeight < 0) {
-            // Some error
-        }
-        if(this.frameTime < 0) {
-            // Some error
-        }
-        if(!this.image) {
-            // Some error
-        }
-        //console.log(args);
-        this.imageWidth = this.image.width;
-        this.imageHeight = this.image.height;
-
-        this.framesCount = this.imageWidth / this.frameWidth;
-        this.currentFrame = 0;
-		//console.log('TOTAL FRAMES = '+ this.framesCount);
-        this.currentFrameTime = 0;
-        this.currentFrameElapsedTime = 0;
-        this.currentFrameImage = document.createElement("canvas");
-        this.currentFrameContext = this.currentFrameImage.getContext("2d");
-        this.currentFrameImage.width = this.frameWidth;
-        this.currentFrameImage.height = this.frameHeight;
-
-        this.render = function(){
-            this.currentFrameContext.clearRect(0, 0, this.frameWidth, this.frameHeight);
-            this.currentFrameContext.drawImage(this.image, this.frameWidth*this.currentFrame, 0, this.frameWidth, this.frameHeight, 0, 0, this.frameWidth, this.frameHeight);
-		
-            if(this.currentFrameElapsedTime < this.frameTime){
-                this.currentFrameElapsedTime += GAME.elapsedTime;
-            }
-            else {
-                this.currentFrame = (this.currentFrame + 1) % this.framesCount;
-                this.currentFrameElapsedTime = (this.currentFrameElapsedTime - this.frameTime);
-            }
-
-            return this.currentFrameImage;
-        }
-    }
-
-
-
-    function Entity(args){
-        if(args == undefined) args = {};
-
-        var x = args.x || 0;
-        var y = args.y || 0;
-        var w = args.w || 1;
-        var h = args.h || 1;
-
-        this.position = new VECTOR.Vector(x, y);
-        this.size = new VECTOR.Vector(w, h);
-        this.velocity = new VECTOR.Vector();
-
-        this.image = null;
-
-        this.update = function (elapsedTime) { throw "NOT IMPLEMENTED"; };
-        this.draw = function (renderContext) { throw "NOT IMPLEMENTED"; };
-
-        this.toRect = function () {
-            var hw = this.size.x / 2;
-            var hh = this.size.y / 2;
-            return (new Rect(this.position.x - hw, this.position.y - hh, this.size.x, this.size.y));
-        }
-    }
 	
 	function Enemy(args) {
              if(args == undefined) args = {};
@@ -771,8 +602,9 @@ canvas{ background-color:black; width: 100%; height: 100%; }
    			
             game.player.update();
 
-			if (RandomInt(game.totalTime) < game.totalTime * 0.09 ) {
+			if (RandomInt(game.totalTime) < game.totalTime * 0.05) {
                 game.enemyCnt++;
+
                 if (game.enemyCnt == 40) {
                     enemyType = 'enemy2'
                     game.enemyCnt = 0;
