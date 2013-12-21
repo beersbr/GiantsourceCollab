@@ -9,6 +9,7 @@ canvas{ background-color:black; }
     <script src="keyboard.js"></script>
     <script src="tools.js"></script>
     <script src="list.js"></script>
+    <script src="vector.js"></script>
 
 <script>
 	
@@ -46,7 +47,7 @@ canvas{ background-color:black; }
                     "spawn" : {
 
                         "x":400,
-                        "y":300,
+                        "y":300
 
                     },
 
@@ -66,7 +67,7 @@ canvas{ background-color:black; }
                     "spawn" : {
 
                         "x":400,
-                        "y":300,
+                        "y":300
 
                     },
 
@@ -131,48 +132,7 @@ canvas{ background-color:black; }
 		}
 	}
 	
-    VECTOR = (function(){
-        var vector = {};
 
-        vector.Vector = function(x, y, z){
-            this.x = x || 0;
-            this.y = y || 0;
-            this.z = z || 0;
-		
-            // .magnitude
-            Object.defineProperty(this, "magnitude", {
-                get: function(){
-                    return (Math.sqrt(this.x*this.y + this.y*this.y));
-                }
-            });
-        }
-
-
-        vector.UP    = new vector.Vector( 0, -1);
-        vector.DOWN  = new vector.Vector( 0,  1);
-        vector.LEFT  = new vector.Vector(-1,  0);
-        vector.RIGHT = new vector.Vector( 1,  0);
-
-        vector.add = function(a, b){
-            return (new vector.Vector(a.x+b.x, a.y+b.y, a.z+b.z));
-        }
-
-        vector.subtract = function(a, b){
-            return (new vector.Vector(a.x-b.x, a.y-b.y, a.z-b.z));
-        }
-
-        vector.unit = function(v){
-            //TODO: set dirty flag on vector to minimize sqrt calls
-            var magnitude = v.magnitude;
-            return (new vector.Vector(v.x / v.magnitude, v.y / v.magnitude));
-        }
-
-        vector.multiplyScalar = function(v, scalar){
-            return (new vector.Vector(v.x*scalar, v.y*scalar, v.z*scalar));
-        }
-
-        return vector;
-    })();
  
     RESOURCES = (function(){
         var resources = {};
@@ -447,19 +407,15 @@ canvas{ background-color:black; }
         this.draw = function (rc) {
 
             var r = this.toRect();
-
             rc.save();
             rc.fillStyle = "rgb(0, 0, 255)";
             rc.fillRect(r.x, r.y, r.w, r.h);
-
             rc.restore();
         }
 
         this.update = function () {
             var v = VECTOR.multiplyScalar(this.velocity, GAME.elapsedTime / 1000);
             this.position = VECTOR.add(this.position, v);
-
-
             return true;
         }
     }
@@ -539,16 +495,16 @@ canvas{ background-color:black; }
             }
 
             // only shoot in one direction at a time, so we use if else
-            if (GAME.Keyboard.keyIsDown("left_arrow")) {
+            if (GAME.Keyboard.keyIsDown("left_arrow") || GAME.Keyboard.keyIsDown("j")) {
                 this.shoot(VECTOR.LEFT);
             }
-            else if (GAME.Keyboard.keyIsDown("right_arrow")) {
+            else if (GAME.Keyboard.keyIsDown("right_arrow") || GAME.Keyboard.keyIsDown("l")) {
                 this.shoot(VECTOR.RIGHT);
             }
-            else if (GAME.Keyboard.keyIsDown("up_arrow")) {
+            else if (GAME.Keyboard.keyIsDown("up_arrow") || GAME.Keyboard.keyIsDown("i")) {
                 this.shoot(VECTOR.UP);
             }
-            else if (GAME.Keyboard.keyIsDown("down_arrow")) {
+            else if (GAME.Keyboard.keyIsDown("down_arrow") || GAME.Keyboard.keyIsDown("k")) {
                 this.shoot(VECTOR.DOWN);
             }
 		
@@ -759,14 +715,13 @@ canvas{ background-color:black; }
 
             var bulletsIter = game.bullets.getIterator();
 
-
             while(bulletsIter.next()){
                 var enemiesIter = game.enemies.getIterator();
                 var bullet = bulletsIter.value;
 
                 // bullet is off the screen...
                 if(!bullet.update()){
-                    enemiesIter.remove();
+                    bullet.remove();
                 }
 
                 while(enemiesIter.next()){
@@ -798,7 +753,7 @@ canvas{ background-color:black; }
                 enemy.draw(_renderingContext);
             }
 
-            var bulletsIter = game.enemies.getIterator();
+            var bulletsIter = game.bullets.getIterator();
 
             while(bulletsIter.next()){
                 var bullet = bulletsIter.value;
