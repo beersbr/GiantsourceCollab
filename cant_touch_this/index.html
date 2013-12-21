@@ -15,7 +15,13 @@ canvas{ background-color:black; }
 		"settings": {
 			"title":"Stupid Zombies",
 			"width":800,
-			"height":600,	
+			"height":600,
+            "quadrant": {
+
+                "w":200,
+                "h":300
+
+            }	
 
 		},
 		"resources": {
@@ -28,15 +34,43 @@ canvas{ background-color:black; }
 			"characters": {
 				"player1":{
 					"name": "Phillip",
-					"src": "player1Sprite.png",
+					"sprite": {
+
+                        "src": "player1Sprite.png",
+                        "w":41,
+                        "h":101
+
+
+                    },
+                    "spawn" : {
+
+                        "x":400,
+                        "y":300,
+
+                    },
+
 					"type":"Player",
                     "fx": {"shoot":"shotgun.ogg"}
 				},
 				"player2":{
 					"name": "Jorge",
-					"src": "player2Sprite.png",
-					"type":"Player",
-					"fx": {}
+					"sprite": {
+
+                        "src": "player2Sprite.png",
+                        "w":62,
+                        "h":101
+
+
+                    },
+                    "spawn" : {
+
+                        "x":400,
+                        "y":300,
+
+                    },
+
+                    "type":"Player",
+                    "fx": {"shoot":"shotgun.ogg"}
 
 
 				},
@@ -320,7 +354,7 @@ canvas{ background-color:black; }
             var spawnAudio = RESOURCES.get(args.name+'Spawn');
             
             spawnAudio.play();
-
+            this.currentQuadrant = null;
 			
 			var hitPoints = 1;
 			var rand = RandomInt(3);
@@ -384,8 +418,24 @@ canvas{ background-color:black; }
 
             this.draw = function (rc) {
 
-                 if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
+                if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
 
+                /*
+                for (var i = 0; i < GAME.quadrants.length; i++) {
+
+                    if (this.position.x <= GAME.quadrants[i].x) {
+
+                        if (this.position.y <= GAME.quadrants[i].y) {
+
+                            this.currentQuadrant = i;
+                            break;
+
+                        }
+
+                    }
+
+                }
+                */
                 var r = this.toRect();
 				rc.save();
            	 	var image = this.sprite.render();
@@ -407,8 +457,24 @@ canvas{ background-color:black; }
 
                 //this.position.x += moveSpeedx;
                 //this.position.y += moveSpeedy;
+                /*
+                for (var i = 0; i < GAME.quadrants.length; i++) {
 
+                    if (this.position.x <= GAME.quadrants[i].x) {
 
+                        if (this.position.y <= GAME.quadrants[i].y) {
+
+                            this.currentQuadrant = i;
+                            break;
+
+                        }
+
+                    }
+
+                }
+
+                console.log('CURRENT QUAD ' + this.currentQuadrant);
+                */
                 if (this.position.x < 0 || this.position.x > GAME.width ||
                     this.position.y < 0 || this.position.y > GAME.height)
                     return false;
@@ -450,14 +516,32 @@ canvas{ background-color:black; }
         }
     }
 	
+    function setupQuadrants() {
+
+         var totalRows = gameConfig.settings.height / gameConfig.settings.quadrant.h;
+
+        var totalCols = gameConfig.settings.width / gameConfig.settings.quadrant.w;
+        console.log('SET EM UP');
+        for (var i = 1; i <= totalRows; i++) {
+            console.log(i);
+             for (var z = 1; z <= totalCols; z++) {
+
+                     GAME.quadrants.push({"x":(z*gameConfig.settings.quadrant.w),'y':(i*gameConfig.settings.quadrant.h)})
+
+             }
+   
+        }
+
+
+    }
 	
     function Player(args){
         if(args == undefined) args = {};
         InheritFrom(this, Entity, args);
         //console.log(args);
-        this.image = RESOURCES.get(args.selectedPlayer);
+        this.image = RESOURCES.get(gameConfig.resources.characters[args.selectedPlayer].name);
         
-        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: 101, frameWidth: 41});
+        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: gameConfig.resources.characters[args.selectedPlayer].sprite.h, frameWidth: gameConfig.resources.characters[args.selectedPlayer].sprite.w});
 
 
         var moveSpeed = 150, // pixels/second
@@ -611,18 +695,20 @@ canvas{ background-color:black; }
         });
 
         game.states = {};
-		game.selectedPlayer = gameConfig.resources.characters['player1'].name;
+		game.selectedPlayer = 'player1';
 		game.currentLevel = 1;
         game.states.PLAYING = 1;
         game.states.GAMEOVER = 2;
         game.states.LOADING = 3;
-
+        game.quadrants = [];
         game.enemyCnt = 0;
         game.state = game.states.LOADING;
-    
+        
         game.init = function() {
-   		       
-            game.player = new Player({x: 100, y: 200, w: 41, h: 101,selectedPlayer:game.selectedPlayer});
+   		    
+            setupQuadrants();
+
+            game.player = new Player({x: gameConfig.resources.characters[game.selectedPlayer].spawn.x, y: gameConfig.resources.characters[game.selectedPlayer].spawn.y, w: gameConfig.resources.characters[game.selectedPlayer].sprite.w, h: gameConfig.resources.characters[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
             game.time = +(new Date());
             game.totalTime = 0;
             game.score = 0;
@@ -801,7 +887,7 @@ canvas{ background-color:black; }
     window.onload = function () {
         GAME.renderingContext = document.getElementById("canvas");
         RESOURCES.markResource(gameConfig.resources.levels['1'].name, "./resources/"+gameConfig.resources.levels['1'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(gameConfig.resources.characters['player1'].name, "./resources/"+gameConfig.resources.characters['player1'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(gameConfig.resources.characters['player1'].name, "./resources/"+gameConfig.resources.characters['player1'].sprite.src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./resources/"+gameConfig.resources.characters['enemy1'].sprite.src, RESOURCES.TYPES.IMAGE);
         RESOURCES.markResource(gameConfig.resources.characters['enemy2'].name, "./resources/"+gameConfig.resources.characters['enemy2'].sprite.src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./resources/"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
