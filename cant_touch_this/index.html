@@ -354,8 +354,8 @@ canvas{ background-color:black; }
 					
                     var moveEnemy = VECTOR.subtract(GAME.player.position,  this.position);
                   
-                    this.velocity = VECTOR.unit(moveEnemy);
-                    
+                    var newVel = VECTOR.unit(moveEnemy);
+                	this.velocity = VECTOR.multiplyScalar(newVel, this.enemySpeed);
                    
             }
 
