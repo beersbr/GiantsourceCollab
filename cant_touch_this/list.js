@@ -105,8 +105,6 @@ function List(){
                     return false;
 
                 this.node = this.node.next;
-
-                return true;
             }
 
             if(this.node == null)
