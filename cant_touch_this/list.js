@@ -47,42 +47,6 @@ function List(){
         return n.data;
     }
 
-    // removes all nodes where data == node.data
-    this.remove = function(data){
-        if(this.head == null)
-            return false;
-
-        if(this.tail == null)
-            return false;
-
-        var self = this;
-        this.each(function(el){
-            if(el.data == data){
-                if(el == self.head){
-                    // head
-                    self.head = self.head.next;
-                    self.head.prev = null;
-                }
-                else if(el == self.tail){
-                    // tail
-                    self.tail = self.tail.prev;
-                    self.tail.next = null;
-                }
-                else{
-                    var n = el.next;
-                    var p = el.prev;
-                    n.prev = p;
-                    p.next = n;
-                }
-
-                el.prev = null;
-                el.next = null;
-            }
-        });
-
-        return false;
-    }
-
     this.each = function(fn){
         var n = this.head;
         while(n != null){
@@ -120,10 +84,18 @@ function List(){
         }
 
         this.remove = function(){
+
+            if(this.list.head == this.node)
+                this.list.head = this.node.next
+
+            if(this.list.tail == this.node)
+                this.list.tail = this.node.prev;
+
             if(this.node.prev != null)
                 this.node.prev.next = this.node.next;
             if(this.node.next != null)
                 this.node.next.prev = this.node.prev;
+
             list.length -= 1;
         }
     }
@@ -137,9 +109,11 @@ function List(){
 l = new List()
 l.push(0);
 l.push(1);
-l.push(2);
-l.push(3);
-l.push(4);
-l.push(5);
-l.push(6);
-l.push(7);
+//l.push(2);
+//l.push(3);
+//l.push(4);
+//l.push(5);
+//l.push(6);
+//l.push(7);
+
+a = l.getIterator();

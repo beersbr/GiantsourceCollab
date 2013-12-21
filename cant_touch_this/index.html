@@ -422,12 +422,21 @@ canvas{ background-color:black; }
 //            rc.save();
             rc.fillStyle = "rgb(0, 0, 255)";
             rc.fillRect(r.x, r.y, r.w, r.h);
+
+//            console.log(r.x, ", ", r.y);
+
 //            rc.restore();
         }
 
         this.update = function () {
             var v = VECTOR.multiplyScalar(this.velocity, GAME.elapsedTime / 1000);
             this.position = VECTOR.add(this.position, v);
+
+//            console.log("POSITION: ", this.position.x);
+
+            if(this.position.x > GAME.width || this.position.x < 0) return false;
+            if(this.position.y > GAME.height || this.position.y < 0) return false;
+
             return true;
         }
     }
@@ -783,10 +792,9 @@ canvas{ background-color:black; }
                 var bullet = bulletsIter.value;
 
                 // bullet is off the screen...
-                bullet.update();
-//                if(!bullet.update()){
-//                    bullet.remove();
-//                }
+                if(!bullet.update()){
+                    bulletsIter.remove();
+                }
 
                 while(enemiesIter.next()){
                     var enemy = enemiesIter.value;
