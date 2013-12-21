@@ -4,24 +4,6 @@ function Node(data){
     this.next = null, this.prev = null;
 }
 
-function ListIter(list){
-    this.list = list;
-    this.node = list.head;
-
-    this.next = function(){
-        return this.node.next;
-    }
-
-    this.prev = function(){
-        return this.node.prev;
-    }
-
-    this.remove = function(){
-        this.node.prev.next = this.node.next;
-        this.node.next.prev = this.node.prev;
-    }
-}
-
 function List(){
     this.head = null;
     this.tail = null;
@@ -55,6 +37,8 @@ function List(){
 
         if(this.tail == null)
             return null;
+
+        this.length -= 1;
 
         var n = this.tail;
         this.tail = this.tail.prev;
@@ -106,6 +90,30 @@ function List(){
 
             n = n.next;
         }
+    }
+
+    function ListIter(list){
+        this.list = list;
+        this.node = null;;
+
+        this.next = function(){ 
+            return this.node.next;
+        }
+
+        this.prev = function(){
+            return this.node.prev;
+        }
+
+        this.remove = function(){
+            if(this.node.prev != null)
+                this.node.prev.next = this.node.next;
+            if(this.node.next != null)
+                this.node.next.prev = this.node.prev;
+        }
+    }
+
+    this.getIterator = function(){
+        return (new ListIter(this));
     }
 
 }
