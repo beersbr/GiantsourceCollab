@@ -313,7 +313,7 @@ canvas{ background-color:black; }
 			//console.log(args);
            
             var spawnAudio = RESOURCES.get(args.name+'Spawn');
-            
+            spawnAudio.volume = 0.3;
             spawnAudio.play();
             this.currentQuadrant = null;
 			
@@ -352,7 +352,7 @@ canvas{ background-color:black; }
 
              this.followPlayer = function () {
 
-                    var moveEnemy = VECTOR.subtract(GAME.player.position,  enemy.position);
+                    var moveEnemy = VECTOR.subtract(GAME.player.position,  this.position);
                     this.velocity = VECTOR.unit(moveEnemy);
                    
             }
@@ -375,6 +375,7 @@ canvas{ background-color:black; }
             this.update = function () {
                 
                 if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
+                
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
                 //var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
@@ -664,6 +665,7 @@ canvas{ background-color:black; }
                       if (!game.states.gameoverPlayed) {
                          game.states.gameoverPlayed = true;
                           game.overAudio = RESOURCES.get('gameOverAudio');
+                		  game.overAudio.volume = 0.2;
                 
                           game.overAudio.play();
                       }
