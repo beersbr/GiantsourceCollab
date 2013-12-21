@@ -33,10 +33,35 @@ function Sprite(args){
         this.currentFrameImage.width = this.frameWidth;
         this.currentFrameImage.height = this.frameHeight;
 
-        this.render = function(){
+        this.render = function(rotation){
+
             this.currentFrameContext.clearRect(0, 0, this.frameWidth, this.frameHeight);
-            this.currentFrameContext.drawImage(this.image, this.frameWidth*this.currentFrame, 0, this.frameWidth, this.frameHeight, 0, 0, this.frameWidth, this.frameHeight);
-		
+
+            if (rotation) {
+
+                //Convert degrees to radian 
+                var rad = rotation * Math.PI / 180;
+
+                //Set the origin to the center of the image
+                this.currentFrameContext.translate(this.frameWidth / 2, this.frameHeight / 2);
+
+                //Rotate the canvas around the origin
+                 this.currentFrameContext.rotate(rad);
+
+                //draw the image    
+                 this.currentFrameContext.drawImage(this.image,this.frameWidth / 2 * (-1),this.frameHeight / 2 * (-1),this.frameWidth,this.frameHeight);
+
+                //reset the canvas  
+                 this.currentFrameContext.rotate(rad * ( -1 ) );
+                 this.currentFrameContext.translate((this.frameWidth / 2) * (-1), (this.frameHeight / 2) * (-1));
+
+                
+               
+		    } else {
+                
+                 this.currentFrameContext.drawImage(this.image, this.frameWidth*this.currentFrame, 0, this.frameWidth, this.frameHeight, 0, 0, this.frameWidth, this.frameHeight);
+
+            }
             if(this.currentFrameElapsedTime < this.frameTime){
                 this.currentFrameElapsedTime += GAME.elapsedTime;
             }

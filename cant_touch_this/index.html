@@ -35,6 +35,16 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 "gameover" : "gameover.ogg"
 
             },
+            "gameImages" : {
+
+
+                "bullet" : {
+                    "src" : "bullet.png",
+                    "w" : 3,
+                    "h" : 19,
+                },
+
+            },
 			"characters": {
 				"player1":{
 					"name": "Phillip",
@@ -42,7 +52,13 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
                         "src": "player1Sprite.png",
                         "w":41,
-                        "h":101
+                        "h":101,
+                         "hitbox" : {
+
+                            "w":33,
+                            "h":96
+
+                        }
 
 
                     },
@@ -62,7 +78,13 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
                         "src": "player2Sprite.png",
                         "w":62,
-                        "h":101
+                        "h":101,
+                         "hitbox" : {
+
+                            "w":62,
+                            "h":90
+
+                        }
 
 
                     },
@@ -84,7 +106,13 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
                         "src": "zombieSprite.png",
                         "w":70,
-                        "h":70
+                        "h":70,
+                        "hitbox" : {
+
+                            "w":60,
+                            "h":60
+
+                        }
 
 
                     },
@@ -102,7 +130,13 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
                         "src": "zombie2Sprite.png",
                         "w":70,
-                        "h":69
+                        "h":69,
+                        "hitbox" : {
+
+                            "w":43,
+                            "h":60
+
+                        }
                     },
 
 					"type":"Enemy",
@@ -238,20 +272,32 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         if(args == undefined) args = {};
         InheritFrom(this, Entity, args);
 
-        this.size = new VECTOR.Vector(args.direction.x * 25 || 5, args.direction.y * 25 || 5);
-
+        this.size = new VECTOR.Vector(gameConfig.resources.gameImages.bullet.w  || 5, gameConfig.resources.gameImages.bullet.h  || 5);
+        this.image = RESOURCES.get('bullet');
+        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: gameConfig.resources.gameImages.bullet.h , frameWidth: gameConfig.resources.gameImages.bullet.w});
         this.bulletSpeed = 450;
 
         this.direction = args.direction;
+        console.log(this.direction);
         this.velocity = VECTOR.multiplyScalar(args.direction, this.bulletSpeed)
         this.position = args.position;
-             
+        
         this.draw = function (rc) {
 
             var r = this.toRect();
             rc.save();
-            rc.fillStyle = "rgb(0, 0, 255)";
-            rc.fillRect(r.x, r.y, r.w, r.h);
+            var rotate = false;
+            if (this.direction.y == 0) {
+                rotate = 90;
+                if (this.direction.x == -1)
+                        rotate = -90;
+
+
+            }
+            var image = this.sprite.render(rotate);
+            rc.drawImage(image, r.x, r.y, r.w, r.h);
+            //rc.fillStyle = "rgb(0, 0, 255)";
+            //rc.fillRect(r.x, r.y, r.w, r.h);
             rc.restore();
         }
 
@@ -295,7 +341,9 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             lastShotElapsedTime = -1;
 
             this.zombiesKilled = 0;
-      
+            this.shotsFired = 0;
+            this.kdRatio = 0;
+
         this.update = function(){
 
             var frameMoveSpeed = moveSpeed;
@@ -331,6 +379,8 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 nonSprintElapsedTime += GAME.elapsedTime;            
                 if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
             } 
+
+
 
             // Show run bar
             this.runBar();
@@ -374,6 +424,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 isShooting = true;
                 // spawn a bullet with the direction 
                 GAME.bullets.push(new Bullet({direction:direction, position: this.position}));
+                this.shotsFired++;
                 var shootAudio = RESOURCES.get('player1Shoot');
                 shootAudio.load();
                 shootAudio.volume = 0.3;
@@ -491,7 +542,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
    		    
 //            setupQuadrants();
 
-            game.player = new Player({x: gameConfig.resources.characters[game.selectedPlayer].spawn.x, y: gameConfig.resources.characters[game.selectedPlayer].spawn.y, w: gameConfig.resources.characters[game.selectedPlayer].sprite.w, h: gameConfig.resources.characters[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
+            game.player = new Player({hitW:gameConfig.resources.characters[game.selectedPlayer].sprite.hitbox.w,hitH:gameConfig.resources.characters[game.selectedPlayer].sprite.hitbox.h,x: gameConfig.resources.characters[game.selectedPlayer].spawn.x, y: gameConfig.resources.characters[game.selectedPlayer].spawn.y, w: gameConfig.resources.characters[game.selectedPlayer].sprite.w, h: gameConfig.resources.characters[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
             game.time = +(new Date());
             game.totalTime = 0;
             game.score = 0;
@@ -559,8 +610,9 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                       _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
 
                       var scoreText = "SCORE: " + game.score;
+
                       if (!game.states.gameoverPlayed) {
-                         game.states.gameoverPlayed = true;
+                          game.states.gameoverPlayed = true;
                           game.overAudio = RESOURCES.get('gameOverAudio');
                 		  game.overAudio.volume = 0.2;
                 
@@ -573,7 +625,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
                     _renderingContext.font = '20pt Calibri';
                     _renderingContext.fillStyle = 'white';
-                    _renderingContext.fillText('Loser, hit [enter] to try again', 340, 350);
+                    _renderingContext.fillText('Zombies Killed: ' +game.player.zombiesKilled, 368, 270);
+                    _renderingContext.fillText('Shots Fired: ' +game.player.shotsFired, 368, 300);
+                    _renderingContext.fillText('Accuracy: ' +Math.floor((game.player.zombiesKilled/game.player.shotsFired)*100)+"%", 368, 330);
+                    _renderingContext.fillText('Loser, hit [enter] to try again', 250, 500);
                         
                          if(GAME.Keyboard.keyPressed("enter")){
                             game.state = game.states.PLAYING;
@@ -592,7 +647,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         game.update = function () {
             game.score = game.totalTime +(game.player.zombiesKilled*1000);
    		   
-            var scoreText = "SCORE: " + game.score;
+             var scoreText = "SCORE: " + game.score + "   ZOMBIES KILLED: " +game.player.zombiesKilled;
             var scoreLen = _renderingContext.measureText(scoreText);
             _renderingContext.font = '14pt Calibri';
             _renderingContext.fillStyle = "rgb(255, 255, 255)";
@@ -610,7 +665,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     enemyType = 'enemy1'
                 }
 
-                game.enemies.push(new Enemy({name:enemyType,w:gameConfig.resources.characters[enemyType].sprite.w,h:gameConfig.resources.characters[enemyType].sprite.h}));
+                game.enemies.push(new Enemy({name:enemyType,hitW:gameConfig.resources.characters[enemyType].sprite.hitbox.w,hitH:gameConfig.resources.characters[enemyType].sprite.hitbox.h,w:gameConfig.resources.characters[enemyType].sprite.w,h:gameConfig.resources.characters[enemyType].sprite.h}));
             }
 
             var bulletsIter = game.bullets.getIterator();
@@ -627,7 +682,8 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 while(enemiesIter.next()){
                     var enemy = enemiesIter.value;
 
-                    if(collideRect(bullet.toRect(), enemy.toRect())){
+                    if(collideRect(bullet.toRect(), enemy.hitBox())){
+                        game.player.zombiesKilled++;
                         enemiesIter.remove();
                         bulletsIter.remove();
                     }
@@ -636,6 +692,11 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
             var enemiesIter = game.enemies.getIterator();
             while(enemiesIter.next()){
+                var enemy = enemiesIter.value;
+                if(collideRect(game.player.hitBox(_renderingContext), enemy.hitBox(_renderingContext))){
+                       game.state = game.states.GAMEOVER; 
+                    }
+
                 if(!enemiesIter.value.update())
                     enemiesIter.remove();
             }
@@ -644,6 +705,8 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
         game.draw = function () {
             game.player.draw(_renderingContext);
+
+
 
             var enemiesIter = game.enemies.getIterator();
 
@@ -674,13 +737,14 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         RESOURCES.markResource(gameConfig.resources.characters['enemy2'].name, "./resources/"+gameConfig.resources.characters['enemy2'].sprite.src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./resources/"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
 		RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./resources/"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource('bullet', "./resources/"+gameConfig.resources.gameImages['bullet'].src, RESOURCES.TYPES.IMAGE);
         RESOURCES.markResource('gameOverAudio', "./resources/"+gameConfig.resources.gameFx['gameover'], RESOURCES.TYPES.AUDIO);
         RESOURCES.markResource('enemy1Spawn', "./resources/"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
         RESOURCES.markResource('enemy2Spawn', "./resources/"+gameConfig.resources.characters['enemy2'].fx['spawn'], RESOURCES.TYPES.AUDIO);
         RESOURCES.markResource('player1Shoot', "./resources/"+gameConfig.resources.characters['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
 
         GAME.run();
-        GODMODE = true;
+        GODMODE = false;
 
     }
 </script>
