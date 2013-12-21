@@ -351,7 +351,6 @@ canvas{ background-color:black; }
             } // end switch
 
              this.followPlayer = function () {
-					
                     var moveEnemy = VECTOR.subtract(GAME.player.position,  this.position);
                   
                     var newVel = VECTOR.unit(moveEnemy);
@@ -364,7 +363,22 @@ canvas{ background-color:black; }
 
                 if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
 
-               
+                /*
+                for (var i = 0; i < GAME.quadrants.length; i++) {
+
+                    if (this.position.x <= GAME.quadrants[i].x) {
+
+                        if (this.position.y <= GAME.quadrants[i].y) {
+
+                            this.currentQuadrant = i;
+                            break;
+
+                        }
+
+                    }
+
+                }
+                */
                 var r = this.toRect();
 				rc.save();
            	 	var image = this.sprite.render();
@@ -372,19 +386,15 @@ canvas{ background-color:black; }
 				rc.restore();
             }
 
-           
+
 
             this.update = function () {
-                
-                if (gameConfig.resources.characters[this.enemyName].follow)this.followPlayer();
-                	
+                if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
+
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
-               		 //var moveSpeedx = this.velocity.x * (GAME.elapsedTime / 1000);
-                	//var moveSpeedy = this.velocity.y * (GAME.elapsedTime / 1000);
+                this.position = VECTOR.add(this.position, moveSpeed);
 
-                 this.position = VECTOR.add(this.position, moveSpeed);
-   
                 if (this.position.x < 0 || this.position.x > GAME.width ||
                     this.position.y < 0 || this.position.y > GAME.height)
                     return false;
@@ -400,7 +410,7 @@ canvas{ background-color:black; }
 
         this.size = new VECTOR.Vector(args.direction.x * 25 || 5, args.direction.y * 25 || 5);
 
-        this.bulletSpeed = 150;
+        this.bulletSpeed = 300;
 
         this.direction = args.direction;
         this.velocity = VECTOR.multiplyScalar(args.direction, this.bulletSpeed)
@@ -409,10 +419,10 @@ canvas{ background-color:black; }
         this.draw = function (rc) {
 
             var r = this.toRect();
-            rc.save();
+//            rc.save();
             rc.fillStyle = "rgb(0, 0, 255)";
             rc.fillRect(r.x, r.y, r.w, r.h);
-            rc.restore();
+//            rc.restore();
         }
 
         this.update = function () {
@@ -773,9 +783,10 @@ canvas{ background-color:black; }
                 var bullet = bulletsIter.value;
 
                 // bullet is off the screen...
-                if(!bullet.update()){
-                    bullet.remove();
-                }
+                bullet.update();
+//                if(!bullet.update()){
+//                    bullet.remove();
+//                }
 
                 while(enemiesIter.next()){
                     var enemy = enemiesIter.value;

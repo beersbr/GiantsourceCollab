@@ -133,3 +133,13 @@ function List(){
     }
 
 }
+
+l = new List()
+l.push(0);
+l.push(1);
+l.push(2);
+l.push(3);
+l.push(4);
+l.push(5);
+l.push(6);
+l.push(7);
