@@ -435,9 +435,11 @@ canvas{ background-color:black; }
             isSprinting = false,
             sprintInterval = 2000, 
             sprintTime = 500,
+            sprintLength = 0,
             lastSprintTime = -1,
             sprintElapsedTime = 0,
-            nonSprintElapsedTime = 0;
+            nonSprintElapsedTime = 0,
+            runBarPercent = 100;
 
         var isShooting = false,
             shootInterval = 500, // in milliseconds
@@ -460,6 +462,7 @@ canvas{ background-color:black; }
                         isSprinting = true;
                         lastSprintTime = +(new Date());
                         nonSprintElapsedTime = 0;
+                        sprintLength += GAME.elapsedTime;
                     }
                 }
                 else{
@@ -470,6 +473,7 @@ canvas{ background-color:black; }
                     }
                     else{
                         frameMoveSpeed = sprintSpeed;
+                        sprintLength += GAME.elapsedTime;
                     }
                 }
             }
@@ -477,9 +481,13 @@ canvas{ background-color:black; }
                 // Not sprinting
                 isSprinting = false;
                 sprintElapsedTime = 0;
-                nonSprintElapsedTime += GAME.elapsedTime;
+                nonSprintElapsedTime += GAME.elapsedTime;            
+                if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
             } 
 
+            // Show run bar
+            this.runBar();
+            
             // Update character movement
 
             if (GAME.Keyboard.keyIsDown("a")) {
@@ -533,7 +541,49 @@ canvas{ background-color:black; }
                 }
             }
         }
-
+        
+        // Calculate percentage of run bar to show
+        this.runBar = function() {
+          
+          var runBar = {};
+          
+          // Run bar color
+          runBar.containerColor = "rgb(24, 24, 24)";
+          runBar.color = "rgb(24, 240, 204)";
+          
+          // Run bar coordinates
+          runBar.x = 25;
+          runBar.y = 30;
+          //runBar.w = 100;
+          runBar.h = 10;
+          
+          // If sprinting, decrease the bar
+          if(isSprinting){
+            runBarPercent = 100 - parseInt((sprintElapsedTime / sprintTime) * 100);
+          }
+          
+          // ElseIf not sprinting, but still within sprintTime
+          else if(nonSprintElapsedTime + sprintLength < sprintTime && lastSprintTime > 0){
+            runBarPercent = 100 - (parseInt(((nonSprintElapsedTime + sprintLength) / sprintTime) * 100));
+          }
+          
+          // Elseif not sprinting, 
+          else if(nonSprintElapsedTime > 0 && nonSprintElapsedTime < sprintInterval && lastSprintTime > 0){
+            runBarPercent = parseInt((nonSprintElapsedTime / sprintInterval) * 100);
+          }
+          
+          
+          runBar.w = runBarPercent
+          
+          // Display Run bar container
+          GAME.renderingContext.fillStyle = runBar.containerColor;
+          GAME.renderingContext.fillRect(runBar.x-1,runBar.y-1,102,runBar.h+2); 
+          
+          // Display Run bar
+          GAME.renderingContext.fillStyle = runBar.color;
+          GAME.renderingContext.fillRect(runBar.x,runBar.y,runBar.w,runBar.h); 
+          
+        }
 
         this.draw = function (rc) {
             var r = this.toRect();
