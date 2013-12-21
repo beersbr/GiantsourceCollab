@@ -516,26 +516,7 @@ canvas{ background-color:black; }
             return true;
         }
     }
-	
-    function setupQuadrants() {
 
-         var totalRows = gameConfig.settings.height / gameConfig.settings.quadrant.h;
-
-        var totalCols = gameConfig.settings.width / gameConfig.settings.quadrant.w;
-        console.log('SET EM UP');
-        for (var i = 1; i <= totalRows; i++) {
-            console.log(i);
-             for (var z = 1; z <= totalCols; z++) {
-
-                     GAME.quadrants.push({"x":(z*gameConfig.settings.quadrant.w),'y':(i*gameConfig.settings.quadrant.h)})
-
-             }
-   
-        }
-
-
-    }
-	
     function Player(args){
         if(args == undefined) args = {};
         InheritFrom(this, Entity, args);
@@ -707,17 +688,17 @@ canvas{ background-color:black; }
         
         game.init = function() {
    		    
-            setupQuadrants();
+//            setupQuadrants();
 
             game.player = new Player({x: gameConfig.resources.characters[game.selectedPlayer].spawn.x, y: gameConfig.resources.characters[game.selectedPlayer].spawn.y, w: gameConfig.resources.characters[game.selectedPlayer].sprite.w, h: gameConfig.resources.characters[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
             game.time = +(new Date());
             game.totalTime = 0;
             game.score = 0;
             game.state = game.states.PLAYING;
-            enemies = [];
-            game.bullets = [];
+            game.enemies = new List();
+            game.bullets = new List();
             game.enemyCnt = 0;
-             game.states.gameoverPlayed  = false;
+            game.states.gameoverPlayed  = false;
         }
  	 
         game.loadedResources = 0;
@@ -825,61 +806,59 @@ canvas{ background-color:black; }
                 } else {
                     enemyType = 'enemy1'
                 }
-                enemies.push(new Enemy({name:enemyType,w:gameConfig.resources.characters[enemyType].sprite.w,h:gameConfig.resources.characters[enemyType].sprite.h})); 
-               
 
+                game.enemies.push(new Enemy({name:enemyType,w:gameConfig.resources.characters[enemyType].sprite.w,h:gameConfig.resources.characters[enemyType].sprite.h}));
             }
 
-            for (var i = 0; i < game.bullets.length; ++i) {
-                    
-                 for (var z = 0; z < enemies.length; ++z){
-                        
-                        if (collideRect(game.bullets[i].toRect(), enemies[z].toRect())) {
+            var bulletsIter = game.bullets.getIterator();
 
 
-                            // this is where things get tricky, you can manipulate an array while iteration over it
-                            // this is where we can use a linked list and just use an iterator instead of an index
-                            //game.bullets.splice(i, 1);
-                            //enemies.splice(z, 1);
+            while(bulletsIter.next()){
+                var enemiesIter = game.enemies.getIterator();
+                var bullet = bulletsIter.value;
 
-                        } else {
+                // bullet is off the screen...
+                if(!bullet.update()){
+                    enemiesIter.remove();
+                }
 
-                             if (!game.bullets[i].update()){
-                                // If the bullet is off the screen
-                                 //game.bullets.splice(i, 1);
-                            }
+                while(enemiesIter.next()){
+                    var enemy = enemiesIter.value;
 
-                        }
-
-                 }   
-            }
-            
-            for (var i = 0; i < enemies.length; ++i){
-           
-                // Check if player and enemy collided
-                
-                if (!GODMODE)
-                if (collideRect(game.player.toRect(), enemies[i].toRect()))
-                    game.state = game.states.GAMEOVER;
-
-                if (!enemies[i].update()){
-                    // If the enemy is off the screen
-                    enemies.splice(i, 1);
+                    if(collideRect(bullet.toRect(), enemy.toRect())){
+                        enemiesIter.remove();
+                        bulletsIter.remove();
+                    }
                 }
             }
-   		 	
+
+            var enemiesIter = game.enemies.getIterator();
+            while(enemiesIter.next()){
+                if(!enemiesIter.value.update())
+                    enemiesIter.remove();
+            }
         }
+
 
         game.draw = function () {
             game.player.draw(_renderingContext);
 
-            for (var i = 0; i < enemies.length; ++i)
-                enemies[i].draw(_renderingContext);
+            var enemiesIter = game.enemies.getIterator();
 
-             for (var i = 0; i < game.bullets.length; ++i)
-                game.bullets[i].draw(_renderingContext);
-            
+            while(enemiesIter.next()){
+
+                var enemy = enemiesIter.value;
+                enemy.draw(_renderingContext);
+            }
+
+            var bulletsIter = game.enemies.getIterator();
+
+            while(bulletsIter.next()){
+                var bullet = bulletsIter.value;
+                bullet.draw(_renderingContext);
+            }
         }
+
         return game;
 
     })();

@@ -94,10 +94,25 @@ function List(){
 
     function ListIter(list){
         this.list = list;
-        this.node = null;;
+        this.node = undefined;
+        this.value = undefined;
 
-        this.next = function(){ 
-            return this.node.next;
+        this.next = function(){
+            if(this.node == undefined)
+                this.node = this.list.head;
+
+            if(this.node == null)
+                return false;
+
+            if(this.node.next == null){
+                return false;
+            }
+            else{
+                this.node = this.node.next;
+            }
+
+            this.value = this.node.data;
+            return true;
         }
 
         this.prev = function(){
@@ -109,6 +124,7 @@ function List(){
                 this.node.prev.next = this.node.next;
             if(this.node.next != null)
                 this.node.next.prev = this.node.prev;
+            list.length -= 1;
         }
     }
 
