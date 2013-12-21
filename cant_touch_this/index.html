@@ -353,8 +353,9 @@ canvas{ background-color:black; }
              this.followPlayer = function () {
 					
                     var moveEnemy = VECTOR.subtract(GAME.player.position,  this.position);
-                    console.log(moveEnemy.magnitude);
+                  
                     this.velocity = VECTOR.unit(moveEnemy);
+                    
                    
             }
 
