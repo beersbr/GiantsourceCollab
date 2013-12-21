@@ -3,7 +3,7 @@
 <head>
     <title></title>
 <style>
-canvas{ background-color:black; }
+canvas{ background-color:black; width: 100%; height: 100%; }
 </style>
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="keyboard.js"></script>
@@ -361,7 +361,8 @@ canvas{ background-color:black; }
 
             this.draw = function (rc) {
 
-                if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
+                if (gameConfig.resources.characters[this.enemyName].follow)
+                    this.followPlayer();
 
                 /*
                 for (var i = 0; i < GAME.quadrants.length; i++) {
@@ -410,7 +411,7 @@ canvas{ background-color:black; }
 
         this.size = new VECTOR.Vector(args.direction.x * 25 || 5, args.direction.y * 25 || 5);
 
-        this.bulletSpeed = 300;
+        this.bulletSpeed = 450;
 
         this.direction = args.direction;
         this.velocity = VECTOR.multiplyScalar(args.direction, this.bulletSpeed)
@@ -419,13 +420,10 @@ canvas{ background-color:black; }
         this.draw = function (rc) {
 
             var r = this.toRect();
-//            rc.save();
+            rc.save();
             rc.fillStyle = "rgb(0, 0, 255)";
             rc.fillRect(r.x, r.y, r.w, r.h);
-
-//            console.log(r.x, ", ", r.y);
-
-//            rc.restore();
+            rc.restore();
         }
 
         this.update = function () {
@@ -462,7 +460,7 @@ canvas{ background-color:black; }
             runBarPercent = 100;
 
         var isShooting = false,
-            shootInterval = 500, // in milliseconds
+            shootInterval = 200, // in milliseconds
             shootDirection = null,
             lastShotTime = -1,
             lastShotElapsedTime = -1;
