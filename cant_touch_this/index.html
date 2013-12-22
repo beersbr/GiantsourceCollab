@@ -355,7 +355,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 if(! isSprinting){
                     nonSprintElapsedTime += GAME.elapsedTime;
 
-                    if(nonSprintElapsedTime > sprintInterval){
+                    if(nonSprintElapsedTime > sprintInterval || lastSprintTime == -1){
                         frameMoveSpeed = sprintSpeed;
                         isSprinting = true;
                         lastSprintTime = +(new Date());
