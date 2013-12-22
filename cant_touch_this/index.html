@@ -41,8 +41,8 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 "bullet" : {
                     "src" : "bullet.png",
                     "w" : 3,
-                    "h" : 19,
-                },
+                    "h" : 19
+                }
 
             },
             "characters": {
@@ -404,6 +404,9 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             }
 
             // only shoot in one direction at a time, so we use if else
+
+            // had to change to shoot function to update the elapsed time every frame
+
             if (GAME.Keyboard.keyIsDown("left_arrow") || GAME.Keyboard.keyIsDown("j")) {
                 this.shoot(VECTOR.LEFT);
             }
@@ -416,13 +419,16 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             else if (GAME.Keyboard.keyIsDown("down_arrow") || GAME.Keyboard.keyIsDown("k")) {
                 this.shoot(VECTOR.DOWN);
             }
+            else {
+                this.shoot(null);
+            }
         
             this.velocity = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
             this.position = VECTOR.add(this.position, this.velocity);
         }
 
         this.shoot = function(direction) {
-            if(! isShooting){
+            if(! isShooting && direction != null){
                 lastShotTime = +(new Date());
                 isShooting = true;
                 // spawn a bullet with the direction 
@@ -432,7 +438,6 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 shootAudio.load();
                 shootAudio.volume = 0.3;
                 shootAudio.play();
-
             }
             else {
                 lastShotElapsedTime += GAME.elapsedTime;
