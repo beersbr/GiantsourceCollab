@@ -1,0 +1,59 @@
+<html>
+<head>
+    <script src="list.js"></script>
+    <script>
+
+    function assert(condition, message){
+        if(!condition)
+            throw "FAIL: " + message;
+        return true;
+    }
+
+    function print_list(list){
+        var iter = list.getIterator();
+
+        while(iter.next()){
+            console.log(iter.value);
+        }
+
+        return true;
+    }
+
+    function remove_item(list, n){
+        var iter = list.getIterator();
+        var counter = 0;
+
+        while(iter.next()){
+            if(counter++ == n){
+                iter.remove();
+            }
+        }
+
+        return true;
+    }
+
+    var L = new List();
+    L.push(0)
+    L.push(1)
+    L.push(2)
+    L.push(3)
+    L.push(4)
+    L.push(5)
+    L.push(6)
+    L.push(7)
+    L.push(8)
+    L.push(9)
+    L.push(10)
+    L.push(11)
+    L.push(12)
+
+    print_list(L);
+    
+    remove_item(L, 12);
+    remove_item(L, 11);
+    print_list(L);
+
+
+    </script>
+</head>
+</html>

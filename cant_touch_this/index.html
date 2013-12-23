@@ -294,13 +294,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 rotate = 90;
                 if (this.direction.x == -1)
                         rotate = -90;
-
-
             }
+
             var image = this.sprite.render(rotate);
             rc.drawImage(image, r.x, r.y, r.w, r.h);
-            //rc.fillStyle = "rgb(0, 0, 255)";
-            //rc.fillRect(r.x, r.y, r.w, r.h);
             rc.restore();
         }
 
@@ -506,8 +503,6 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
    
     
     GAME = (function () {
-
-
         var startTime = 0.0;
 
         var game = {};
