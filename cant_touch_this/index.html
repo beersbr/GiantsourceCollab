@@ -167,9 +167,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             }
         }
     }
-    
 
-    
     function Enemy(args) {
          if(args == undefined) args = {};
          InheritFrom(this, Entity, args);
@@ -221,36 +219,17 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                    
             }
 
-
             this.draw = function (rc) {
 
                 if (gameConfig.resources.characters[this.enemyName].follow)
                     this.followPlayer();
 
-                /*
-                for (var i = 0; i < GAME.quadrants.length; i++) {
-
-                    if (this.position.x <= GAME.quadrants[i].x) {
-
-                        if (this.position.y <= GAME.quadrants[i].y) {
-
-                            this.currentQuadrant = i;
-                            break;
-
-                        }
-
-                    }
-
-                }
-                */
                 var r = this.toRect();
                 rc.save();
                 var image = this.sprite.render();
                 rc.drawImage(image, r.x, r.y, r.w, r.h);
                 rc.restore();
             }
-
-
 
             this.update = function () {
                 if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
@@ -380,8 +359,6 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
             } 
 
-
-
             // Show run bar
             this.runBar();
             
@@ -499,9 +476,6 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         }
     }// end of player
 
-
-   
-    
     GAME = (function () {
         var startTime = 0.0;
 
@@ -515,8 +489,6 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         game.Keyboard = new KeyboardHandler();
      
         //game.selectedPlayer = 0;
-    
-       
 
         Object.defineProperty(game, "renderingContext", {
             set: function (e) {
