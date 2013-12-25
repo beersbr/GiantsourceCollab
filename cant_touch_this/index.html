@@ -298,7 +298,6 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         InheritFrom(this, Entity, args);
         //console.log(args);
         this.image = RESOURCES.get(gameConfig.resources.characters[args.selectedPlayer].name);
-        
         this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: gameConfig.resources.characters[args.selectedPlayer].sprite.h, frameWidth: gameConfig.resources.characters[args.selectedPlayer].sprite.w});
 
 
@@ -483,7 +482,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         
 
         game.width = gameConfig.settings.width;
-        game.height =gameConfig.settings.height;
+        game.height = gameConfig.settings.height;
 
         var _renderingContext = null;
         game.Keyboard = new KeyboardHandler();

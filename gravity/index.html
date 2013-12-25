@@ -2,7 +2,7 @@
 <head>
     <title>Space Game</title>
     <style>
-        canvas { position: absolute; margin: 0; height: 100%; width: 100%; }
+        canvas { background-color: #000; position: absolute; margin: 0; padding: 0; height: 100%; width: 100%; top: 0; left: 0; }
     </style>
 
     <script src="./keyboard.js"></script>
@@ -15,31 +15,192 @@
     <script>
 
     function Player(args){
-        InheritFrom(entity, this, args);
+        InheritFrom(this, Entity, args);
+
+        this.mass = args.mass || 0.0001;
+        this.position.x = args.x || 0;
+        this.position.y = args.y || 0;
+
+        this.update = function(){
+            var elapsedTime = GAME.FrameTime/1000.0;
+            var friction = 0.96;
+            var movement = new VECTOR.Vector();
+
+            if(GAME.Keyboard.keyIsDown("w")){
+                movement.y -= 50;
+            }
+            if(GAME.Keyboard.keyIsDown("s")){
+                movement.y += 50;
+            }
+            if(GAME.Keyboard.keyIsDown("a")){
+                movement.x -= 50;
+            }
+            if(GAME.Keyboard.keyIsDown("d")){
+                movement.x += 50;
+            }
+
+            movement = VECTOR.multiplyScalar(movement, elapsedTime);
+            this.velocity = VECTOR.add(movement, this.velocity);
+            this.velocity = VECTOR.multiplyScalar(this.velocity, friction);
+            this.position = VECTOR.add(this.position, this.velocity);
+
+        }
+
+        this.draw = function(rc){
+            rc.save();
+            rc.fillStyle = "rgb(50, 50, 200)";
+            rc.fillRect(this.position.x-10, this.position.y-10, 20, 20);
+            rc.restore();
+        }
+    }
+
+    var GRAVITY_CONSTANT = -6.67*Math.pow(10, -11);
+
+    function Planet(args){
+        InheritFrom(this, Entity, args);
+
+        this.position.x = args.x;
+        this.position.y = args.y;
+
+        this.mass = args.mass || 1.0; // kg
+        this.radius = args.radius || 1.0; // metres
 
         this.update = function(){
 
         }
 
-        this.draw = function(rc){
 
+        // returns the force towards the object
+        this.getPull = function(mass, distance){
+            return GRAVITY_CONSTANT * (mass*this.mass) / Math.pow(distance, 2);
+        }
+
+        this.draw = function(rc){
+            rc.save();
+            var offset = 0.5;
+
+            rc.fillStyle = "rgb(200, 50, 200)";
+            rc.beginPath();
+            rc.arc(this.position.x+offset, this.position.y, this.radius, 0, 2*Math.PI);
+            rc.closePath();
+            rc.fill();
+
+
+            rc.restore();
         }
     }
 
-    GAME = (function(){
+//    The quick answer is : g=-GM/(r*r),
+//    F = G(mass1*mass2)/D squared
+
+
+        GAME = (function(){
         var game = {};
+
+        function GameStateBase(args){
+            this.update = function(){ throw "not done!"; };
+            this.draw = function(rc){ throw "not done!"; };
+
+            this.do = function(rc){
+                this.update();
+                this.draw(rc);
+            }
+        }
 
         game.STATES = {};
 
+        game.STATES.Playing = function(args){
+            InheritFrom(this, GameStateBase, args);
+
+            this.update = function(){
+                var iter = GAME.Planets.getIterator();
+
+                while(iter.next()){
+                    var force = 0.0;
+
+                    var dir = VECTOR.subtract(iter.value.position, GAME.Player.position);
+                    force = iter.value.getPull(GAME.Player.mass, Math.max(dir.magnitude/10, 2)) * -1;
+                    dir = VECTOR.unit(dir);
+//                    dir = VECTOR.multiplyScalar(dir, 2/3);
+                    dir = VECTOR.multiplyScalar(dir, force);
+                    GAME.Player.velocity = VECTOR.add(GAME.Player.velocity, dir);
+                }
+
+                GAME.Player.update();
+            }
+
+            this.draw = function(rc){
+
+                rc.fillStyle = "rgb(0,0,0)";
+                rc.fillRect(0, 0, 640, 480);
+
+                var iter = GAME.Planets.getIterator();
+
+                while(iter.next()){
+                    iter.value.draw(rc);
+                }
+
+                GAME.Player.draw(rc);
+            }
+        };
+
+        game.Canvas = null;
+        game.Context = null;
+
+        game.init = function(){
+            // find the canvas and init it.
+            game.Canvas = document.getElementById("canvas")
+            game.Context = game.Canvas.getContext("2d");
+
+            // init the handlers
+            game.Keyboard = new KeyboardHandler();
+
+            game.Planets = new List();
+            game.Planets.push(new Planet({
+                x: 300,
+                y: 200,
+                radius: 25,
+                mass: Math.pow(10, 10)
+            }));
+
+            game.Player = new Player({
+                x: 300,
+                y: 50,
+                mass: 1
+            });
+
+            game.state = new game.STATES.Playing();
+        }
+
+        game.StartTime = +(new Date());
+        game.Time = game.StartTime;
+        game.LastFrame = game.StartTime;
+        game.TotalTime = 0.0;
+
+        game.run = function(){
+            game.LastFrame = game.Time;
+            game.Time = +(new Date());
+            game.FrameTime = game.Time - game.LastFrame;
+            game.TotalTime += game.FrameTime;
+
+            game.state.do(game.Context);
+
+            requestAnimFrame(game.run);
+        }
 
         return game;
     })();
+
+    window.onload = function(){
+        GAME.init();
+        GAME.run();
+    }
 
     </script>
 </head>
 
 <body>
-    <canvas id="main"></canvas>
+    <canvas id="canvas" width="640" height="480"></canvas>
 </body>
 
 </html>
