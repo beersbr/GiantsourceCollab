@@ -21,9 +21,11 @@
         this.position.x = args.x || 0;
         this.position.y = args.y || 0;
 
+        this.dropFrames = [];
+
         this.update = function(){
             var elapsedTime = GAME.FrameTime/1000.0;
-            var friction = 0.986;
+            var friction = 0.9991;
             var movement = new VECTOR.Vector();
 
             if(GAME.Keyboard.keyIsDown("w")){
@@ -44,12 +46,70 @@
             this.velocity = VECTOR.multiplyScalar(this.velocity, friction);
             this.position = VECTOR.add(this.position, this.velocity);
 
+            this.dropFrames.push(this.position.copy());
+
+            if(this.dropFrames.length == 6)
+                this.dropFrames.shift();
         }
 
         this.draw = function(rc){
             rc.save();
+
+            switch(this.dropFrames.length){
+
+                case 6:
+                rc.fillStyle = "rgb(20, 50, 160)";
+                rc.beginPath();
+                rc.arc(this.dropFrames[5].x, this.dropFrames[5].y, 10, 0, 2*Math.PI);
+                rc.closePath();
+                rc.fill();
+
+                case 5:
+                rc.fillStyle = "rgb(20, 50, 140)";
+                rc.beginPath();
+                rc.arc(this.dropFrames[4].x, this.dropFrames[4].y, 10, 0, 2*Math.PI);
+                rc.closePath();
+                rc.fill();
+
+                case 4:
+                rc.fillStyle = "rgb(20, 50, 110)";
+                rc.beginPath();
+                rc.arc(this.dropFrames[3].x, this.dropFrames[3].y, 10, 0, 2*Math.PI);
+                rc.closePath();
+                rc.fill();
+
+                case 3:
+                rc.fillStyle = "rgb(20, 50, 80)";
+                rc.beginPath();
+                rc.arc(this.dropFrames[2].x, this.dropFrames[2].y, 10, 0, 2*Math.PI);
+                rc.closePath();
+                rc.fill()
+
+                case 2:
+                rc.fillStyle = "rgb(50, 50, 50)";
+                rc.beginPath();
+                rc.arc(this.dropFrames[1].x, this.dropFrames[1].y, 10, 0, 2*Math.PI);
+                rc.closePath();
+                rc.fill();
+
+                case 1:
+                rc.fillStyle = "rgb(20, 20, 20)";
+                rc.beginPath();
+                rc.arc(this.dropFrames[0].x, this.dropFrames[0].y, 10, 0, 2*Math.PI);
+                rc.closePath();
+                rc.fill();
+            }
+
+
             rc.fillStyle = "rgb(50, 50, 200)";
-            rc.fillRect(this.position.x-10, this.position.y-10, 20, 20);
+//            rc.fillRect(this.position.x-10, this.position.y-10, 20, 20);
+            rc.beginPath();
+            rc.arc(this.position.x, this.position.y, 10, 0, 2*Math.PI);
+            rc.closePath();
+
+            rc.fill();
+
+
             rc.restore();
         }
     }
@@ -72,25 +132,22 @@
 
         // returns the force towards the object
         this.getPull = function(mass, distance){
-            return GRAVITY_CONSTANT * (mass*this.mass) / Math.pow(distance, 2);
+            return -1*((mass*this.mass) / Math.pow(distance, 2));
         }
 
         this.draw = function(rc){
             rc.save();
             var offset = 0.5;
-
             rc.fillStyle = "rgb(200, 50, 200)";
             rc.beginPath();
             rc.arc(this.position.x+offset, this.position.y, this.radius, 0, 2*Math.PI);
             rc.closePath();
             rc.fill();
-
-
             rc.restore();
         }
     }
 
-//    The quick answer is : g=-GM/(r*r),
+//    The quick answer is : g=-GM/(r*r)
 //    F = G(mass1*mass2)/D squared
 
 
@@ -119,7 +176,7 @@
                     var force = 0.0;
 
                     var dir = VECTOR.subtract(iter.value.position, GAME.Player.position);
-                    force = iter.value.getPull(GAME.Player.mass, Math.max(dir.magnitude/10, 2)) * -1;
+                    force = iter.value.getPull(GAME.Player.mass, Math.max(dir.magnitude/2, 20)) * -1;
                     dir = VECTOR.unit(dir);
 //                    dir = VECTOR.multiplyScalar(dir, 2/3);
                     dir = VECTOR.multiplyScalar(dir, force);
@@ -160,7 +217,7 @@
                 x: 300,
                 y: 200,
                 radius: 25,
-                mass: Math.pow(10, 9)
+                mass: 100 //Math.pow(10, 9)
             }));
 
             game.Player = new Player({

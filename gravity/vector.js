@@ -12,6 +12,10 @@ VECTOR = (function(){
                 return (Math.sqrt(this.x*this.x + this.y*this.y));
             }
         });
+
+        this.copy = function(){
+            return new VECTOR.Vector(this.x, this.y, this.z);
+        }
     }
 
 

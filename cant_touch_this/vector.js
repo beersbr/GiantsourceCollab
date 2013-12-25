@@ -38,5 +38,9 @@ VECTOR = (function(){
         return (new vector.Vector(v.x*scalar, v.y*scalar, v.z*scalar));
     }
 
+    vector.copy = function(){
+        return new VECTOR.Vector(this.x, this.y, this.z);
+    }
+
     return vector;
 })();
