@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Space Game</title>
+    <style>
+        canvas { position: absolute; margin: 0; height: 100%; width: 100%; }
+    </style>
+
+    <script src="./keyboard.js"></script>
+    <script src="./tools.js"></script>
+    <script src="./resources.js"></script>
+    <script src="./list.js"></script>
+    <script src="./vector.js"></script>
+    <script src="./entity.js"></script>
+
+    <script>
+
+    function Player(args){
+        InheritFrom(entity, this, args);
+
+        this.update = function(){
+
+        }
+
+        this.draw = function(rc){
+
+        }
+    }
+
+    GAME = (function(){
+        var game = {};
+
+        game.STATES = {};
+
+
+        return game;
+    })();
+
+    </script>
+</head>
+
+<body>
+    <canvas id="main"></canvas>
+</body>
+
+</html>
