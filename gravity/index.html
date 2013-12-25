@@ -23,20 +23,20 @@
 
         this.update = function(){
             var elapsedTime = GAME.FrameTime/1000.0;
-            var friction = 0.96;
+            var friction = 0.986;
             var movement = new VECTOR.Vector();
 
             if(GAME.Keyboard.keyIsDown("w")){
-                movement.y -= 50;
+                movement.y -= 12;
             }
             if(GAME.Keyboard.keyIsDown("s")){
-                movement.y += 50;
+                movement.y += 12;
             }
             if(GAME.Keyboard.keyIsDown("a")){
-                movement.x -= 50;
+                movement.x -= 12;
             }
             if(GAME.Keyboard.keyIsDown("d")){
-                movement.x += 50;
+                movement.x += 12;
             }
 
             movement = VECTOR.multiplyScalar(movement, elapsedTime);
@@ -160,7 +160,7 @@
                 x: 300,
                 y: 200,
                 radius: 25,
-                mass: Math.pow(10, 10)
+                mass: Math.pow(10, 9)
             }));
 
             game.Player = new Player({
