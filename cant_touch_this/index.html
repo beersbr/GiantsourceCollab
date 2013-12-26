@@ -15,163 +15,133 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
     <script src="entity.js"></script>
 <script>
     
-    var gameConfig = {
-        "settings": {
-            "title":"Stupid Zombies",
-            "width":800,
-            "height":600,
-            "quadrant": {
-
-                "w":400,
-                "h":600
-
-            }   
-
+    var configObj = {
+    "settings": {
+        "title": "Stupid Zombies",
+        "width": 800,
+        "height": 600,
+        "quadrant": {
+            "w": 400,
+            "h": 600
+        }
+    },
+    "enemies": {
+        "enemy1": {
+            "name": "Office Zombie",
+            "sprite": {
+                "src": "zombieSprite.png",
+                "w": 70,
+                "h": 70,
+                "hitbox": {
+                    "w": 60,
+                    "h": 60
+                }
+            },
+            "type": "Enemy",
+            "follow": false,
+            "speed": "random",
+            "fx": {
+                "spawn": "zombieRising.ogg"
+            }
         },
-        "resources": {
-            "gameFx" : {
-
-
-                "gameover" : "gameover.ogg"
-
-            },
-            "gameImages" : {
-
-
-                "bullet" : {
-                    "src" : "bullet.png",
-                    "w" : 3,
-                    "h" : 19
-                }
-
-            },
-            "characters": {
-                "player1":{
-                    "name": "Phillip",
-                    "sprite": {
-
-                        "src": "player1Sprite.png",
-                        "w":41,
-                        "h":101,
-                         "hitbox" : {
-
-                            "w":33,
-                            "h":96
-
-                        }
-
-
-                    },
-                    "spawn" : {
-
-                        "x":400,
-                        "y":300
-
-                    },
-
-                    "type":"Player",
-                    "fx": {"shoot":"shotgun.ogg"}
-                },
-                "player2":{
-                    "name": "Jorge",
-                    "sprite": {
-
-                        "src": "player2Sprite.png",
-                        "w":62,
-                        "h":101,
-                         "hitbox" : {
-
-                            "w":62,
-                            "h":90
-
-                        }
-
-
-                    },
-                    "spawn" : {
-
-                        "x":400,
-                        "y":300
-
-                    },
-
-                    "type":"Player",
-                    "fx": {"shoot":"shotgun.ogg"}
-
-
-                },
-                "enemy1":{
-                    "name": "Office Zombie",
-                    "sprite": {
-
-                        "src": "zombieSprite.png",
-                        "w":70,
-                        "h":70,
-                        "hitbox" : {
-
-                            "w":60,
-                            "h":60
-
-                        }
-
-
-                    },
-                    "type":"Enemy",
-                    "follow":false,
-                    "speed" : "random",
-                    "fx" : {
-                        "spawn": "zombieRising.ogg"
-                    }   
-
-                },
-                "enemy2": {
-                    "name": "Girl Zombie",
-                    "sprite": {
-
-                        "src": "zombie2Sprite.png",
-                        "w":70,
-                        "h":69,
-                        "hitbox" : {
-
-                            "w":43,
-                            "h":60
-
-                        }
-                    },
-
-                    "type":"Enemy",
-                    "follow":true,
-                    "speed" : 200,
-                    "fx" : {
-                        "spawn": "brains.ogg"
-                    }   
+        "enemy2": {
+            "name": "Girl Zombie",
+            "sprite": {
+                "src": "zombie2Sprite.png",
+                "w": 70,
+                "h": 69,
+                "hitbox": {
+                    "w": 43,
+                    "h": 60
                 }
             },
-            "levels": {
-                "1" :{
-                    "name":"Swamp",
-                    "src":"swamp.jpg"   
+            "type": "Enemy",
+            "follow": true,
+            "speed": 200,
+            "fx": {
+                "spawn": "brains.ogg"
+            }
+        }
+    },
+    "players": {
+        "player1": {
+            "name": "Phillip",
+            "sprite": {
+                "src": "player1Sprite.png",
+                "w": 41,
+                "h": 101,
+                "hitbox": {
+                    "w": 33,
+                    "h": 96
                 }
             },
-            "screens": {
-                
-                "welcome": {
-                    "name":"Welcome",
-                    "src":"welcome.jpg" 
-                },
-                "gameover": {
-                    "name":"Game Over",
-                    "src":"gameover.jpg"    
-                    
-                }   
+            "spawn": {
+                "x": 400,
+                "y": 300
+            },
+            "type": "Player",
+            "fx": {
+                "shoot": "shotgun.ogg"
+            }
+        },
+        "player2": {
+            "name": "Jorge",
+            "sprite": {
+                "src": "player2Sprite.png",
+                "w": 62,
+                "h": 101,
+                "hitbox": {
+                    "w": 62,
+                    "h": 90
+                }
+            },
+            "spawn": {
+                "x": 400,
+                "y": 300
+            },
+            "type": "Player",
+            "fx": {
+                "shoot": "shotgun.ogg"
+            }
+        }
+    },
+    "resources": {
+        "gameFx": {
+            "gameover": "gameover.ogg"
+        },
+        "gameImages": {
+            "bullet": {
+                "src": "bullet.png",
+                "w": 3,
+                "h": 19
+            }
+        },
+        "levels": {
+            "1": {
+                "name": "Swamp",
+                "src": "swamp.jpg"
+            }
+        },
+        "screens": {
+            "welcome": {
+                "name": "Welcome",
+                "src": "welcome.jpg"
+            },
+            "gameover": {
+                "name": "Game Over",
+                "src": "gameover.jpg"
             }
         }
     }
+}
+
+   
+
 
     function Enemy(args) {
          if(args == undefined) args = {};
          InheritFrom(this, Entity, args);
-         this.image = RESOURCES.get(gameConfig.resources.characters[args.name].name);
+         this.image = RESOURCES.get(GAME.EnemyTypes[args.name].name);
          this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: args.h, frameWidth: args.w});
            
             var spawnAudio = RESOURCES.get(args.name+'Spawn');
@@ -181,7 +151,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             var hitPoints = 1;
             var rand = RandomInt(3);
             this.enemyName = args.name;
-            this.enemySpeed = (gameConfig.resources.characters[this.enemyName].speed == 'random' ? 100 + RandomInt(100) : gameConfig.resources.characters[this.enemyName].speed);
+            this.enemySpeed = (GAME.EnemyTypes[this.enemyName].speed == 'random' ? 100 + RandomInt(100) : GAME.EnemyTypes[this.enemyName].speed);
             
             switch (rand) {
                 // Top
@@ -221,7 +191,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
             this.draw = function (rc) {
 
-                if (gameConfig.resources.characters[this.enemyName].follow)
+                if (GAME.EnemyTypes[this.enemyName].follow)
                     this.followPlayer();
 
                 var r = this.toRect();
@@ -232,7 +202,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             }
 
             this.update = function () {
-                if (gameConfig.resources.characters[this.enemyName].follow) this.followPlayer();
+                if (GAME.EnemyTypes[this.enemyName].follow) this.followPlayer();
 
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
@@ -253,10 +223,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
         
         //this.size = new VECTOR.Vector(args.direction.x * 25 || 5, args.direction.y * 25  || 5);
-         this.size = new VECTOR.Vector(gameConfig.resources.gameImages.bullet.w  || 5, gameConfig.resources.gameImages.bullet.h  || 5);
+         this.size = new VECTOR.Vector(GAME.GameImages.bullet.w  || 5, GAME.GameImages.bullet.h  || 5);
 
         this.image = RESOURCES.get('bullet');
-        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: gameConfig.resources.gameImages.bullet.h , frameWidth: gameConfig.resources.gameImages.bullet.w});
+        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.GameImages.bullet.h , frameWidth: GAME.GameImages.bullet.w});
         this.bulletSpeed = 450;
 
         this.direction = args.direction;
@@ -297,8 +267,8 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         if(args == undefined) args = {};
         InheritFrom(this, Entity, args);
         //console.log(args);
-        this.image = RESOURCES.get(gameConfig.resources.characters[args.selectedPlayer].name);
-        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: gameConfig.resources.characters[args.selectedPlayer].sprite.h, frameWidth: gameConfig.resources.characters[args.selectedPlayer].sprite.w});
+        this.image = RESOURCES.get(GAME.PlayerTypes[args.selectedPlayer].name);
+        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.PlayerTypes[args.selectedPlayer].sprite.h, frameWidth: GAME.PlayerTypes[args.selectedPlayer].sprite.w});
 
 
         var moveSpeed = 150, // pixels/second
@@ -476,18 +446,13 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
     }// end of player
 
     GAME = (function () {
+
+
+
         var startTime = 0.0;
 
         var game = {};
-        
-
-        game.width = gameConfig.settings.width;
-        game.height = gameConfig.settings.height;
-
-        var _renderingContext = null;
-        game.Keyboard = new KeyboardHandler();
-     
-        //game.selectedPlayer = 0;
+       
 
         Object.defineProperty(game, "renderingContext", {
             set: function (e) {
@@ -511,12 +476,27 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         game.quadrants = [];
         game.enemyCnt = 0;
         game.state = game.states.LOADING;
+
+        game.loadConfig = function () {
+
+            game.Config = eval(configObj);
+            game.Settings = game.Config.settings;
+            game.EnemyTypes = game.Config.enemies;
+            game.PlayerTypes = game.Config.players;
+            game.GameFX = game.Config.resources.gameFx;
+            game.GameImages = game.Config.resources.gameImages;
+            game.Levels = game.Config.resources.levels;
+            game.Screens = game.Config.resources.screens;
+            delete game.Config;
+            configObj = {};
         
+        }
+
         game.init = function() {
             
 //            setupQuadrants();
 
-            game.player = new Player({hitW:gameConfig.resources.characters[game.selectedPlayer].sprite.hitbox.w,hitH:gameConfig.resources.characters[game.selectedPlayer].sprite.hitbox.h,x: gameConfig.resources.characters[game.selectedPlayer].spawn.x, y: gameConfig.resources.characters[game.selectedPlayer].spawn.y, w: gameConfig.resources.characters[game.selectedPlayer].sprite.w, h: gameConfig.resources.characters[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
+            game.player = new Player({hitW:GAME.PlayerTypes[game.selectedPlayer].sprite.hitbox.w,hitH:GAME.PlayerTypes[game.selectedPlayer].sprite.hitbox.h,x: GAME.PlayerTypes[game.selectedPlayer].spawn.x, y: GAME.PlayerTypes[game.selectedPlayer].spawn.y, w: GAME.PlayerTypes[game.selectedPlayer].sprite.w, h: GAME.PlayerTypes[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
             game.time = +(new Date());
             game.totalTime = 0;
             game.score = 0;
@@ -526,7 +506,16 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             game.enemyCnt = 0;
             game.states.gameoverPlayed  = false;
         }
+        
+        game.loadConfig();
+
+        game.width = game.Settings.width;
+        game.height = game.Settings.height;
+
+        var _renderingContext = null;
+        game.Keyboard = new KeyboardHandler();
      
+        //game.selectedPlayer = 0;
         game.loadedResources = 0;
         game.totalResources = 6;
 
@@ -552,7 +541,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 
                     if (RESOURCES.isLoaded()) {
                         
-                         var screenImage = RESOURCES.get(gameConfig.resources.screens['welcome'].name);
+                         var screenImage = RESOURCES.get(GAME.Screens['welcome'].name);
                         _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
                         
                          if(GAME.Keyboard.keyPressed("enter")){
@@ -568,7 +557,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     break;
 
                 case game.states.PLAYING:
-                    var levelImage = RESOURCES.get(gameConfig.resources.levels[GAME.currentLevel].name);
+                    var levelImage = RESOURCES.get(GAME.Levels[GAME.currentLevel].name);
                     _renderingContext.drawImage(levelImage, 0, 0, 800, 600);
 
                     game.update();
@@ -580,7 +569,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     break;
                 case game.states.GAMEOVER:
 
-                     var screenImage = RESOURCES.get(gameConfig.resources.screens['gameover'].name);
+                     var screenImage = RESOURCES.get(GAME.Screens['gameover'].name);
                       _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
 
                       var scoreText = "SCORE: " + game.score;
@@ -639,7 +628,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     enemyType = 'enemy1'
                 }
 
-                game.enemies.push(new Enemy({name:enemyType,hitW:gameConfig.resources.characters[enemyType].sprite.hitbox.w,hitH:gameConfig.resources.characters[enemyType].sprite.hitbox.h,w:gameConfig.resources.characters[enemyType].sprite.w,h:gameConfig.resources.characters[enemyType].sprite.h}));
+                game.enemies.push(new Enemy({name:enemyType,hitW:GAME.EnemyTypes[enemyType].sprite.hitbox.w,hitH:GAME.EnemyTypes[enemyType].sprite.hitbox.h,w:GAME.EnemyTypes[enemyType].sprite.w,h:GAME.EnemyTypes[enemyType].sprite.h}));
             }
 
             var bulletsIter = game.bullets.getIterator();
@@ -702,22 +691,27 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
     })();
 
+   
 
     window.onload = function () {
         GAME.renderingContext = document.getElementById("canvas");
-        RESOURCES.markResource(gameConfig.resources.levels['1'].name, "./resources/"+gameConfig.resources.levels['1'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(gameConfig.resources.characters['player1'].name, "./resources/"+gameConfig.resources.characters['player1'].sprite.src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(gameConfig.resources.characters['enemy1'].name, "./resources/"+gameConfig.resources.characters['enemy1'].sprite.src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(gameConfig.resources.characters['enemy2'].name, "./resources/"+gameConfig.resources.characters['enemy2'].sprite.src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(gameConfig.resources.screens['welcome'].name, "./resources/"+gameConfig.resources.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(gameConfig.resources.screens['gameover'].name, "./resources/"+gameConfig.resources.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource('bullet', "./resources/"+gameConfig.resources.gameImages['bullet'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource('gameOverAudio', "./resources/"+gameConfig.resources.gameFx['gameover'], RESOURCES.TYPES.AUDIO);
-        RESOURCES.markResource('enemy1Spawn', "./resources/"+gameConfig.resources.characters['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
-        RESOURCES.markResource('enemy2Spawn', "./resources/"+gameConfig.resources.characters['enemy2'].fx['spawn'], RESOURCES.TYPES.AUDIO);
-        RESOURCES.markResource('player1Shoot', "./resources/"+gameConfig.resources.characters['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
+        
+        RESOURCES.markResource(GAME.Levels['1'].name, "./resources/"+GAME.Levels['1'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(GAME.PlayerTypes['player1'].name, "./resources/"+GAME.PlayerTypes['player1'].sprite.src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(GAME.EnemyTypes['enemy1'].name, "./resources/"+GAME.EnemyTypes['enemy1'].sprite.src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(GAME.EnemyTypes['enemy2'].name, "./resources/"+GAME.EnemyTypes['enemy2'].sprite.src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(GAME.Screens['welcome'].name, "./resources/"+GAME.Screens['welcome'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(GAME.Screens['gameover'].name, "./resources/"+GAME.Screens['gameover'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource('bullet', "./resources/"+GAME.GameImages['bullet'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource('gameOverAudio', "./resources/"+GAME.GameFX['gameover'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy1Spawn', "./resources/"+GAME.EnemyTypes['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy2Spawn', "./resources/"+GAME.EnemyTypes['enemy2'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('player1Shoot', "./resources/"+GAME.PlayerTypes['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
+
+       
 
         GAME.run();
+
         GODMODE = false;
 
     }
