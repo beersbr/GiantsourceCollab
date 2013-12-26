@@ -1,0 +1,12 @@
+{
+  enabled: true,  // Tile can be moved onto (there is pry a better name for this)
+  x: 0, // Row
+  y: 0, // Column
+  z: 0, // Elevation
+  hp: 100, // Health of the tile
+  image: "",  // 3d image file/object/or something?
+  damage: 0,  // Damage taken when on tile
+  type: 0,   // Grass, Rock, Wood, Water, Fire, Etc
+  onStep: function() {},  // Function to run when tile is stpped on  
+  onDeath: funtion() {}  // Function to run when tile loses all hp
+}

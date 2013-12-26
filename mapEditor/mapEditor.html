@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>Map Editor</title>
+    <link href="mapEditor.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="mapGrid">
+      <table>
+        <tbody>
+          <tr id="row1">
+            <td id="row1-col1">
+              <div></div>
+            </td>
+            <td class="newCol">
+              <input type="button" value="+" onclick="addCol($(this).closest('tr').attr('id').replace('row',''))" />
+            </td>
+          </tr>
+          <tr class="newRow">
+            <td>
+              <input type="button" value="+" onclick="addRow()" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Tile Stats Window -->
+    <div id="tileStatsWindow">
+      <label for="tile-enabled">enabled: </label><input type="text" id="tile-enabled" />
+      <label for="tile-x">x: </label><input type="text" id="tile-x" disabled="disabled"/>
+      <label for="tile-y">y: </label><input type="text" id="tile-y" disabled="disabled" />
+      <label for="tile-z">z: </label><input type="text" id="tile-z" />
+      <label for="tile-hp">hp: </label><input type="text" id="tile-hp" />
+      <label for="tile-image">image: </label><input type="text" id="tile-image" />
+      <label for="tile-damage">damage: </label><input type="text" id="tile-damage" />
+      <label for="tile-type">type: </label><input type="text" id="tile-type" />
+      <input id="saveTile" type="button" value="save" onclick="saveTile()" />
+    </div>
+    <!-- END Tile Stats Window -->
+    
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="mapEditor.js" type="text/javascript"></script>
+  </body>
+</html>
+      
+      
