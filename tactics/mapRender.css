@@ -1,0 +1,6 @@
+#map { float:left }
+#map div { float:left; height:100px; width:100px; }
+#map div.top { }
+#map div.right { }
+#map div.bottom { }
+#map div.left { clear:both; }
