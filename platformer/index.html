@@ -50,10 +50,12 @@
             var movement = new VECTOR.Vector();
 
             if(GAME.Keyboard.keyIsDown("w")){
-                if(!isJumping){
-                    movement.y -= 800;
-                    isJumping = true;
-                }
+//                if(!isJumping){
+//                    movement.y -= 800;
+//                    isJumping = true;
+//                }
+
+                movement.y -= 30;
             }
             if(GAME.Keyboard.keyIsDown("s")){
                 movement.y += 30;
@@ -69,33 +71,43 @@
             var iter = world.entities.getIterator();
 
             while(iter.next()){
+
                 var entity = iter.value;
+
+                if(!collideRect(entity.toRect(), this.toRect()))
+                    continue;
 
                 // check collision and move us out of it
                 var minX = entity.size.x/2 + this.size.x/2;
                 var minY = entity.size.y/2 + this.size.y/2;
 
                 var subVector = VECTOR.subtract(this.position, entity.position);
+
                 var absVector = VECTOR.abs(subVector);
+                absVector.x -= minX;
+                absVector.y -= minY;
+                console.log(minX, minY, absVector);
+                console.log(subVector);
+
 
                 var fixVector = new Vector();
 
-                if(absVector.x < minX && absVector.x < absVector.y){
-                    fixVector.x = subVector.x;
+                if(Math.abs(absVector.x) < minX && Math.abs(absVector.x) < Math.abs(absVector.y)){
+                    fixVector.x = absVector.x;
 
-                }else if(absVector.y < minY && absVector.y < absVector.x){
-                    fixVector.y = subVector.y;
+                }else if(Math.abs(absVector.y) < minY && Math.abs(absVector.y) < Math.abs(absVector.x)){
+                    fixVector.y = absVector.y;
 
                 }
 
                 // do something because we collided
 
-                this.position += VECTOR.add(this.position, fixVector);
+                this.position = VECTOR.add(this.position, fixVector);
 
             }
 
             movement = VECTOR.multiplyScalar(movement, elapsedTime);
-            this.velocity = VECTOR.add(this.velocity, world.Gravity);
+//            this.velocity = VECTOR.add(this.velocity, world.Gravity);
             this.velocity = VECTOR.add(movement, this.velocity);
             this.velocity = VECTOR.multiplyScalar(this.velocity, friction);
             this.position = VECTOR.add(this.position, this.velocity);
@@ -145,14 +157,14 @@
             this.Gravity = new Vector(0, 0.2);
 
             this.entities = new List();
-            this.player = new Player({ x: 50, y: 400 });
+            this.player = new Player({ x: 50, y: 350 });
 
-            this.entities.push(
-                    new Block({x: 0, y: 440}),
-                    new Block({x: 40, y: 440}),
-                    new Block({x: 80, y: 440}),
-                    new Block({x: 120, y: 440})
-            )
+            this.entities.push(new Block({x: 320, y: 240}))
+
+//            this.entities.push(new Block({x: 20, y: 460}))
+//            this.entities.push(new Block({x: 60, y: 460}))
+//            this.entities.push(new Block({x: 100, y: 460}))
+//            this.entities.push(new Block({x: 140, y: 460}))
         }
 
         this.draw = function(rc){
