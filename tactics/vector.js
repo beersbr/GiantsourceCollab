@@ -14,7 +14,6 @@ VECTOR = (function(){
         });
     }
 
-
     vector.UP    = new vector.Vector( 0, -1);
     vector.DOWN  = new vector.Vector( 0,  1);
     vector.LEFT  = new vector.Vector(-1,  0);
