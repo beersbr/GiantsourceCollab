@@ -44,3 +44,5 @@ VECTOR = (function(){
 
     return vector;
 })();
+
+Vector = VECTOR.Vector;
