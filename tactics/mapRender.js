@@ -1,5 +1,5 @@
 function getMap(mapId) { 
-  $.ajax({url:"map"+mapId+".obj",dataType:"json",success:renderTiles});
+  $.ajax({url:"resources/map"+mapId+".obj",dataType:"json",success:renderTiles});
 }
 
 function renderTiles(mapObj) {
