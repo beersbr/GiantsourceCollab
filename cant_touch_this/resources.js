@@ -17,7 +17,7 @@ RESOURCES = (function(){
                 $(resourceCache[key]).unbind("loadeddata");
                 resourceCache[key] = new audio(resourceCache[key]);
             }
-
+             
             return true;
         }
 
@@ -59,6 +59,7 @@ RESOURCES = (function(){
         resources.markResource = function(resourceKey, resourcePath, resourceType){
             var object = null;
 
+           
             switch(resourceType){
                 case resources.TYPES.IMAGE: 
                     resourcesCount += 1;
@@ -80,6 +81,7 @@ RESOURCES = (function(){
                     o = object;
                     break;
             }
+
         }
 
         resources.get = function(resourceKey){

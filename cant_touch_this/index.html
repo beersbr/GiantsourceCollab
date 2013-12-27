@@ -13,127 +13,150 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
     <script src="resources.js"></script>
     <script src="sprite.js"></script>
     <script src="entity.js"></script>
+    <script src="gameconfig.js"></script>
 <script>
     
     var configObj = {
-    "settings": {
-        "title": "Stupid Zombies",
-        "width": 800,
-        "height": 600,
-        "quadrant": {
-            "w": 400,
-            "h": 600
-        }
-    },
-    "enemies": {
-        "enemy1": {
-            "name": "Office Zombie",
-            "sprite": {
-                "src": "zombieSprite.png",
-                "w": 70,
-                "h": 70,
-                "hitbox": {
-                    "w": 60,
-                    "h": 60
+            "settings": {
+                "title": "Stupid Zombies",
+                "width": 800,
+                "height": 600,
+                "quadrant": {
+                    "w": 400,
+                    "h": 600
+                },
+                "resourcePath" : "resources"
+            },
+            "enemies": {
+                "enemy1": {
+                    "level":"all",
+                    "name": "Office Zombie",
+                    "sprite": {
+                        "src": "zombieSprite.png",
+                        "w": 70,
+                        "h": 70,
+                        "hitbox": {
+                            "w": 60,
+                            "h": 60
+                        }
+                    },
+                    "type": "Enemy",
+                    "follow": false,
+                    "speed": "random",
+                    "fx": { 
+                        "spawn": {
+                            "name" : "enemy1Spawn",
+                            "src":"zombieRising.ogg"
+                        }
+                    }
+                },
+                "enemy2": {
+                     "level":"all",
+                    "name": "Girl Zombie",
+                    "sprite": {
+                        "src": "zombie2Sprite.png",
+                        "w": 70,
+                        "h": 69,
+                        "hitbox": {
+                            "w": 43,
+                            "h": 60
+                        }
+                    },
+                    "type": "Enemy",
+                    "follow": true,
+                    "speed": 200,
+                    "fx": {
+                       "spawn": {
+                            "name" : "enemy2Spawn",
+                            "src":"brains.ogg"
+                        }
+                    }
                 }
             },
-            "type": "Enemy",
-            "follow": false,
-            "speed": "random",
-            "fx": {
-                "spawn": "zombieRising.ogg"
-            }
-        },
-        "enemy2": {
-            "name": "Girl Zombie",
-            "sprite": {
-                "src": "zombie2Sprite.png",
-                "w": 70,
-                "h": 69,
-                "hitbox": {
-                    "w": 43,
-                    "h": 60
+            "players": {
+                "player1": {
+                    "name": "Phillip",
+                    "sprite": {
+                        "src": "player1Sprite.png",
+                        "w": 41,
+                        "h": 101,
+                        "hitbox": {
+                            "w": 33,
+                            "h": 96
+                        }
+                    },
+                    "spawn": {
+                        "x": 400,
+                        "y": 300
+                    },
+                    "type": "Player",
+                    "fx": {
+                        "shoot": {
+                            "name" : "player1Shoot",
+                            "src":"shotgun.ogg"
+                        }
+                    }
+                },
+                "player2": {
+                    "name": "Jorge",
+                    "level" : "2",
+                    "sprite": {
+                        "src": "player2Sprite.png",
+                        "w": 62,
+                        "h": 101,
+                        "hitbox": {
+                            "w": 62,
+                            "h": 90
+                        }
+                    },
+                    "spawn": {
+                        "x": 400,
+                        "y": 300
+                    },
+                    "type": "Player",
+                    "fx": {
+                        "shoot": {
+                            "name" : "player2Shoot",
+                            "src":"shotgun.ogg"
+                        }
+                    }
                 }
             },
-            "type": "Enemy",
-            "follow": true,
-            "speed": 200,
-            "fx": {
-                "spawn": "brains.ogg"
-            }
-        }
-    },
-    "players": {
-        "player1": {
-            "name": "Phillip",
-            "sprite": {
-                "src": "player1Sprite.png",
-                "w": 41,
-                "h": 101,
-                "hitbox": {
-                    "w": 33,
-                    "h": 96
+            "resources": {
+                "gameFx": {
+                    "gameover": {
+                        "name" : "gameOverAudio",
+                        "type" : "AUDIO",
+                        "src" : "gameover.ogg"
+                    } 
+                },
+                "gameImages": {
+                    "bullet": {
+                        "name":"playerBullet",
+                        "level" : "all",
+                        "src": "bullet.png",
+                        "w": 3,
+                        "h": 19
+                    }
+                },
+                "levels": {
+                    "1": {
+                        "name": "Swamp",
+                        "src": "swamp.jpg"
+                    }
+                },
+                "screens": {
+                    "welcome": {
+                        "name": "Welcome",
+                        "src": "welcome.jpg"
+                    },
+                    "gameover": {
+                        "name": "Game Over",
+                        "src": "gameover.jpg"
+                    }
                 }
-            },
-            "spawn": {
-                "x": 400,
-                "y": 300
-            },
-            "type": "Player",
-            "fx": {
-                "shoot": "shotgun.ogg"
-            }
-        },
-        "player2": {
-            "name": "Jorge",
-            "sprite": {
-                "src": "player2Sprite.png",
-                "w": 62,
-                "h": 101,
-                "hitbox": {
-                    "w": 62,
-                    "h": 90
-                }
-            },
-            "spawn": {
-                "x": 400,
-                "y": 300
-            },
-            "type": "Player",
-            "fx": {
-                "shoot": "shotgun.ogg"
             }
         }
-    },
-    "resources": {
-        "gameFx": {
-            "gameover": "gameover.ogg"
-        },
-        "gameImages": {
-            "bullet": {
-                "src": "bullet.png",
-                "w": 3,
-                "h": 19
-            }
-        },
-        "levels": {
-            "1": {
-                "name": "Swamp",
-                "src": "swamp.jpg"
-            }
-        },
-        "screens": {
-            "welcome": {
-                "name": "Welcome",
-                "src": "welcome.jpg"
-            },
-            "gameover": {
-                "name": "Game Over",
-                "src": "gameover.jpg"
-            }
-        }
-    }
-}
 
    
 
@@ -141,7 +164,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
     function Enemy(args) {
          if(args == undefined) args = {};
          InheritFrom(this, Entity, args);
-         this.image = RESOURCES.get(GAME.EnemyTypes[args.name].name);
+         this.image = RESOURCES.get(GAMECONFIG.enemies[args.name].name);
          this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: args.h, frameWidth: args.w});
            
             var spawnAudio = RESOURCES.get(args.name+'Spawn');
@@ -151,7 +174,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             var hitPoints = 1;
             var rand = RandomInt(3);
             this.enemyName = args.name;
-            this.enemySpeed = (GAME.EnemyTypes[this.enemyName].speed == 'random' ? 100 + RandomInt(100) : GAME.EnemyTypes[this.enemyName].speed);
+            this.enemySpeed = (GAMECONFIG.enemies[this.enemyName].speed == 'random' ? 100 + RandomInt(100) : GAMECONFIG.enemies[this.enemyName].speed);
             
             switch (rand) {
                 // Top
@@ -191,7 +214,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
             this.draw = function (rc) {
 
-                if (GAME.EnemyTypes[this.enemyName].follow)
+                if (GAMECONFIG.enemies[this.enemyName].follow)
                     this.followPlayer();
 
                 var r = this.toRect();
@@ -202,7 +225,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             }
 
             this.update = function () {
-                if (GAME.EnemyTypes[this.enemyName].follow) this.followPlayer();
+                if (GAMECONFIG.enemies[this.enemyName].follow) this.followPlayer();
 
                 var moveSpeed = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
 
@@ -223,10 +246,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
         
         //this.size = new VECTOR.Vector(args.direction.x * 25 || 5, args.direction.y * 25  || 5);
-         this.size = new VECTOR.Vector(GAME.GameImages.bullet.w  || 5, GAME.GameImages.bullet.h  || 5);
+         this.size = new VECTOR.Vector(GAMECONFIG.images.bullet.w  || 5, GAMECONFIG.images.bullet.h  || 5);
 
-        this.image = RESOURCES.get('bullet');
-        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.GameImages.bullet.h , frameWidth: GAME.GameImages.bullet.w});
+        this.image = RESOURCES.get(GAMECONFIG.images.bullet.name);
+        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAMECONFIG.images.bullet.h , frameWidth: GAMECONFIG.images.bullet.w});
         this.bulletSpeed = 450;
 
         this.direction = args.direction;
@@ -267,8 +290,9 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
         if(args == undefined) args = {};
         InheritFrom(this, Entity, args);
         //console.log(args);
-        this.image = RESOURCES.get(GAME.PlayerTypes[args.selectedPlayer].name);
-        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.PlayerTypes[args.selectedPlayer].sprite.h, frameWidth: GAME.PlayerTypes[args.selectedPlayer].sprite.w});
+        console.log(' NAME = ' +GAME.CurrentPlayer.name)
+        this.image = RESOURCES.get(GAME.CurrentPlayer.name);
+        this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.CurrentPlayer.sprite.h, frameWidth: GAME.CurrentPlayer.sprite.w});
 
 
         var moveSpeed = 150, // pixels/second
@@ -291,6 +315,8 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             this.zombiesKilled = 0;
             this.shotsFired = 0;
             this.kdRatio = 0;
+            this.playerTarget = args.playerTarget;
+       
 
         this.update = function(){
 
@@ -375,9 +401,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 lastShotTime = +(new Date());
                 isShooting = true;
                 // spawn a bullet with the direction 
-                GAME.bullets.push(new Bullet({direction:direction, position: this.position}));
+                GAME.bullets.push(new Bullet({playerTarget:this.playerTarget,direction:direction, position: this.position}));
                 this.shotsFired++;
-                var shootAudio = RESOURCES.get('player1Shoot');
+
+                var shootAudio = RESOURCES.get(GAMECONFIG.players[this.playerTarget].fx.shoot.name);
                 shootAudio.load();
                 shootAudio.volume = 0.3;
                 shootAudio.play();
@@ -479,24 +506,26 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
 
         game.loadConfig = function () {
 
+            /*
             game.Config = eval(configObj);
             game.Settings = game.Config.settings;
-            game.EnemyTypes = game.Config.enemies;
+            GAMECONFIG.enemies = game.Config.enemies;
             game.PlayerTypes = game.Config.players;
-            game.GameFX = game.Config.resources.gameFx;
-            game.GameImages = game.Config.resources.gameImages;
+            GAMECONFIG.fx = game.Config.resources.gameFx;
+            GAMECONFIG.images = game.Config.resources.gameImages;
             game.Levels = game.Config.resources.levels;
-            game.Screens = game.Config.resources.screens;
-            delete game.Config;
-            configObj = {};
+            GAMECONFIG.screens = game.Config.resources.screens;
+            //delete game.Config;
+            //configObj = {};
+            */
         
         }
 
         game.init = function() {
             
 //            setupQuadrants();
-
-            game.player = new Player({hitW:GAME.PlayerTypes[game.selectedPlayer].sprite.hitbox.w,hitH:GAME.PlayerTypes[game.selectedPlayer].sprite.hitbox.h,x: GAME.PlayerTypes[game.selectedPlayer].spawn.x, y: GAME.PlayerTypes[game.selectedPlayer].spawn.y, w: GAME.PlayerTypes[game.selectedPlayer].sprite.w, h: GAME.PlayerTypes[game.selectedPlayer].sprite.h,selectedPlayer:game.selectedPlayer});
+            game.CurrentPlayer = GAMECONFIG.players[game.selectedPlayer];
+            game.player = new Player({hitW:game.CurrentPlayer.sprite.hitbox.w,hitH:game.CurrentPlayer.sprite.hitbox.h,x: game.CurrentPlayer.spawn.x, y: game.CurrentPlayer.spawn.y, w: game.CurrentPlayer.sprite.w, h: game.CurrentPlayer.sprite.h,playerTarget:game.selectedPlayer});
             game.time = +(new Date());
             game.totalTime = 0;
             game.score = 0;
@@ -507,10 +536,10 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
             game.states.gameoverPlayed  = false;
         }
         
-        game.loadConfig();
+        //game.loadConfig();
 
-        game.width = game.Settings.width;
-        game.height = game.Settings.height;
+        game.width= 0;
+        game.height = 0;
 
         var _renderingContext = null;
         game.Keyboard = new KeyboardHandler();
@@ -541,7 +570,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 
                     if (RESOURCES.isLoaded()) {
                         
-                         var screenImage = RESOURCES.get(GAME.Screens['welcome'].name);
+                         var screenImage = RESOURCES.get(GAMECONFIG.screens['welcome'].name);
                         _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
                         
                          if(GAME.Keyboard.keyPressed("enter")){
@@ -557,7 +586,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     break;
 
                 case game.states.PLAYING:
-                    var levelImage = RESOURCES.get(GAME.Levels[GAME.currentLevel].name);
+                    var levelImage = RESOURCES.get(GAMECONFIG.levels[GAME.currentLevel].name);
                     _renderingContext.drawImage(levelImage, 0, 0, 800, 600);
 
                     game.update();
@@ -569,14 +598,14 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     break;
                 case game.states.GAMEOVER:
 
-                     var screenImage = RESOURCES.get(GAME.Screens['gameover'].name);
+                     var screenImage = RESOURCES.get(GAMECONFIG.screens['gameover'].name);
                       _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
 
                       var scoreText = "SCORE: " + game.score;
 
                       if (!game.states.gameoverPlayed) {
                           game.states.gameoverPlayed = true;
-                          game.overAudio = RESOURCES.get('gameOverAudio');
+                          game.overAudio = RESOURCES.get(GAMECONFIG.fx['gameover'].name);
                           game.overAudio.volume = 0.2;
                 
                           game.overAudio.play();
@@ -628,7 +657,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                     enemyType = 'enemy1'
                 }
 
-                game.enemies.push(new Enemy({name:enemyType,hitW:GAME.EnemyTypes[enemyType].sprite.hitbox.w,hitH:GAME.EnemyTypes[enemyType].sprite.hitbox.h,w:GAME.EnemyTypes[enemyType].sprite.w,h:GAME.EnemyTypes[enemyType].sprite.h}));
+                game.enemies.push(new Enemy({name:enemyType,hitW:GAMECONFIG.enemies[enemyType].sprite.hitbox.w,hitH:GAMECONFIG.enemies[enemyType].sprite.hitbox.h,w:GAMECONFIG.enemies[enemyType].sprite.w,h:GAMECONFIG.enemies[enemyType].sprite.h}));
             }
 
             var bulletsIter = game.bullets.getIterator();
@@ -686,7 +715,7 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
                 bullet.draw(_renderingContext);
             }
         }
-
+ 
         return game;
 
     })();
@@ -694,21 +723,34 @@ canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%
    
 
     window.onload = function () {
+        
+        GAMECONFIG.init(configObj);
+
+        //GAMECONFIG(configObj);
+        //console.log(CONFIG.settings);
+        GAME.width = GAMECONFIG.settings.width;
+        GAME.height = GAMECONFIG.settings.width;
         GAME.renderingContext = document.getElementById("canvas");
         
-        RESOURCES.markResource(GAME.Levels['1'].name, "./resources/"+GAME.Levels['1'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(GAME.PlayerTypes['player1'].name, "./resources/"+GAME.PlayerTypes['player1'].sprite.src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(GAME.EnemyTypes['enemy1'].name, "./resources/"+GAME.EnemyTypes['enemy1'].sprite.src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(GAME.EnemyTypes['enemy2'].name, "./resources/"+GAME.EnemyTypes['enemy2'].sprite.src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(GAME.Screens['welcome'].name, "./resources/"+GAME.Screens['welcome'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource(GAME.Screens['gameover'].name, "./resources/"+GAME.Screens['gameover'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource('bullet', "./resources/"+GAME.GameImages['bullet'].src, RESOURCES.TYPES.IMAGE);
-        RESOURCES.markResource('gameOverAudio', "./resources/"+GAME.GameFX['gameover'], RESOURCES.TYPES.AUDIO);
-        RESOURCES.markResource('enemy1Spawn', "./resources/"+GAME.EnemyTypes['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
-        RESOURCES.markResource('enemy2Spawn', "./resources/"+GAME.EnemyTypes['enemy2'].fx['spawn'], RESOURCES.TYPES.AUDIO);
-        RESOURCES.markResource('player1Shoot', "./resources/"+GAME.PlayerTypes['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
+        GAMECONFIG.loadLevelResources(1);
+
+
+/*
+
+        RESOURCES.markResource(GAMECONFIG.levels['1'].name, "./resources/"+GAMECONFIG.levels['1'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(GAMECONFIG.players['player1'].name, "./resources/"+GAMECONFIG.players['player1'].sprite.src, RESOURCES.TYPES.IMAGE);
+        GAMECONFIG.loadEnemies();
 
        
+        RESOURCES.markResource(GAMECONFIG.screens['welcome'].name, "./resources/"+GAMECONFIG.screens['welcome'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource(GAMECONFIG.screens['gameover'].name, "./resources/"+GAMECONFIG.screens['gameover'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource('bullet', "./resources/"+GAMECONFIG.images['bullet'].src, RESOURCES.TYPES.IMAGE);
+        RESOURCES.markResource('gameOverAudio', "./resources/"+GAMECONFIG.fx['gameover'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy1Spawn', "./resources/"+GAMECONFIG.enemies['enemy1'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('enemy2Spawn', "./resources/"+GAMECONFIG.enemies['enemy2'].fx['spawn'], RESOURCES.TYPES.AUDIO);
+        RESOURCES.markResource('player1Shoot', "./resources/"+GAMECONFIG.players['player1'].fx['shoot'], RESOURCES.TYPES.AUDIO);
+
+       */
 
         GAME.run();
 
