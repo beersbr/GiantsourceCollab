@@ -14,7 +14,6 @@ VECTOR = (function(){
         });
     }
 
-
     vector.UP    = new vector.Vector( 0, -1);
     vector.DOWN  = new vector.Vector( 0,  1);
     vector.LEFT  = new vector.Vector(-1,  0);
@@ -42,5 +41,11 @@ VECTOR = (function(){
         return new VECTOR.Vector(this.x, this.y, this.z);
     }
 
+    vector.abs = function(v){
+        return new VECTOR.Vector(Math.abs(v.x), Math.abs(v.y), Math.abs(v.z));
+    }
+
     return vector;
 })();
+
+Vector = VECTOR.Vector;

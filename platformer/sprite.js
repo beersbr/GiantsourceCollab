@@ -55,9 +55,7 @@ function Sprite(args){
                  this.currentFrameContext.rotate(rad * ( -1 ) );
                  this.currentFrameContext.translate((this.frameWidth / 2) * (-1), (this.frameHeight / 2) * (-1));
 
-                
-               
-		    } else {
+            } else {
                 
                  this.currentFrameContext.drawImage(this.image, this.frameWidth*this.currentFrame, 0, this.frameWidth, this.frameHeight, 0, 0, this.frameWidth, this.frameHeight);
 

@@ -2,6 +2,10 @@
 <head>
     <title>PLATFORMER</title>
 
+    <style>
+        canvas { background-color: black; }
+    </style>
+
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="keyboard.js"></script>
     <script src="tools.js"></script>
@@ -13,7 +17,248 @@
 
     <script>
 
-        
+    function Shape(args){
+        this.verticies = [];
+    }
+
+    function Rectangle(args){
+        InheritFrom(this, Shape, args);
+
+        this.x = args.x;
+        this.y = args.y;
+        this.w = args.w;
+        this.h = args.h;
+
+        this.verticies = [
+                new Vector(x, y),
+                new Vector(x+w, y),
+                new Vector(x+w, y+h),
+                new Vector(x, y+h)
+        ];
+
+    }
+
+    function Player(args){
+        InheritFrom(this, Entity, args);
+
+        this.size = new Vector(24, 40);
+        var isJumping = false;
+
+        this.update = function(world){
+            var elapsedTime = GAME.FrameTime;
+            var friction = 0.89;
+            var movement = new VECTOR.Vector();
+
+            if(GAME.Keyboard.keyIsDown("w")){
+                if(!isJumping){
+                    movement.y -= 800;
+                    isJumping = true;
+                }
+            }
+            if(GAME.Keyboard.keyIsDown("s")){
+                movement.y += 30;
+            }
+            if(GAME.Keyboard.keyIsDown("a")){
+                movement.x -= 30;
+            }
+            if(GAME.Keyboard.keyIsDown("d")){
+                movement.x += 30;
+            }
+
+            // get vector to move out of collided object
+            var iter = world.entities.getIterator();
+
+            while(iter.next()){
+                var entity = iter.value;
+
+                // check collision and move us out of it
+                var minX = entity.size.x/2 + this.size.x/2;
+                var minY = entity.size.y/2 + this.size.y/2;
+
+                var subVector = VECTOR.subtract(this.position, entity.position);
+                var absVector = VECTOR.abs(subVector);
+
+                var fixVector = new Vector();
+
+                if(absVector.x < minX && absVector.x < absVector.y){
+                    fixVector.x = subVector.x;
+
+                }else if(absVector.y < minY && absVector.y < absVector.x){
+                    fixVector.y = subVector.y;
+
+                }
+
+                // do something because we collided
+
+                this.position += VECTOR.add(this.position, fixVector);
+
+            }
+
+            movement = VECTOR.multiplyScalar(movement, elapsedTime);
+            this.velocity = VECTOR.add(this.velocity, world.Gravity);
+            this.velocity = VECTOR.add(movement, this.velocity);
+            this.velocity = VECTOR.multiplyScalar(this.velocity, friction);
+            this.position = VECTOR.add(this.position, this.velocity);
+
+
+        }
+
+        this.draw = function(rc){
+            var rect = this.toRect();
+
+            rc.save();
+            rc.fillStyle = "rgb(255, 0, 255)";
+            rc.fillRect(rect.x, rect.y, rect.w, rect.h);
+            rc.restore();
+        }
+    }
+
+    function Block(args){
+        InheritFrom(this, Entity, args);
+
+        this.size = new Vector(40, 40);
+
+        this.update = function(){
+
+        }
+
+        this.draw = function(rc){
+            var rect = this.toRect();
+
+            rc.save();
+
+            rc.fillStyle = "rgb(128, 20, 200)";
+            rc.fillRect(rect.x, rect.y, rect.w, rect.h);
+
+            rc.restore();
+        }
+
+
+    }
+
+    function World(args){
+        this.Gravity = null;
+        this.entities = null;
+        this.player = null;
+
+        this.init = function(){
+            this.Gravity = new Vector(0, 0.2);
+
+            this.entities = new List();
+            this.player = new Player({ x: 50, y: 400 });
+
+            this.entities.push(
+                    new Block({x: 0, y: 440}),
+                    new Block({x: 40, y: 440}),
+                    new Block({x: 80, y: 440}),
+                    new Block({x: 120, y: 440})
+            )
+        }
+
+        this.draw = function(rc){
+            var iter = this.entities.getIterator();
+
+            while(iter.next()){
+                var entity = iter.value;
+
+                entity.draw(rc);
+            }
+
+            this.player.draw(rc);
+        }
+
+        this.update = function(){
+            var iter = this.entities.getIterator();
+
+            while(iter.next()){
+                var entity = iter.value;
+
+                entity.update();
+            }
+
+            this.player.update(this);
+
+        }
+    }
+
+    function IGameStateBase(){
+        this.do = function(){ throw "NOT DONE!"; }
+    }
+
+    function PlayingState(args){
+        InheritFrom(this, IGameStateBase, args);
+
+        this.init = function(){
+            this.world = new World();
+            this.world.init();
+        }
+
+        this.do = function(){
+//            GAME.Context.fillStyle = "rgb(0, 0, 0)";
+            GAME.Context.fillRect(0, 0, GAME.Width, GAME.Height);
+
+            this.update();
+            this.draw();
+        }
+
+        this.draw = function(){
+
+            this.world.draw(GAME.Context);
+        }
+
+        this.update = function(){
+            this.world.update();
+        }
+
+        this.init();
+    }
+
+    GAME = (function(){
+        var game = {};
+
+        game.init = function(){
+            game.Width = 640;
+            game.Height = 480;
+
+            game.renderWidth = 1280;
+            game.renderHeight = 960;
+
+            game.Canvas = document.getElementById("canvas");
+            game.Canvas.width = game.Width;
+            game.Canvas.height = game.Height;
+
+            game.Canvas.style.width = (game.renderWidth+"px");
+            game.Canvas.style.height = (game.renderHeight+"px");
+
+            game.Context = game.Canvas.getContext("2d");
+
+            game.State = new PlayingState();
+            game.Keyboard = new KeyboardHandler();
+        }
+
+        game.StartTime = +(new Date());
+        game.Time = game.StartTime;
+        game.LastFrame = game.StartTime;
+        game.TotalTime = 0.0;
+
+        game.run = function(){
+            game.LastFrame = game.Time;
+            game.Time = +(new Date());
+            game.FrameTime = (game.Time - game.LastFrame) / 1000;
+            game.TotalTime += game.FrameTime;
+
+            game.State.do();
+
+            requestAnimFrame(game.run);
+        }
+
+        return game;
+    })();
+
+    window.onload = function(){
+        GAME.init();
+        GAME.run();
+    }
 
     </script>
 </head>
