@@ -50,12 +50,12 @@
             var movement = new VECTOR.Vector();
 
             if(GAME.Keyboard.keyIsDown("w")){
-//                if(!isJumping){
-//                    movement.y -= 800;
-//                    isJumping = true;
-//                }
+                if(!isJumping){
+                    movement.y -= 800;
+                    isJumping = true;
+                }
 
-                movement.y -= 30;
+//                movement.y -= 30;
             }
             if(GAME.Keyboard.keyIsDown("s")){
                 movement.y += 30;
@@ -86,17 +86,29 @@
                 var absVector = VECTOR.abs(subVector);
                 absVector.x -= minX;
                 absVector.y -= minY;
-                console.log(minX, minY, absVector);
-                console.log(subVector);
+//                console.log(minX, minY, absVector);
+//                console.log(subVector);
+
+                subVector.x = minX - Math.abs(subVector.x);
+                if(this.position.x < entity.position.x)
+                    subVector.x *= -1;
+
+                subVector.y = minY - Math.abs(subVector.y);
+                if(this.position.y < entity.position.y)
+                    subVector.y *= -1;
+
+//                console.log(subVector);
 
 
                 var fixVector = new Vector();
 
                 if(Math.abs(absVector.x) < minX && Math.abs(absVector.x) < Math.abs(absVector.y)){
-                    fixVector.x = absVector.x;
+                    fixVector.x = subVector.x;
+                    this.velocity.x = 0;
 
                 }else if(Math.abs(absVector.y) < minY && Math.abs(absVector.y) < Math.abs(absVector.x)){
-                    fixVector.y = absVector.y;
+                    fixVector.y = subVector.y;
+                    this.velocity.y = 0;
 
                 }
 
@@ -107,7 +119,7 @@
             }
 
             movement = VECTOR.multiplyScalar(movement, elapsedTime);
-//            this.velocity = VECTOR.add(this.velocity, world.Gravity);
+            this.velocity = VECTOR.add(this.velocity, world.Gravity);
             this.velocity = VECTOR.add(movement, this.velocity);
             this.velocity = VECTOR.multiplyScalar(this.velocity, friction);
             this.position = VECTOR.add(this.position, this.velocity);
@@ -161,10 +173,10 @@
 
             this.entities.push(new Block({x: 320, y: 240}))
 
-//            this.entities.push(new Block({x: 20, y: 460}))
-//            this.entities.push(new Block({x: 60, y: 460}))
-//            this.entities.push(new Block({x: 100, y: 460}))
-//            this.entities.push(new Block({x: 140, y: 460}))
+            this.entities.push(new Block({x: 20, y: 460}))
+            this.entities.push(new Block({x: 60, y: 460}))
+            this.entities.push(new Block({x: 100, y: 460}))
+            this.entities.push(new Block({x: 140, y: 460}))
         }
 
         this.draw = function(rc){
