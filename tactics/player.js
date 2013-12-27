@@ -7,16 +7,23 @@
         this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.CurrentPlayer.sprite.h, frameWidth: GAME.CurrentPlayer.sprite.w});
 
 
-        var XP = 0,
-            HP = 150, 
-            MP = 300,
-            STR = 10,
-            DEX = 10, 
-            INT = 10;
+        var XP = 0,   // Experience
+            HP = 10,  // Hit Points
+            MP = 10,  // Magic Points 
+            STR = 1,  // Strength
+            DEX = 1,  // Dexterity
+            INT = 1,  // Intellegence
+            ATT = 1,  // Attack Power
+            DEF = 1,  // Defense
+            EV = 1;   // Evade
             
-            
-
+        var inventory = {};
+        var perks = {};
+        
+        // Calculate stats based on other stats
         this.level = this.XP / 100;
+        this.HP = STR * 10;
+        this.MP = INT * 10;
         
        
 /*
