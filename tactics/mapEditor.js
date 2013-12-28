@@ -16,8 +16,8 @@ function Tile(args) {
   this.damage = args.image || 0;   // Damage taken when on tile
   this.type = args.type || 0;      // Grass, Rock, Wood, Water, Fire, Etc
   
-  this.onStep = function() {}  // Function to run when tile is stpped on  
-  this.onDeath = function() {}  // Function to run when tile loses all hp
+  this.onStep = args.onStep || ""; // Function to run when tile is stpped on  
+  this.onDeath = args.onDeath || "";  // Function to run when tile loses all hp
   
 }
 
@@ -59,7 +59,7 @@ function activateTile(e) {
 function loadTileInfo(row, col) {
   
   var tile = mapGrid[row - 1][col - 1]; 
-  
+  console.log(tile.onDeath);
   $("#tile-enabled").val(tile.enabled);
   $("#tile-x").val(tile.x);
   $("#tile-y").val(tile.y);
@@ -68,6 +68,8 @@ function loadTileInfo(row, col) {
   $("#tile-image").val(tile.image);
   $("#tile-damage").val(tile.damage);
   $("#tile-type").val(tile.type);
+  $("#tile-onStep").val(tile.onStep);  
+  $("#tile-onDeath").val(tile.onDeath);  
   
 }
 
@@ -82,7 +84,11 @@ function saveTile() {
   tile.hp = $("#tile-hp").val();
   tile.image = $("#tile-image").val();
   tile.damage = $("#tile-damage").val();
-  tile.type = $("#tile-type").val();
+  tile.type = $("#tile-type").val();  
+  tile.onStep = $("#tile-onStep").val();  
+  tile.onDeath = $("#tile-onDeath").val();  
+  
+  console.log(tile);
   
   // Update image
   $("#mapGrid td#row"+tile.x+"-col"+tile.y+" div").attr("style","background-image:url("+tile.image+")");

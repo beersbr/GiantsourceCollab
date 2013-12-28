@@ -13,7 +13,7 @@
 #mapGrid table tr td.newCol input { font-size: 24px; height:100%; width:100%; }
 
 
-#tileStatsWindow { border: 2px solid #000000; float: right; height: 200px; padding: 10px; width: 300px; }
+#tileStatsWindow { border: 2px solid #000000; float: right; padding: 10px; width: 300px; }
 #tileStatsWindow label { clear: both; float: left; width: 60px; } 
 #tileStatsWindow input { float:left; } 
 #tileStatsWindow #saveTile { clear:both; } 
