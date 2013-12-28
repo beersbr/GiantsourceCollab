@@ -161,6 +161,10 @@ function loadMap() {
   $("#mapGrid td#row1-col1").click();
 }
 
+function saveMap() {
+  window.open("data:text/octet-stream," + JSON.stringify(mapGrid));  
+}
+
 window.onload = function () {
   // Make tiles clickable to activate
   $("#mapGrid td").click(function() { activateTile(this) });
