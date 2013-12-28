@@ -57,7 +57,7 @@ function activateTile(e) {
 }
 
 function loadTileInfo(row, col) {
-  console.log("loading tile from row "+row+", col "+col);
+  
   var tile = mapGrid[row - 1][col - 1]; 
   
   $("#tile-enabled").val(tile.enabled);
@@ -75,12 +75,17 @@ function saveTile() {
   var row = $("#tile-x").val() - 1;
   var col = $("#tile-y").val() - 1;
   var tile = mapGrid[row][col];
+  
+  // Save tile values
   tile.enabled = $("#tile-enabled").val();
   tile.z = $("#tile-z").val();
   tile.hp = $("#tile-hp").val();
   tile.image = $("#tile-image").val();
   tile.damage = $("#tile-damage").val();
   tile.type = $("#tile-type").val();
+  
+  // Update image
+  $("#mapGrid td#row"+tile.x+"-col"+tile.y+" div").attr("style","background-image:url("+tile.image+")");
 }
 
 function readMap() {
@@ -139,7 +144,7 @@ function loadMap() {
       
         
       // Add the tile to the page
-      gridHTML += preText+"<td id=\"row"+(parseInt(r)+1)+"-col"+(parseInt(c)+1)+"\"><div></div></td>"+postText;
+      gridHTML += preText+"<td id=\"row"+(parseInt(r)+1)+"-col"+(parseInt(c)+1)+"\"><div style='background-image:url("+tile.image+")'></div></td>"+postText;
     }
   }
   
