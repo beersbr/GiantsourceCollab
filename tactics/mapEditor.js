@@ -160,7 +160,7 @@ function loadMap() {
       
         
       // Add the tile to the page
-      gridHTML += preText+"<td id=\"row"+(parseInt(r)+1)+"-col"+(parseInt(c)+1)+"\"><div style='background-image:url("+tile.image+")'></div></td>"+postText;
+      gridHTML += preText+"<td id=\"row"+(parseInt(r)+1)+"-col"+(parseInt(c)+1)+"\" "+(tile.enabled ? "" : "class=\"disabledTile\"")+"><div style='background-image:url("+tile.image+")'></div></td>"+postText;
     }
   }
   
