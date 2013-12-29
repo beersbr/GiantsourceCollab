@@ -7,14 +7,18 @@
 #mapGrid table tr td { border: 1px solid #000000; height: 50px; width: 50px; }
 #mapGrid table tr td.activeTile { background-color: #6666FF; border-color: #FF0000; }
 #mapGrid table tr td div { height: 100%; width: 100%; }
+#mapGrid .disabledTile { opacity:.5; }
 #mapGrid table tr.newRow td { text-align: center; }
 #mapGrid table tr.newRow td input { font-size: 24px; height:100%; width:100%; }
 #mapGrid table tr td.newCol { text-align: center; }
 #mapGrid table tr td.newCol input { font-size: 24px; height:100%; width:100%; }
 
-
 #tileStatsWindow { border: 2px solid #000000; float: right; padding: 10px; width: 300px; }
 #tileStatsWindow label { clear: both; float: left; width: 60px; } 
 #tileStatsWindow input { float:left; } 
+#tileStatsWindow textarea { float:left; } 
 #tileStatsWindow select { float:left; } 
 #tileStatsWindow #saveTile { clear:both; } 
+
+
+.dont-clear { clear:none !important; }

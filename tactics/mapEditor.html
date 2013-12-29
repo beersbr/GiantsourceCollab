@@ -12,7 +12,7 @@
       <table>
         <tbody>
           <tr id="row1">
-            <td id="row1-col1">
+            <td id="row1-col1" class="tile">
               <div></div>
             </td>
             <td class="newCol">
@@ -30,7 +30,8 @@
     
     <!-- Tile Stats Window -->
     <div id="tileStatsWindow">
-      <label for="tile-enabled">enabled: </label><input type="text" id="tile-enabled" />
+      <label for="tile-enabled-true">enabled: </label><input type="radio" id="tile-enabled-true" name="tile-enabled" value="1"/>
+      <label class="dont-clear" for="tile-enabled-false">disabled: </label><input type="radio" id="tile-enabled-false" name="tile-enabled" value="0"/>
       <label for="tile-x">x: </label><input type="text" id="tile-x" disabled="disabled"/>
       <label for="tile-y">y: </label><input type="text" id="tile-y" disabled="disabled" />
       <label for="tile-z">z: </label><input type="text" id="tile-z" />

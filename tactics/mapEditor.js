@@ -67,9 +67,8 @@ function activateTile(e) {
 
 function loadTileInfo(row, col) {
   
-  var tile = mapGrid[row - 1][col - 1]; 
-  console.log(tile.onDeath);
-  $("#tile-enabled").val(tile.enabled);
+  var tile = mapGrid[row - 1][col - 1];   
+  $("#tile-enabled-"+(tile.enabled ? "true" : "false")).prop("checked","true");
   $("#tile-x").val(tile.x);
   $("#tile-y").val(tile.y);
   $("#tile-z").val(tile.z);
@@ -88,7 +87,7 @@ function saveTile() {
   var tile = mapGrid[row][col];
   
   // Save tile values
-  tile.enabled = $("#tile-enabled").val();
+  tile.enabled = parseInt($("input[name=tile-enabled]:checked").val());
   tile.z = $("#tile-z").val();
   tile.hp = $("#tile-hp").val();
   tile.image = $("#tile-image").val();
@@ -98,6 +97,8 @@ function saveTile() {
   tile.onDeath = $("#tile-onDeath").val();  
   
   console.log(tile);
+  
+  toggleTile({"enabled":tile.enabled,"x":tile.x,"y":tile.y});
   
   // Update image
   $("#mapGrid td#row"+tile.x+"-col"+tile.y+" div").attr("style","background-image:url("+tile.image+")");
@@ -203,6 +204,29 @@ function loadTileTypes() {
   $("#tile-type").append(h);
 }
 
+function enableTile(args) {
+  if(args == undefined) args = {};
+  args.enabled = args.enabled || 1;
+  toggleTile(args);
+}
+
+function disableTile(args) {
+  if(args == undefined) args = {};
+  args.enabled = args.enabled || 0;
+  toggleTile(args)
+}
+
+function toggleTile(args) {
+  
+  if(args == undefined) args = {};
+  var enabled = args.enabled || 0;
+  var x = args.x || $("#tile-x").val();
+  var y = args.y || $("#tile-y").val();
+  
+  if(enabled) $("#row"+x+"-col"+y).removeClass("disabledTile");
+  else $("#row"+x+"-col"+y).addClass("disabledTile");
+}
+
 function init() {
   
   loadTileImages(); 
@@ -221,6 +245,7 @@ function init() {
   $("#mapGrid td").click();
   
 }
+
 window.onload = function () {
   init();
 }
