@@ -43,6 +43,7 @@
 
         this.size = new Vector(24, 40);
         var isJumping = false;
+        var isOnGround = false;
 
         this.update = function(world){
             var elapsedTime = GAME.FrameTime;
@@ -51,8 +52,9 @@
 
             if(GAME.Keyboard.keyIsDown("w")){
                 if(!isJumping){
-                    movement.y -= 400;
+                    movement.y -= 850;
                     isJumping = true;
+                    isOnGround = false;
                 }
 
 //                movement.y -= 30;
@@ -110,19 +112,23 @@
                     fixVector.y = subVector.y;
                     this.velocity.y = 0;
 
-                    if(fixVector.y < 0)
+                    if(fixVector.y < 0){
                         isJumping = false;
-
+                        isOnGround = true;
+                    }
                 }
 
                 // do something because we collided
 
                 this.position = VECTOR.add(this.position, fixVector);
-
             }
 
+
+            
             movement = VECTOR.multiplyScalar(movement, elapsedTime);
-            this.velocity = VECTOR.add(this.velocity, world.Gravity);
+            if(!isOnGround)
+                this.velocity = VECTOR.add(this.velocity, world.Gravity);
+
             this.velocity = VECTOR.add(movement, this.velocity);
             this.velocity = VECTOR.multiplyScalar(this.velocity, friction);
             this.position = VECTOR.add(this.position, this.velocity);
@@ -169,7 +175,7 @@
         this.player = null;
 
         this.init = function(){
-            this.Gravity = new Vector(0, 0.5);
+            this.Gravity = new Vector(0, 0.7);
 
             this.entities = new List();
             this.player = new Player({ x: 50, y: 350 });
@@ -230,8 +236,8 @@
 //            GAME.Context.fillStyle = "rgb(0, 0, 0)";
             GAME.Context.fillRect(0, 0, GAME.Width, GAME.Height);
 
-            this.draw();
             this.update();
+            this.draw();
         }
 
         this.draw = function(){
