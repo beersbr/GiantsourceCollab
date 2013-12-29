@@ -3,6 +3,15 @@ mapGrid = [[]];
 var newColButton = "<td class=\"newCol\"><input type=\"button\" value=\"+\" onclick=\"addCol($(this).closest('tr').attr('id').replace('row',''))\" /></td>",
     newRowButton = "<tr class=\"newRow\"><td><input type=\"button\" value=\"+\" onclick=\"addRow()\" /></td></tr>";
 
+
+var imageList = ["tile-fire","tile-glass","tile-grass","tile-stone","tile-wood"];
+var tileTypes = {};
+    tileTypes.grass = 1;
+    tileTypes.wood = 2;
+    tileTypes.stone = 3;
+    tileTypes.glass = 4;
+    tileTypes.fire = 5;
+
 function Tile(args) {
   
   if(args == undefined) args = {};
@@ -171,7 +180,34 @@ function saveMap() {
   window.open("data:text/octet-stream," + JSON.stringify(mapGrid));  
 }
 
-window.onload = function () {
+function loadTileImages() {
+  // Store the html in a string
+  var h = "";
+  
+  // Start with an option for a new image
+  h += "<option value='0'>Add...</option>";
+  
+  for(var i in imageList) {
+     h += "<option value='resources/"+imageList[i]+".jpg'>"+imageList[i]+".jpg</option>";
+  }
+  $("#tile-image").append(h);
+}
+
+function loadTileTypes() {
+  // Store the html in a string
+  var h = "";
+  
+  for(var t in tileTypes) {
+     h += "<option value='"+tileTypes[t]+"'>"+t+"</option>";
+  }
+  $("#tile-type").append(h);
+}
+
+function init() {
+  
+  loadTileImages(); 
+  loadTileTypes(); 
+  
   // Make tiles clickable to activate
   $("#mapGrid td").click(function() { activateTile(this) });
   
@@ -184,4 +220,7 @@ window.onload = function () {
   // Click the title to activate it
   $("#mapGrid td").click();
   
+}
+window.onload = function () {
+  init();
 }
