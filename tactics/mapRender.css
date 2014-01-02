@@ -4,3 +4,4 @@
 #map div.right { }
 #map div.bottom { }
 #map div.left { clear:both; }
+#map div img { height:50px; width:50px; }
