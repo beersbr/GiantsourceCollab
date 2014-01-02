@@ -4,13 +4,15 @@ var newColButton = "<td class=\"newCol\"><input type=\"button\" value=\"+\" oncl
     newRowButton = "<tr class=\"newRow\"><td><input type=\"button\" value=\"+\" onclick=\"addRow()\" /></td></tr>";
 
 
-var imageList = ["tile-fire","tile-glass","tile-grass","tile-stone","tile-wood"];
+var imageList = ["tile-dirt-1","tile-grass-1","tile-water-1","tile-wood-1"];
 var tileTypes = {};
     tileTypes.grass = 1;
     tileTypes.wood = 2;
     tileTypes.stone = 3;
     tileTypes.glass = 4;
     tileTypes.fire = 5;
+    tileTypes.dirt = 6;
+    tileTypes.water = 7;
 
 function Tile(args) {
   
