@@ -123,6 +123,44 @@
                 this.position = VECTOR.add(this.position, fixVector);
             }
 
+            var rect = this.toRect();
+            var zones = [];
+            zones.push(world.queryZone(rect.x, rect.y));
+            zones.push(world.queryZone(rect.x+rect.w, rect.y));
+            zones.push(world.queryZone(rect.x+rect.w, rect.y+rect.h));
+            zones.push(world.queryZone(rect.x, rect.y+rect.h));
+
+            // TODO: querying all the lists is too slow, need to augment the list object to be a bit quicker
+
+//            isOnGround = false;
+
+//            for(var i = 0; i < zones.length; ++i){
+//                var list = world.getZone(zones[i]);
+//
+//                if(list.length == 0)
+//                    continue;
+//
+//                var zoneIter = list.getIterator(),
+//
+//                    closestEntity = null,
+//                    distance = 500000; // some big number
+//
+//                while(zoneIter.next()){
+//                    var entity = zoneIter.value;
+//
+//                    var temp_distance = VECTOR.subtract(entity.position, this.position).magnitude;
+//                    if(temp_distance < distance){
+//                        closestEntity = entity;
+//                    }
+//                }
+//
+//                var minDistance = closestEntity.size.y/2 + this.size.y/2;
+//                if(distance != minDistance)
+//                    if(isOnGround != true)
+//                        isOnGround = false;
+//                    else
+//                        isOnGround = true;
+//            }
 
             movement = VECTOR.multiplyScalar(movement, elapsedTime);
             if(!isOnGround)
@@ -131,7 +169,6 @@
             this.velocity = VECTOR.add(movement, this.velocity);
             this.velocity = VECTOR.multiplyScalar(this.velocity, friction);
             this.position = VECTOR.add(this.position, this.velocity);
-
 
         }
 
@@ -156,22 +193,19 @@
 
         this.draw = function(rc){
             var rect = this.toRect();
-
             rc.save();
-
             rc.fillStyle = "rgb(128, 20, 200)";
             rc.fillRect(rect.x, rect.y, rect.w, rect.h);
-
             rc.restore();
         }
-
-
     }
 
     function World(args){
         this.Gravity = null;
         this.entities = null;
         this.player = null;
+
+        this.collisionZones = [];
 
         this.init = function(){
             this.Gravity = new Vector(0, 0.7);
@@ -191,6 +225,36 @@
             this.entities.push(new Block({x: 340, y: 460}))
             this.entities.push(new Block({x: 380, y: 420}))
             this.entities.push(new Block({x: 420, y: 380}))
+
+
+            // divide the visible screen up into 8 zones
+            this.resetZones();
+        }
+
+        this.resetZones = function(){
+            this.collisionZones.push(new List(),new List(),new List(),new List(),new List(),new List(),new List(),new List(),new List(),new List(),new List(),new List());
+        }
+
+        this.queryZone = function(x, y){
+            var cols = 4;
+            var rows = 2;
+
+            var width = GAME.Width;
+            var height = GAME.Height;
+
+            width = width/cols;
+            height = height/rows;
+
+            var zx = Math.floor(x/width);
+            var zy = Math.floor(y/height);
+
+            var zoneIndex = zy * cols + zx;
+
+            return zoneIndex;
+        }
+
+        this.getZone = function(index){
+            return (this.collisionZones[index]);
         }
 
         this.draw = function(rc){
@@ -198,7 +262,6 @@
 
             while(iter.next()){
                 var entity = iter.value;
-
                 entity.draw(rc);
             }
 
@@ -210,12 +273,23 @@
 
             while(iter.next()){
                 var entity = iter.value;
-
                 entity.update();
+
+                var rect = entity.toRect();
+
+                var p1 = this.queryZone(rect.x, rect.y);
+                var p2 = this.queryZone(rect.x+rect.w, rect.y);
+                var p3 = this.queryZone(rect.x+rect.w, rect.y+rect.h);
+                var p4 = this.queryZone(rect.x, rect.y+rect.h);
+
+                this.collisionZones[p1].push(entity);
+                this.collisionZones[p2].push(entity);
+                this.collisionZones[p3].push(entity);
+                this.collisionZones[p4].push(entity);
             }
 
             this.player.update(this);
-
+            this.resetZones();
         }
     }
 
