@@ -17,6 +17,7 @@
 		FB1B0BA31877389000A02E35 /* SDL2_mixer.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = FB1B0B9C187737C100A02E35 /* SDL2_mixer.framework */; };
 		FB1B0BA41877389000A02E35 /* SDL2.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = FB1B0B9D187737C100A02E35 /* SDL2.framework */; };
 		FB1B0BA51877389000A02E35 /* OpenGL.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
+		FBD09E40187B8A7000BF4554 /* ZombieDodge-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FBD09E3F187B8A7000BF4554 /* ZombieDodge-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +49,7 @@
 		FB1B0B9B187737C100A02E35 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		FB1B0B9C187737C100A02E35 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../../Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
 		FB1B0B9D187737C100A02E35 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		FBD09E3F187B8A7000BF4554 /* ZombieDodge-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ZombieDodge-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				FB1B0B691877369800A02E35 /* Supporting Files */,
+				FBD09E3F187B8A7000BF4554 /* ZombieDodge-Info.plist */,
 			);
 			path = ZombieDodge;
 			sourceTree = "<group>";
@@ -185,6 +188,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBD09E40187B8A7000BF4554 /* ZombieDodge-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
