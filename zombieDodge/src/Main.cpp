@@ -1,85 +1,18 @@
 #include <iostream>
 
+#include "Vector.h"
+
 #include <SDL2/SDL.h>
 
 // This was taken from a tutorial website as a test. make sure it runs :D
 
 namespace game
 {
-    class Vector
-    {
-    public:
-        Vector(const float x = 0, const float y = 0, const float z = 0)
-        {
-            this->x = x; this->y = y; this->z = z;
-        }
-
-        Vector(const Vector &v)
-        {
-            this->x = v.x; this->y = v.y; this->z = v.z;
-        }
-
-        Vector& operator+(const Vector &v) const
-        {
-            Vector *rv = new Vector();
-            rv->x = this->x + v.x; rv->y = this->y + v.y; rv->z = this->z + v.z;
-            return *rv;
-        }
-
-        Vector& operator+=(const Vector &v)
-        {
-            this->x += v.x; this->y += v.y; this->z += v.z;
-            return *this;
-        }
-
-        Vector& operator-(const Vector &v) const
-        {
-            Vector *rv = new Vector();
-            rv->x = this->x - v.x; rv->y = this->y - v.y; rv->z = this->z - v.z;
-            return *rv;
-        }
-
-        Vector& operator-=(const Vector &v)
-        {
-            this->x -= v.x; this->y -= v.y; this->z -= v.z;
-            return *this;
-        }
-
-        Vector& operator*(const Vector &v) const
-        {
-            Vector *rv = new Vector();
-            rv->x = this->x * v.x; rv->y = this->y * v.y; rv->z = this->z * v.z;
-            return *rv;
-        }
-
-        Vector& operator*=(const Vector &v)
-        {
-            this->x *= v.x; this->y *= v.y; this->z *= v.z;
-            return *this;
-        }
-
-        Vector& operator*(const float s) const
-        {
-            Vector *rv = new Vector();
-            rv->x = this->x * s; rv->y = this->y * s; rv->z = this->z * s;
-            return *rv;
-        }
-
-        Vector& operator*=(const float s)
-        {
-            this->x *= s; this->y *= s; this->z *= s;
-            return *this;
-        }
-
-        float x, y, z;
-    };
-
-    typedef Vector vector;
 
     class Entity
     {
     public:
-        vector pos;
+        Vector pos;
     };
 
 }
