@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		EAB4E7DF187E4AE600919144 /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAB4E7DE187E4AE600919144 /* Vector.cpp */; };
+		F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */; };
+		F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */; };
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
 		FB1B0B98187736E600A02E35 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1B0B97187736E600A02E35 /* Main.cpp */; };
 		FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
@@ -42,6 +44,10 @@
 		EAB4E7DE187E4AE600919144 /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
 		EAB4E7E0187E4AFA00919144 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		EAB4E7E1187E4C1800919144 /* SDL.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = SDL.h; path = ../../../../../../Frameworks/SDL2.framework/Headers/SDL.h; sourceTree = "<group>"; };
+		F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = welcome.jpg; sourceTree = "<group>"; };
+		F5F5A42FF46CF05D5EAB5A16 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		F5F5AE7FF7B33515326B1A99 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1B0B621877369800A02E35 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FB1B0B651877369800A02E35 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -137,6 +143,10 @@
 				EAB4E7E0187E4AFA00919144 /* Vector.h */,
 				EAB4E7DE187E4AE600919144 /* Vector.cpp */,
 				FB1B0B97187736E600A02E35 /* Main.cpp */,
+				F5F5A42FF46CF05D5EAB5A16 /* config.h */,
+				F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */,
+				F5F5AE7FF7B33515326B1A99 /* Player.h */,
+				F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -196,6 +206,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBD09E40187B8A7000BF4554 /* ZombieDodge-Info.plist in Resources */,
+				F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +219,7 @@
 			files = (
 				EAB4E7DF187E4AE600919144 /* Vector.cpp in Sources */,
 				FB1B0B98187736E600A02E35 /* Main.cpp in Sources */,
+				F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
