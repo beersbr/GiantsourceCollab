@@ -57,11 +57,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\src\config.f" />
-    <None Include="..\..\..\..\src\Player.mm" />
-    <None Include="..\..\..\..\src\Singleton.mm" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="..\..\..\..\src\welcome.bmp" />
     <Image Include="..\..\..\..\src\welcome.jpg" />
   </ItemGroup>

@@ -62,8 +62,8 @@
       <AdditionalDependencies>SDL2Main.lib;SDL2.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)..\..\..\thirdparty\SDL\lib\x86\SDL2.dll" $(TargetDir)
-copy "$(ProjectDir)..\..\..\thirdparty\SDL\lib\x86\SDL2_image.dll" $(TargetDir)</Command>
+      <Command>copy "$(ProjectDir)..\..\..\thirdparty\SDL\lib\x86\dll\*" $(TargetDir)
+copy "$(ProjectDir)..\..\..\..\images\*" $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -101,11 +101,6 @@ copy "$(ProjectDir)..\..\..\thirdparty\SDL\lib\x86\SDL2_image.dll" $(TargetDir)<
     <ClInclude Include="..\..\..\..\src\Singleton.h" />
     <ClInclude Include="..\..\..\..\src\Vector.h" />
     <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\src\config.f" />
-    <None Include="..\..\..\..\src\Player.mm" />
-    <None Include="..\..\..\..\src\Singleton.mm" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\src\welcome.bmp" />
