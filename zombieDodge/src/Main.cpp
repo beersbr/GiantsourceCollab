@@ -1,8 +1,25 @@
 #include <iostream>
 
+<<<<<<< HEAD
 #include <SDL.h>
+=======
+#include "Vector.h"
+
+#include <SDL2/SDL.h>
+>>>>>>> f47c35c3563f7d31d673810c91678562242580f1
 
 // This was taken from a tutorial website as a test. make sure it runs :D
+
+namespace game
+{
+
+    class Entity
+    {
+    public:
+        Vector pos;
+    };
+
+}
 
 int main(int argc, char * arg[])
 {
@@ -13,7 +30,7 @@ int main(int argc, char * arg[])
         
         return -1;
     }
-    
+
     // create a window
     SDL_Window * window = SDL_CreateWindow(
                                            "SDL 2 window",             // window title

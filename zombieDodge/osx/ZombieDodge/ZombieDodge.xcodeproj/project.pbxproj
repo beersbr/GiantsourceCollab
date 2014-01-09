@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E3A5C2BE534A8D1D478F /* Vector.cpp */; };
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
 		FB1B0B98187736E600A02E35 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1B0B97187736E600A02E35 /* Main.cpp */; };
 		FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
@@ -17,6 +18,7 @@
 		FB1B0BA31877389000A02E35 /* SDL2_mixer.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = FB1B0B9C187737C100A02E35 /* SDL2_mixer.framework */; };
 		FB1B0BA41877389000A02E35 /* SDL2.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = FB1B0B9D187737C100A02E35 /* SDL2.framework */; };
 		FB1B0BA51877389000A02E35 /* OpenGL.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
+		FBD09E40187B8A7000BF4554 /* ZombieDodge-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FBD09E3F187B8A7000BF4554 /* ZombieDodge-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +39,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A46E3A5C2BE534A8D1D478F /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
+		4A46EAF2EF3E26A0B8061328 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1B0B621877369800A02E35 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FB1B0B651877369800A02E35 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -48,6 +52,7 @@
 		FB1B0B9B187737C100A02E35 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		FB1B0B9C187737C100A02E35 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../../Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
 		FB1B0B9D187737C100A02E35 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		FBD09E3F187B8A7000BF4554 /* ZombieDodge-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ZombieDodge-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				FB1B0B691877369800A02E35 /* Supporting Files */,
+				FBD09E3F187B8A7000BF4554 /* ZombieDodge-Info.plist */,
 			);
 			path = ZombieDodge;
 			sourceTree = "<group>";
@@ -127,6 +133,8 @@
 			isa = PBXGroup;
 			children = (
 				FB1B0B97187736E600A02E35 /* Main.cpp */,
+				4A46E3A5C2BE534A8D1D478F /* Vector.cpp */,
+				4A46EAF2EF3E26A0B8061328 /* Vector.h */,
 			);
 			name = src;
 			path = ../../src;
@@ -185,6 +193,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBD09E40187B8A7000BF4554 /* ZombieDodge-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,6 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB1B0B98187736E600A02E35 /* Main.cpp in Sources */,
+				4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +228,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -233,6 +244,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				"INFOPLIST_FILE[sdk=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -255,6 +267,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -278,6 +291,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/brettbeers/Frameworks,
+					"/Users/Frameworks/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -297,6 +311,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/brettbeers/Frameworks,
+					"/Users/Frameworks/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
