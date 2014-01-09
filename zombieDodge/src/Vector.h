@@ -6,6 +6,14 @@
 #ifndef __Vector_H_
 #define __Vector_H_
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES
+#endif
+
+#ifdef _WIN64
+#define _USE_MATH_DEFINES
+#endif
+
 #include <iostream>
 #include <assert.h>
 #include <math.h>
@@ -17,7 +25,6 @@ public:
     Vector();
     Vector(const float x_, const float y_, const float z_);
     Vector(const Vector& v);
-    Vector(Vector& v);
     ~Vector();
 
     bool operator==(const Vector& v) const;

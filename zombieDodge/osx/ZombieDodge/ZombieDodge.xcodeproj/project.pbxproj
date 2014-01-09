@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+<<<<<<< HEAD
 		4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E3A5C2BE534A8D1D478F /* Vector.cpp */; };
 		4A46E8AA629D5A9B33A3D299 /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EA28C10E08702A111501 /* Configurator.cpp */; };
 		4A46EC020FAE3374CB99BF7C /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E8960119C17251B04D47 /* Game.cpp */; };
+=======
+		EAB4E7DF187E4AE600919144 /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAB4E7DE187E4AE600919144 /* Vector.cpp */; };
+>>>>>>> 9cd747bebaa809d77d2dbf7846f758391138fea7
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
 		FB1B0B98187736E600A02E35 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1B0B97187736E600A02E35 /* Main.cpp */; };
 		FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
@@ -41,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+<<<<<<< HEAD
 		4A46E3A5C2BE534A8D1D478F /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
 		4A46E8960119C17251B04D47 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 		4A46E978543461A87128CF95 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
@@ -48,6 +53,11 @@
 		4A46EAF2EF3E26A0B8061328 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		4A46EC5C5749843D7EE4DF42 /* Configurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configurator.h; sourceTree = "<group>"; };
 		4A46EE72293A61D1CD7776AE /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+=======
+		EAB4E7DE187E4AE600919144 /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
+		EAB4E7E0187E4AFA00919144 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		EAB4E7E1187E4C1800919144 /* SDL.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = SDL.h; path = ../../../../../../Frameworks/SDL2.framework/Headers/SDL.h; sourceTree = "<group>"; };
+>>>>>>> 9cd747bebaa809d77d2dbf7846f758391138fea7
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1B0B621877369800A02E35 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FB1B0B651877369800A02E35 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -99,6 +109,7 @@
 		FB1B0B611877369800A02E35 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EAB4E7E1187E4C1800919144 /* SDL.h */,
 				FB1B0B9B187737C100A02E35 /* SDL2_image.framework */,
 				FB1B0B9C187737C100A02E35 /* SDL2_mixer.framework */,
 				FB1B0B9D187737C100A02E35 /* SDL2.framework */,
@@ -139,7 +150,10 @@
 		FB1B0B96187736D200A02E35 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				EAB4E7E0187E4AFA00919144 /* Vector.h */,
+				EAB4E7DE187E4AE600919144 /* Vector.cpp */,
 				FB1B0B97187736E600A02E35 /* Main.cpp */,
+<<<<<<< HEAD
 				4A46E3A5C2BE534A8D1D478F /* Vector.cpp */,
 				4A46EAF2EF3E26A0B8061328 /* Vector.h */,
 				4A46E8960119C17251B04D47 /* Game.cpp */,
@@ -147,6 +161,8 @@
 				4A46EA28C10E08702A111501 /* Configurator.cpp */,
 				4A46EC5C5749843D7EE4DF42 /* Configurator.h */,
 				4A46E978543461A87128CF95 /* common.h */,
+=======
+>>>>>>> 9cd747bebaa809d77d2dbf7846f758391138fea7
 			);
 			name = src;
 			path = ../../src;
@@ -216,10 +232,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAB4E7DF187E4AE600919144 /* Vector.cpp in Sources */,
 				FB1B0B98187736E600A02E35 /* Main.cpp in Sources */,
+<<<<<<< HEAD
 				4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */,
 				4A46EC020FAE3374CB99BF7C /* Game.cpp in Sources */,
 				4A46E8AA629D5A9B33A3D299 /* Configurator.cpp in Sources */,
+=======
+>>>>>>> 9cd747bebaa809d77d2dbf7846f758391138fea7
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +263,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Library/Frameworks/**",
+					"/Users/mattjacobs/Dropbox/GiantsourceCollab/zombieDodge/windows/thirdparty/**",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -284,6 +308,8 @@
 				CREATE_INFOPLIST_SECTION_IN_BINARY = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks/**";
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "/Library/Frameworks/**";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

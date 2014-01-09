@@ -1,7 +1,5 @@
 #include <iostream>
-
 #include "Vector.h"
-
 #include <SDL2/SDL.h>
 
 // This was taken from a tutorial website as a test. make sure it runs :D

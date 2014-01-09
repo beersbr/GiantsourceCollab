@@ -27,18 +27,10 @@ Vector::Vector(const Vector &v)
     z = v.z;
 }
 
-Vector::Vector(Vector &v)
-{
-    x = v.x;
-    y = v.y;
-    z = v.z;
-}
-
 Vector::~Vector()
 {
     x = y = z = 0;
 }
-
 
 bool Vector::operator==(const Vector& v) const
 {
