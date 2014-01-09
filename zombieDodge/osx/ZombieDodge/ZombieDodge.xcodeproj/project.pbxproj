@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E3A5C2BE534A8D1D478F /* Vector.cpp */; };
+		4A46E8AA629D5A9B33A3D299 /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EA28C10E08702A111501 /* Configurator.cpp */; };
+		4A46EC020FAE3374CB99BF7C /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E8960119C17251B04D47 /* Game.cpp */; };
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
 		FB1B0B98187736E600A02E35 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1B0B97187736E600A02E35 /* Main.cpp */; };
 		FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
@@ -40,7 +42,12 @@
 
 /* Begin PBXFileReference section */
 		4A46E3A5C2BE534A8D1D478F /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
+		4A46E8960119C17251B04D47 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
+		4A46E978543461A87128CF95 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		4A46EA28C10E08702A111501 /* Configurator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Configurator.cpp; sourceTree = "<group>"; };
 		4A46EAF2EF3E26A0B8061328 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		4A46EC5C5749843D7EE4DF42 /* Configurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configurator.h; sourceTree = "<group>"; };
+		4A46EE72293A61D1CD7776AE /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1B0B621877369800A02E35 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FB1B0B651877369800A02E35 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -135,6 +142,11 @@
 				FB1B0B97187736E600A02E35 /* Main.cpp */,
 				4A46E3A5C2BE534A8D1D478F /* Vector.cpp */,
 				4A46EAF2EF3E26A0B8061328 /* Vector.h */,
+				4A46E8960119C17251B04D47 /* Game.cpp */,
+				4A46EE72293A61D1CD7776AE /* Game.h */,
+				4A46EA28C10E08702A111501 /* Configurator.cpp */,
+				4A46EC5C5749843D7EE4DF42 /* Configurator.h */,
+				4A46E978543461A87128CF95 /* common.h */,
 			);
 			name = src;
 			path = ../../src;
@@ -206,6 +218,8 @@
 			files = (
 				FB1B0B98187736E600A02E35 /* Main.cpp in Sources */,
 				4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */,
+				4A46EC020FAE3374CB99BF7C /* Game.cpp in Sources */,
+				4A46E8AA629D5A9B33A3D299 /* Configurator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
