@@ -195,7 +195,7 @@ bool init()
     {
         //Create window
         gameWindow = SDL_CreateWindow(
-                WINDOW_CAPTION,             // window title
+                WINDOW_CAPTION.c_str(),             // window title
                 SDL_WINDOWPOS_CENTERED,     // x position, centered
                 SDL_WINDOWPOS_CENTERED,     // y position, centered
                 WINDOW_WIDTH,                        // width, in pixels

@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include "Game.h"
+#include "config.h"
 
 Game* Game::_instance = nullptr;
 
@@ -19,11 +20,11 @@ void Game::Init(){
         throw SDL_INIT_ERROR;
     }
 
-    window = SDL_CreateWindow(Config->title,
+    window = SDL_CreateWindow(WINDOW_CAPTION.c_str(),
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            Config->width,
-            Config->height,
+            WINDOW_WIDTH,
+            WINDOW_HEIGHT,
             SDL_WINDOW_OPENGL
     );
 }
