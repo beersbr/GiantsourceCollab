@@ -1,8 +1,13 @@
 #include <iostream>
+<<<<<<< HEAD
 
 #include "Vector.h"
 
 #include <SDL.h>
+=======
+#include "Vector.h"
+#include <SDL2/SDL.h>
+>>>>>>> d509675339ce1a7fd0c1b1f716c39fa1d5af1461
 
 // This was taken from a tutorial website as a test. make sure it runs :D
 
