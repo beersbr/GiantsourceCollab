@@ -19,11 +19,12 @@ void Game::Init(){
         throw SDL_INIT_ERROR;
     }
 
-    window = SDL_CreateWindow(Config->title,
+    //window = SDL_CreateWindow(Config->title,
+	window = SDL_CreateWindow("TEST",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            Config->width,
-            Config->height,
+            800,
+            600,
             SDL_WINDOW_OPENGL
     );
 }

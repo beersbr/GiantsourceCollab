@@ -59,10 +59,11 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2Main.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2Main.lib;SDL2.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)..\..\..\thirdparty\SDL\lib\x86\SDL2.dll" $(TargetDir)</Command>
+      <Command>copy "$(ProjectDir)..\..\..\thirdparty\SDL\lib\x86\SDL2.dll" $(TargetDir)
+copy "$(ProjectDir)..\..\..\thirdparty\SDL\lib\x86\SDL2_image.dll" $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,12 +85,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Configurator.cpp" />
+    <ClCompile Include="..\..\..\..\src\Game.cpp" />
     <ClCompile Include="..\..\..\..\src\Main.cpp" />
+    <ClCompile Include="..\..\..\..\src\Player.cpp" />
     <ClCompile Include="..\..\..\..\src\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\common.h" />
+    <ClInclude Include="..\..\..\..\src\config.h" />
+    <ClInclude Include="..\..\..\..\src\Configurator.h" />
+    <ClInclude Include="..\..\..\..\src\Game.h" />
+    <ClInclude Include="..\..\..\..\src\Player.h" />
+    <ClInclude Include="..\..\..\..\src\ResourceLoader.h" />
+    <ClInclude Include="..\..\..\..\src\Singleton.h" />
     <ClInclude Include="..\..\..\..\src\Vector.h" />
     <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\src\config.f" />
+    <None Include="..\..\..\..\src\Player.mm" />
+    <None Include="..\..\..\..\src\Singleton.mm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\src\welcome.bmp" />
+    <Image Include="..\..\..\..\src\welcome.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

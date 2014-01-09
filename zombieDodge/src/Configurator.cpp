@@ -25,18 +25,18 @@ Configurator::Configurator(){
 
  */
 int Configurator::LoadConfigFile(const std::string filename, const int bufferSize = 1024) {
-    std::fstream fs;
-    fs.open(filename.c_str(), std::ios::in);
+    //std::fstream fs;
+    //fs.open(filename.c_str(), std::ios::in);
 
-    if(!fs.is_open()){
-        return COULD_NOT_OPEN_FILE;
-    }
+    //if(!fs.is_open()){
+    //    return COULD_NOT_OPEN_FILE;
+    //}
 
-    std::string line = 0;
-    while(std::getline(fs, line)){
+    //std::string line = 0;
+    //while(std::getline(fs, line)){
 
-        line = MeadowFrost::trim(line);
-    }
+    //    line = MeadowFrost::trim(line);
+    //}
 
     return RETURN_OK;
 
