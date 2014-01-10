@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E3A5C2BE534A8D1D478F /* Vector.cpp */; };
-		4A46E2D29A47488AAA6FB95A /* Singleton.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EE4D8F5C8E51C33D542B /* Singleton.mm */; };
 		4A46E78B450805044DCEE49D /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E90527F1BA066BE8C536 /* Configurator.cpp */; };
 		4A46E8EF69835C60483F3F3B /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EFEF7E3107564206EFFF /* Game.cpp */; };
 		F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */; };
@@ -151,7 +150,6 @@
 			children = (
 				FB1B0B97187736E600A02E35 /* Main.cpp */,
 				F5F5A42FF46CF05D5EAB5A16 /* config.h */,
-				F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */,
 				F5F5AE7FF7B33515326B1A99 /* Player.h */,
 				F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */,
 				4A46E3A5C2BE534A8D1D478F /* Vector.cpp */,
@@ -162,7 +160,6 @@
 				4A46EFEF7E3107564206EFFF /* Game.cpp */,
 				4A46ECE21E2F57EDD6AB1B83 /* Game.h */,
 				4A46E50C312BFDDA3184AE1E /* Singleton.h */,
-				4A46EE4D8F5C8E51C33D542B /* Singleton.mm */,
 			);
 			name = src;
 			path = ../../src;
@@ -238,7 +235,7 @@
 				4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */,
 				4A46E78B450805044DCEE49D /* Configurator.cpp in Sources */,
 				4A46E8EF69835C60483F3F3B /* Game.cpp in Sources */,
-				4A46E2D29A47488AAA6FB95A /* Singleton.mm in Sources */,
+				4A46E2D29A47488AAA6FB95A,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
