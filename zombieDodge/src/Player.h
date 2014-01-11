@@ -9,19 +9,20 @@
 
 class Player {
 public:
-    Player();
 
-    ~Player();
 
     static void update();
     static void spawn();
     static void move();
     static void draw();
     static void takeDamage(int dmg);
-
-
-public:
     float hitPoints, exp;
     int playerId;
+
+private:
+
+    Player();
+
+    ~Player(Player&);
 
 };

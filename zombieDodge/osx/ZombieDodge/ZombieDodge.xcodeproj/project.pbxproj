@@ -59,6 +59,7 @@
 		F5F5A43274ABEDF374EF5D69 /* zombieGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zombieGame.cpp; sourceTree = "<group>"; };
 		F5F5A7B5B02DE78D61EEA105 /* zombieGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zombieGame.h; sourceTree = "<group>"; };
 		F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		F5F5AAB51A8EE840022DE35A /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		F5F5AE7FF7B33515326B1A99 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1B0B621877369800A02E35 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -165,6 +166,7 @@
 				4A46E50C312BFDDA3184AE1E /* Singleton.h */,
 				F5F5A43274ABEDF374EF5D69 /* zombieGame.cpp */,
 				F5F5A7B5B02DE78D61EEA105 /* zombieGame.h */,
+				F5F5AAB51A8EE840022DE35A /* Entity.h */,
 			);
 			name = src;
 			path = ../../src;

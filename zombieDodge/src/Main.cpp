@@ -8,13 +8,14 @@
 
 #include <iostream>
 #include "Vector.h"
-
+#include "zombieGame.h"
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include "config.h"
 #include <stack>
 #include <stdio.h>
-#include "Player.h"
+//#include "Player.h"
+#include "Entity.h"
 #include <string>
 
 struct StateStruct
@@ -254,7 +255,9 @@ void update(){
 
             case 1:
                 //Load the Welcome screen
-                Player::update();
+
+
+                //Player::update();
                 game::gameInput();
                 break;
 
@@ -316,7 +319,9 @@ int main( int argc, char* args[] )
                     }
                 }
 
-                update();
+
+
+                    update();
         }
     }
 
@@ -325,3 +330,6 @@ int main( int argc, char* args[] )
 
     return 0;
 }
+
+
+
