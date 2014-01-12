@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>19B656D2-8880-4C6A-B707-7A9E3B528EFB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Tactex</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>8FC531D1-BFCC-4244-A25F-4D0C43A49ABB</key>
+		<string>https://github.com/beersbr/GiantsourceCollab.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Tactex/osx/Tactex.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>8FC531D1-BFCC-4244-A25F-4D0C43A49ABB</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/beersbr/GiantsourceCollab.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8FC531D1-BFCC-4244-A25F-4D0C43A49ABB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8FC531D1-BFCC-4244-A25F-4D0C43A49ABB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GiantsourceCollab</string>
+		</dict>
+	</array>
+</dict>
+</plist>
