@@ -7,22 +7,25 @@
 #include <assert.h>
 #include <math.h>
 
-class Player {
+#include "Vector.h"
+#include "Size.h"
+#include "Entity.h"
+
+class Player : public Entity{
 public:
+	Player();
+	~Player();
 
+    void update();
+    void spawn();
+    void move();
+    void draw();
+    void takeDamage(int dmg);
 
-    static void update();
-    static void spawn();
-    static void move();
-    static void draw();
-    static void takeDamage(int dmg);
-    float hitPoints, exp;
-    int playerId;
+public:
+	Vector* vel;
+	Size<int> size;
 
-private:
-
-    Player();
-
-    ~Player(Player&);
-
+    int hitPoints;
+	int exp;
 };

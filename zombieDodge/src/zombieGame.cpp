@@ -1,16 +1,14 @@
-#import "zombieGame.h"
-#import "config.h"
-zombieGame* zombieGame::_instance = nullptr;
+#include "zombieGame.h"
+#include "config.h"
 
+zombieGame* zombieGame::_instance = nullptr;
 zombieGame* zombieGame::getInstance() {
 
         if (!zombieGame::_instance)
             zombieGame::_instance = new zombieGame();
 
     return zombieGame::_instance;
-
 }
-
 
 zombieGame::zombieGame() {
 
@@ -22,7 +20,6 @@ zombieGame::zombieGame(zombieGame&)
 
 
 }
-
 
 bool zombieGame::Setup(){
 

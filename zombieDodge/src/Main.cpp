@@ -83,9 +83,6 @@ SDL_Surface* loadOptSurface( std::string path )
 
 namespace game
 {
-
-
-
         bool loadScreen(int screenId)
             {
                 //Loading success flag
