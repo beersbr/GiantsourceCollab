@@ -76,17 +76,21 @@ bool zombieGame::Setup(){
 
 void zombieGame::Run() {
     gameState = SETUP;
+	Setup();
+
 	float gameTimer = 0.0f;
 
 	Player* p = new Player();
-
+	SDL_Rect srcRect = {100, 100, 41, 101};	
 
     while (gameState == RUNNING)
 	{
-			//SDL_BlitSurface(
-
-	
+		SDL_BlitSurface(p->image,  NULL, gameSurface, (SDL_Rect*)&srcRect);
+		SDL_UpdateWindowSurface( gameWindow );
     }
+
+	delete p;
+	p = NULL;
 
     Cleanup();
 

@@ -286,6 +286,8 @@ void shutdown() {
 
 int main( int argc, char* args[] )
 {
+	zombieGame *z = zombieGame::getInstance();
+	z->Run();
 	
     return 0;
 }

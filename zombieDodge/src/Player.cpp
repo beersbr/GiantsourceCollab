@@ -10,7 +10,7 @@ Player::Player()
 	if(tempSurface == NULL)
 		return;
 
-	image = SDL_ConvertSurface(tempSurface, image->format, NULL);
+	image = SDL_ConvertSurface(tempSurface, tempSurface->format, NULL);
 
 	if(image == NULL)
 	{
