@@ -7,6 +7,11 @@
 #include <assert.h>
 #include <math.h>
 
+#include <SDL2\SDL.h>
+#include <SDL2_image\SDL_image.h>
+
+#include "common.h"
+
 #include "Vector.h"
 #include "Size.h"
 #include "Entity.h"
@@ -16,15 +21,17 @@ public:
 	Player();
 	~Player();
 
-    void update();
-    void spawn();
-    void move();
-    void draw();
-    void takeDamage(int dmg);
+    void Update();
+    void Spawn();
+    void Move();
+    void Draw();
+    void TakeDamage(int dmg);
 
 public:
 	Vector* vel;
 	Size<int> size;
+
+	SDL_Surface* image;
 
     int hitPoints;
 	int exp;

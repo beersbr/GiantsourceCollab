@@ -286,45 +286,7 @@ void shutdown() {
 
 int main( int argc, char* args[] )
 {
-
-
-    //Start up SDL and create window
-    if( !init() )
-    {
-        printf( "Failed to initialize!\n" );
-    }
-    else
-    {
-
-            //Main loop flag
-            bool quit = false;
-
-
-            //While application is running
-            while( !quit )
-            {
-                //Handle events on queue
-                while( SDL_PollEvent( &gameEvent ) != 0 )
-                {
-                    //User requests quit
-                    if( gameEvent.type == SDL_QUIT )
-                    {
-                        quit = true;
-                    } //User presses a key
-                    else {
-
-                    }
-                }
-
-
-
-                    update();
-        }
-    }
-
-    //Free resources and close SDL
-    shutdown();
-
+	
     return 0;
 }
 

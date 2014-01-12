@@ -1,3 +1,6 @@
+#ifndef __ENTITY_H__
+#define __ENTITY_H__
+
 #include "Vector.h"
 
 class Entity {
@@ -20,3 +23,5 @@ private:
 	static int _ids;
 	static int SetId();
 };
+
+#endif

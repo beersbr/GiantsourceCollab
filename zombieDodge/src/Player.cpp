@@ -1,38 +1,51 @@
-
-
 #include "Player.h"
 
 Player::Player()
 {
     hitPoints = exp = 0;
 	vel = new Vector();
+
+	SDL_Surface* tempSurface = IMG_Load("player.png");
+
+	if(tempSurface == NULL)
+		return;
+
+	image = SDL_ConvertSurface(tempSurface, image->format, NULL);
+
+	if(image == NULL)
+	{
+		SDL_FreeSurface(tempSurface);
+		return;
+	}
+
+	SDL_FreeSurface(tempSurface);
+	tempSurface = NULL;
 }
 
-void Player::spawn()
-{	
-}
-
-void Player::takeDamage(int dmg)
-{
-}
-
-void Player::move()
-{
-
-
-}
-
-void Player::draw()
-{
-
-
-}
-
-void Player::update()
+void Player::Spawn()
 {
 
 }
 
+void Player::TakeDamage(int dmg)
+{
+
+}
+
+void Player::Move()
+{
+
+}
+
+void Player::Draw()
+{
+
+}
+
+void Player::Update()
+{
+
+}
 
 Player::~Player()
 {

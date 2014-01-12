@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 
+#include "Player.h"
+
  enum GAMESTATES {
 
      SETUP = 100,

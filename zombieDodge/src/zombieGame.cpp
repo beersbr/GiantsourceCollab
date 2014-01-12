@@ -16,14 +16,14 @@ zombieGame::zombieGame() {
 }
 
 zombieGame::zombieGame(zombieGame&)
- {
+{
 
 
 }
 
 bool zombieGame::Setup(){
 
-      gameState = SETUP;
+    gameState = SETUP;
     //Initialization flag
     bool success = true;
 
@@ -66,6 +66,8 @@ bool zombieGame::Setup(){
                 gameSurface = SDL_GetWindowSurface( gameWindow );
             }
         }
+
+		
     }
 
     return success;
@@ -74,15 +76,16 @@ bool zombieGame::Setup(){
 
 void zombieGame::Run() {
     gameState = SETUP;
+	float gameTimer = 0.0f;
 
-    while (gameState == RUNNING) {
-
-        //timer
-
-        //update
-        //draw
+	Player* p = new Player();
 
 
+    while (gameState == RUNNING)
+	{
+			//SDL_BlitSurface(
+
+	
     }
 
     Cleanup();
