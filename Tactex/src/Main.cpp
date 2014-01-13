@@ -5,7 +5,7 @@
 
 int main(int argc, char * arg[])
 {
-    Configurator::open("resources/config/game.config");
+    Configurator::open("config/game.config");
 
     Game* game = Game::getInstance();
     game->setup();

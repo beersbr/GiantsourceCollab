@@ -7,8 +7,8 @@
 #include <assert.h>
 #include <math.h>
 
-#include <SDL2\SDL.h>
-#include <SDL2_image\SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
 
 #include "common.h"
 

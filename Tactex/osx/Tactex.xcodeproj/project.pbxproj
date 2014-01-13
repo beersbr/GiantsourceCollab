@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A46E2A631DD50418262A0D3 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4A46E83727D0891B6E43DDBB /* game.config */; };
-		4A46E6AEB5CA8772EA9D7179 /* Controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EC5A35BBF99A54942DCC /* Controller.cpp */; };
+		4A46E6AEB5CA8772EA9D7179 /* KeyboardHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EC5A35BBF99A54942DCC /* KeyboardHandler.cpp */; };
 		4A46E6C91C3676DA06E8A470 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EE08C3B0C8522B0EFD78 /* Game.cpp */; };
 		4A46E84A1653E2C53A2D586A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A46E80C4E792C0A0C95DA57 /* Cocoa.framework */; };
 		4A46ED676E6752408D6B5684 /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EEA9234C75D44AE36504 /* Configurator.cpp */; };
+		4A46EEBA6E0E34F918182721 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4A46E797BAD8BEBCE6D46917 /* game.config */; };
 		FB1C020518827E9B00B0D5C9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020418827E9B00B0D5C9 /* SDL2_image.framework */; };
 		FB1C020718827EAF00B0D5C9 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020618827EAF00B0D5C9 /* SDL2_mixer.framework */; };
 		FB1C020918827EB700B0D5C9 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020818827EB700B0D5C9 /* SDL2.framework */; };
@@ -40,14 +40,14 @@
 /* Begin PBXFileReference section */
 		4A46E0C2A5A5CB6061702CA6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4A46E520369112B440FB2D1F /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
-		4A46E5ACF463A6FC21F7615A /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
+		4A46E5ACF463A6FC21F7615A /* KeyboardHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardHandler.h; sourceTree = "<group>"; };
 		4A46E647EA59EF96130D6406 /* Tactex-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = "Tactex-Info.plist"; sourceTree = "<group>"; };
 		4A46E6D31156EBB02AD3C38C /* Tactex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tactex.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A46E797BAD8BEBCE6D46917 /* game.config */ = {isa = PBXFileReference; lastKnownFileType = file.config; path = game.config; sourceTree = "<group>"; };
 		4A46E80C4E792C0A0C95DA57 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		4A46E83727D0891B6E43DDBB /* game.config */ = {isa = PBXFileReference; lastKnownFileType = file.config; path = game.config; sourceTree = "<group>"; };
 		4A46E916933D7E1E33C02FE3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4A46EBA2CECAC8101C88B1B5 /* Configurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configurator.h; sourceTree = "<group>"; };
-		4A46EC5A35BBF99A54942DCC /* Controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Controller.cpp; sourceTree = "<group>"; };
+		4A46EC5A35BBF99A54942DCC /* KeyboardHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardHandler.cpp; sourceTree = "<group>"; };
 		4A46ECC2F7ADD9B59AE11D7C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		4A46EE08C3B0C8522B0EFD78 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 		4A46EEA9234C75D44AE36504 /* Configurator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Configurator.cpp; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 		4A46EE0E1CA2C3210F12B139 /* config */ = {
 			isa = PBXGroup;
 			children = (
-				4A46E83727D0891B6E43DDBB /* game.config */,
+				4A46E797BAD8BEBCE6D46917 /* game.config */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -171,8 +171,8 @@
 				FB1C020F18827F5800B0D5C9 /* Main.cpp */,
 				4A46EE08C3B0C8522B0EFD78 /* Game.cpp */,
 				4A46E520369112B440FB2D1F /* Game.h */,
-				4A46EC5A35BBF99A54942DCC /* Controller.cpp */,
-				4A46E5ACF463A6FC21F7615A /* Controller.h */,
+				4A46EC5A35BBF99A54942DCC /* KeyboardHandler.cpp */,
+				4A46E5ACF463A6FC21F7615A /* KeyboardHandler.h */,
 				4A46EEA9234C75D44AE36504 /* Configurator.cpp */,
 				4A46EBA2CECAC8101C88B1B5 /* Configurator.h */,
 			);
@@ -231,7 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A46E2A631DD50418262A0D3 /* game.config in Resources */,
+				4A46EEBA6E0E34F918182721 /* game.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +244,7 @@
 			files = (
 				FB1C021018827F5800B0D5C9 /* Main.cpp in Sources */,
 				4A46E6C91C3676DA06E8A470 /* Game.cpp in Sources */,
-				4A46E6AEB5CA8772EA9D7179 /* Controller.cpp in Sources */,
+				4A46E6AEB5CA8772EA9D7179 /* KeyboardHandler.cpp in Sources */,
 				4A46ED676E6752408D6B5684 /* Configurator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +289,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CACHE_ROOT)/SharedPrecompiledHeaderscompilpre";
+				SYMROOT = /Users/brettbeers/build/debug;
 			};
 			name = Debug;
 		};
@@ -341,6 +342,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				SYMROOT = "$(PROJECT_DIR)/build/release";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -360,6 +362,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				SYMROOT = "$(PROJECT_DIR)/build/debug";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

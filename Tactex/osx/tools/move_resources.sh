@@ -1,2 +1,4 @@
 #!/bin/sh
-cp -r ../../resources/ ../resources 
+echo "Moving resources..."
+cp -r ../../resources/ ../build/debug/Debug 
+echo "Done."

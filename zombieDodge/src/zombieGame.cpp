@@ -75,6 +75,8 @@ bool zombieGame::Setup(){
 }
 
 void zombieGame::Run() {
+    system("pwd");
+
     gameState = SETUP;
 	Setup();
 
