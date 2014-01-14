@@ -42,9 +42,10 @@ namespace ConfiguratorException
 
 class Configurator {
 public:
-    static std::map<std::string, std::string>* open(const std::string filepath);
+    static std::map<std::string, std::string> * open(const std::string filepath);
     static std::string readline(std::fstream& );
     static std::vector<std::string> split(std::string& str, const char t);
+    static std::string strip(std::string& str);
 
 };
 

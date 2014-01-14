@@ -13,12 +13,16 @@ class KeyboardHandler {
 public:
     static KeyboardHandler * getInstance();
 
-    void setKey(const SDL_Scancode key);
-    bool getKey(const SDL_Scancode key);
+    void update();
+
+    bool keyDown(const SDL_Scancode key);
 
 private:
     KeyboardHandler();
     KeyboardHandler(KeyboardHandler & );
+
+    void onKeyUp(const SDL_Scancode key);
+    void onKeyDown(const SDL_Scancode key);
 
     static KeyboardHandler * _instance;
 

@@ -19,6 +19,7 @@
 		FB1C020C18827F0A00B0D5C9 /* SDL2_mixer.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB1C020618827EAF00B0D5C9 /* SDL2_mixer.framework */; };
 		FB1C020D18827F0A00B0D5C9 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB1C020418827E9B00B0D5C9 /* SDL2_image.framework */; };
 		FB1C021018827F5800B0D5C9 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1C020F18827F5800B0D5C9 /* Main.cpp */; };
+		FB5D66FC188521030089E15A /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5D66FB188521030089E15A /* GLUT.framework */; };
 		FBD4ACA41882CC0C00E64324 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBD4ACA31882CC0C00E64324 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		FB1C020618827EAF00B0D5C9 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
 		FB1C020818827EB700B0D5C9 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		FB1C020F18827F5800B0D5C9 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
+		FB5D66FB188521030089E15A /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		FBD4ACA31882CC0C00E64324 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -63,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB5D66FC188521030089E15A /* GLUT.framework in Frameworks */,
 				FB1C020918827EB700B0D5C9 /* SDL2.framework in Frameworks */,
 				FB1C020718827EAF00B0D5C9 /* SDL2_mixer.framework in Frameworks */,
 				FB1C020518827E9B00B0D5C9 /* SDL2_image.framework in Frameworks */,
@@ -104,6 +107,7 @@
 		4A46E4B85CB54CCEDB5F60C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FB5D66FB188521030089E15A /* GLUT.framework */,
 				FBD4ACA31882CC0C00E64324 /* OpenGL.framework */,
 				FB1C020818827EB700B0D5C9 /* SDL2.framework */,
 				FB1C020618827EAF00B0D5C9 /* SDL2_mixer.framework */,

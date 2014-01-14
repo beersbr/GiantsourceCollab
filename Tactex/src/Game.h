@@ -10,6 +10,9 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include <OpenGL/glu.h>
+
+#include "KeyboardHandler.h"
 
 class Game {
 
@@ -29,6 +32,8 @@ private:
     static Game* _instance;
 
     SDL_Window* window;
+    SDL_Renderer *renderer;
+    SDL_GLContext glContext;
 };
 
 

@@ -17,17 +17,27 @@ std::map<std::string, std::string>* Configurator::open(const std::string filepat
     if(!ifp.is_open())
         throw ConfiguratorException::FileNotFoundException();
 
+    std::map<std::string, std::string> *config = new std::map<std::string, std::string>();
+
     while(!ifp.eof())
     {
         std::string line = Configurator::readline(ifp);
-        std::cout << line << std::endl;
 
         // split the line by the '='
-        Configurator::split(line, '=');
+        std::vector<std::string> strings =  Configurator::split(line, '=');
+
+        if(strings.size() == 2){
+            std::string key = Configurator::strip(strings[0]);
+            std::string value = Configurator::strip(strings[1]);
+
+            (*config)[key] = value;
+        }
+        else {
+            throw ConfiguratorException::ParseFileException();
+        }
     }
 
-
-    return new std::map<std::string, std::string>();
+    return config;
 }
 
 std::string Configurator::readline(std::fstream& f)
@@ -56,18 +66,31 @@ std::vector<std::string> Configurator::split(std::string& str, const char t)
         if((*it) == t)
         {
             std::string _s = str.substr(startIndex, index);
-            std::cout << "substring: " << _s << std::endl;
             startIndex = index + 1;
 
             tokens.push_back(_s);
         }
     }
     std::string lastToken = str.substr(startIndex, index);
-    std::cout << "last substring: " << lastToken << std::endl;
 
     tokens.push_back(lastToken);
-
 
     return tokens;
 }
 
+std::string Configurator::strip(std::string& str)
+{
+    // remove from front of string
+    int frontIndex = 0, endIndex = (str.length()-1);
+    for(frontIndex; frontIndex < str.length(); ++frontIndex){
+        if(!(str[frontIndex] == ' ' || str[frontIndex] == '\n' || str[frontIndex] == '\r'))
+            break;
+    }
+
+    for(endIndex; endIndex < str.length(); --endIndex){
+        if(!(str[frontIndex] == ' ' || str[frontIndex] == '\n' || str[frontIndex] == '\r'))
+            break;
+    }
+
+    return (str.substr(frontIndex, endIndex));
+}

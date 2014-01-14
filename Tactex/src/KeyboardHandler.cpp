@@ -16,6 +16,32 @@ KeyboardHandler *KeyboardHandler::getInstance()
     return KeyboardHandler::_instance;
 }
 
+void KeyboardHandler::update()
+{
+    SDL_Event event;
+    while(SDL_PollEvent(&event))
+    {
+        switch(event.type)
+        {
+            case SDL_KEYUP:
+            {
+                onKeyUp(event.key.keysym.scancode);
+                break;
+            }
+            case SDL_KEYDOWN:
+            {
+                onKeyDown(event.key.keysym.scancode);
+                break;
+            }
+        }
+    }
+}
+
+bool KeyboardHandler::keyDown(const SDL_Scancode key)
+{
+    return keyStates[key];
+}
+
 KeyboardHandler::KeyboardHandler()
 {
 
@@ -26,12 +52,13 @@ KeyboardHandler::KeyboardHandler(KeyboardHandler& keyboard)
 
 }
 
-void KeyboardHandler::setKey(const SDL_Scancode key)
+void KeyboardHandler::onKeyUp(const SDL_Scancode key)
 {
     keyStates[key] = true;
 }
 
-bool KeyboardHandler::getKey(const SDL_Scancode key)
+void KeyboardHandler::onKeyDown(const SDL_Scancode key)
 {
-    return keyStates[key];
+    keyStates[key] = true;
 }
+
