@@ -22,7 +22,6 @@
 #include "Player.h"
 #include "Enemy.h"
 
-
 struct StateStruct
 {
     void (*StatePointer)();
@@ -31,15 +30,16 @@ struct StateStruct
 // Global data //
 std::stack<StateStruct> gameStates;
 
-gameEngine* gEngine = gameEngine::getInstance();
 
 int main( int argc, char* args[] )
 {
-        gEngine->Setup();
 
-        gEngine->Run();
+    gameEngine* gEngine = gameEngine::getInstance();
 
-        gEngine->Cleanup();
+        if (gEngine->Setup()) {
 
+            gEngine->Run();
+
+        }
         return 0;
 }

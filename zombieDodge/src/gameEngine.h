@@ -32,33 +32,22 @@ public:
     float gameTimer;
     Player* currentPlayer = nullptr;
     int gameState=0;
-    int currentLevel = 0;
     bool Setup();
     void Run();
     void Draw();
     void Update(SDL_Event &event);
     void Cleanup();
     void SetPlayer(std::string playerId);
-    bool loadScreen(int screenId);
+    bool LoadScreen();
     bool loadStateResources(int screenId);
-    void menuInput(SDL_Event &event);
-    void gameInput(SDL_Event &event);
-    SDL_Surface* LoadImage(const std::string& path);
+    void MenuInput(SDL_Event &event);
+    void GameInput(SDL_Event &event);
+    SDL_Surface* LoadImage(const std::string path);
     void ApplySurface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL );
 
     void SetGameState(int state);
     bool GameInit();
     //Loads Optimized Surface
-
-
-
-
-private:
-    gameEngine();
-
-    gameEngine(gameEngine&);
-
-    static gameEngine* _instance;
 
     //The window we'll be rendering to
     SDL_Window* gameWindow;
@@ -71,8 +60,13 @@ private:
 
 
 
-    int currentGameState = 0;
 
+private:
+    gameEngine();
+
+    gameEngine(gameEngine&);
+
+    static gameEngine* _instance;
 
 
 

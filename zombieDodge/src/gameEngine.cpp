@@ -36,9 +36,10 @@ gameEngine::gameEngine(gameEngine&)
 
 }
 
-
-SDL_Surface* gameEngine::LoadImage( const std::string& path )
+SDL_Surface* gameEngine::LoadImage( const std::string path )
 {
+
+    /*
     //The image that's loaded
     SDL_Surface* loadedImage = NULL;
 
@@ -47,6 +48,9 @@ SDL_Surface* gameEngine::LoadImage( const std::string& path )
 
     //Load the image
     loadedImage = IMG_Load( path.c_str() );
+
+
+    std::cout << "ladoing = " << path << std::endl;
 
     //If the image loaded
     if( loadedImage != NULL )
@@ -61,12 +65,36 @@ SDL_Surface* gameEngine::LoadImage( const std::string& path )
         if( optimizedImage != NULL )
         {
             //Color key surface
-            SDL_SetColorKey( optimizedImage, SDL_TRUE, SDL_MapRGB( optimizedImage->format, 0, 0xFF, 0xFF ) );
+            SDL_SetColorKey( optimizedImage, SDL_TRUE, SDL_MapRGB( gameSurface->format, 0, 0xFF, 0xFF ) );
         }
     }
 
     //Return the optimized surface
     return optimizedImage;
+    */
+
+    SDL_Surface* optimizedSurface = NULL;
+
+    //Load image at specified path
+    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+    if( loadedSurface == NULL )
+    {
+        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+    }
+    else
+    {
+        //Convert surface to screen format
+        optimizedSurface = SDL_ConvertSurface( loadedSurface, gameSurface->format, NULL );
+        if( optimizedSurface == NULL )
+        {
+            printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        }
+
+        //Get rid of old loaded surface
+        SDL_FreeSurface( loadedSurface );
+    }
+
+    return optimizedSurface;
 }
 
 void gameEngine::ApplySurface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip)
@@ -83,13 +111,78 @@ void gameEngine::ApplySurface( int x, int y, SDL_Surface* source, SDL_Surface* d
 }
 
 
+bool gameEngine::LoadScreen()
+{
+    //Loading success flag
+    bool success = true;
+
+    switch(gameState)
+
+    {
+        case SETUP:
+            gameBackground = LoadImage( "welcome.jpg" );
+            break;
+
+        case MENU:
+            gameBackground = LoadImage( "welcome.jpg" );
+            break;
+
+        case PLAYING:
+            gameBackground = LoadImage( "welcome.jpg" );
+            break;
+
+        case GAME_OVER:
+            gameBackground = LoadImage( "welcome.jpg" );
+            break;
+
+        default:
+            break;
+
+    }
+
+
+    if(gameBackground == NULL )
+    {
+        printf( "Failed to load  image!\n" );
+        success = false;
+
+        gameState = CLEANUP;
+
+    }   else {
+
+        success = true;
+    }
+
+    return success;
+};
+
+
+bool gameEngine::loadStateResources(int screenId)
+{
+    //Loading success flag
+    bool success = true;
+
+    switch(screenId)
+
+    {
+        case 0:
+
+            break;
+
+    }
+
+
+    return success;
+};
+
+
 bool gameEngine::Setup(){
 
-    this->gameState = SETUP;
+    gameState = SETUP;
     //Initialization flag
     bool success = true;
 
-    this->gameTimer = SDL_GetTicks();
+    gameTimer = SDL_GetTicks();
 
     //Initialize SDL
     if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 )
@@ -100,7 +193,7 @@ bool gameEngine::Setup(){
     else
     {
         //Create window
-        this->gameWindow = SDL_CreateWindow(
+        gameWindow = SDL_CreateWindow(
                 WINDOW_CAPTION.c_str(),             // window title
                 SDL_WINDOWPOS_CENTERED,     // x position, centered
                 SDL_WINDOWPOS_CENTERED,     // y position, centered
@@ -108,7 +201,7 @@ bool gameEngine::Setup(){
                 WINDOW_HEIGHT,                        // height, in pixels
                 SDL_WINDOW_OPENGL           // flags
         );
-        if( gameEngine::getWindow() == NULL )
+        if( gameWindow == NULL )
         {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
             success = false;
@@ -125,9 +218,15 @@ bool gameEngine::Setup(){
             else
             {
                 //Get window surface
-                this->gameSurface = SDL_GetWindowSurface( gameEngine::getWindow());
+                gameSurface = SDL_GetWindowSurface( gameWindow);
             }
         }
+    }
+
+    if (success) {
+
+        gameState = MENU;
+
     }
 
     return success;
@@ -186,23 +285,21 @@ void gameEngine::SetPlayer(std::string playerId) {
 }
 void gameEngine::Update(SDL_Event &event) {
 
+    switch(gameState) {
 
-
-    switch( this->currentGameState) {
-
-
-        case -1:
+        case SETUP:
             //Load the Welcome screen
-            this->loadStateResources( this->currentGameState);
+            //this->loadStateResources( this->currentGameState);
             break;
 
-        case 0:
+        case MENU:
             //Load the Welcome screen
-            loadScreen(this->currentGameState);
-            this->menuInput(event);
+            LoadScreen();
+            this->MenuInput(event);
+            Draw();
             break;
 
-        case 1:
+        case PLAYING:
             //Load the Game Level
 
             //Fill the screen white
@@ -211,7 +308,13 @@ void gameEngine::Update(SDL_Event &event) {
             currentPlayer->Update(event);
             currentPlayer->Draw();
 
-            this->gameInput(event);
+            this->GameInput(event);
+            break;
+
+        case GAME_OVER:
+            //Load the Welcome screen
+            LoadScreen();
+            this->MenuInput(event);
             break;
 
         default:
@@ -228,13 +331,11 @@ void gameEngine::Update(SDL_Event &event) {
 
 void gameEngine::Draw() {
 
-
-
     //Apply the image
-    SDL_BlitSurface(  this->gameBackground, NULL,  this->gameSurface, NULL );
+    SDL_BlitSurface(  gameBackground, NULL,  gameSurface, NULL );
 
     //Update the surface
-    SDL_UpdateWindowSurface(  this->gameWindow );
+    SDL_UpdateWindowSurface(  gameWindow );
 
 
 
@@ -242,13 +343,11 @@ void gameEngine::Draw() {
 
 void gameEngine::Run() {
 
+
     while ( this->gameState != EXIT) {
 
         if (getTimer() >= FRAME_RATE )
         {
-
-
-
             SDL_Event event;
             while( SDL_PollEvent( &event ) != 0 ){
                 if( event.type == SDL_KEYDOWN ) {
@@ -273,40 +372,44 @@ void gameEngine::Run() {
             }
 
             if (this->gameState != CLEANUP) {
-
+                //std::cout << "GAME STATE = " <<  this->gameState << std::endl;
                 if ((this->gameState == PLAYING) && (!gameReady)){
 
-                    gameReady = gameEngine::GameInit();
+                    gameReady = GameInit();
 
-                    //Move to gamestates
-                    this->Update(event);
-
-
-                    this->Draw();
                 }
+
+                //Move to gamestates
+                this->Update(event);
+
+                this->Draw();
 
                 this->gameTimer = SDL_GetTicks();
             }
         }
+
+        if (this->gameState == GAME_OVER) {
+
+            this->gameState = CLEANUP;
+
+
+        }
+
+        if (gameState == CLEANUP) {
+
+            Cleanup();
+
+        }
+
     }
-    if (this->gameState == GAME_OVER) {
-
-        this->gameState = CLEANUP;
 
 
-    } else
-    if (this->gameState == EXIT) {
-
-        this->gameState = CLEANUP;
-
-
-    }
 
 }
 
 void gameEngine::Cleanup(){
 
-    this->gameState = CLEANUP;
+    this->gameState = EXIT;
 
     SDL_FreeSurface(  this->gameBackground );
     this->gameBackground = NULL;
@@ -321,56 +424,8 @@ void gameEngine::Cleanup(){
 }
 
 
-bool gameEngine::loadScreen(int screenId)
-{
-    //Loading success flag
-    bool success = true;
 
-    switch(screenId)
-
-    {
-        case 0:
-            this->gameBackground = LoadImage( "welcome.jpg" );
-            break;
-        default:
-            break;
-
-    }
-
-
-    if( this->gameBackground == NULL )
-    {
-        printf( "Failed to load  image!\n" );
-        success = false;
-    }   else {
-
-        success = true;
-    }
-
-    return success;
-};
-
-
-bool gameEngine::loadStateResources(int screenId)
-{
-    //Loading success flag
-    bool success = true;
-
-    switch(screenId)
-
-    {
-        case 0:
-
-            break;
-
-    }
-
-
-    return success;
-};
-
-
-void gameEngine::menuInput(SDL_Event &event) {
+void gameEngine::MenuInput(SDL_Event &event) {
 
 
     //User requests quit
@@ -394,6 +449,7 @@ void gameEngine::menuInput(SDL_Event &event) {
 
             case SDLK_SPACE:
                 this->gameState = PLAYING;
+
                 break;
 
         }
@@ -402,7 +458,7 @@ void gameEngine::menuInput(SDL_Event &event) {
 
 }
 
-void gameEngine::gameInput(SDL_Event &event) {
+void gameEngine::GameInput(SDL_Event &event) {
 
 
     switch(event.key.keysym.sym ) {
