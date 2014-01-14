@@ -22,8 +22,8 @@ class Player : public Entity {
 
 public:
 
-    Player();
-    Player(int _x=0, int _y=0, int _z=0,std::string playerTarget = std::string(), int _hp=1);
+    Player() : Entity(){};
+    Player(int _x=0, int _y=0, int _z=0,std::string playerTarget = std::string(), int _hp=1) : Entity(_x,_y,_z){};
     ~Player();
 
     Vector pos;
@@ -61,7 +61,7 @@ public:
     std::string name;
     std::string playerTarget;
 
-    virtual void Update(SDL_Event& event) = 0;
+    virtual void Update(SDL_Event& event) =0;
     virtual void Spawn();
     virtual void TakeDamage(float dmg);
 

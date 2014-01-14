@@ -6,7 +6,7 @@
 
 Player::Player()
 {
-    //EntityEntity();
+
     gameEngine* gEngine = gameEngine::getInstance();
     hitPoints = exp = 0;
     playerId = -1;
