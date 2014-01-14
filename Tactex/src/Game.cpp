@@ -34,6 +34,9 @@ int Game::setup(){
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION,4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION,2);
 
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
     glContext = SDL_GL_CreateContext(window);
 
     // setup opengl
@@ -92,6 +95,14 @@ int Game::run(){
 
         // render some stuff
 
+        glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+        GLuint VertexArrayID;
+        glGenVertexArrays(1, &VertexArrayID);
+        glBindVertexArray(VertexArrayID);
+
+        // do something with the 
 
         SDL_GL_SwapWindow(window);
     }
@@ -100,7 +111,10 @@ int Game::run(){
 }
 
 int Game::cleanup(){
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_GL_DeleteContext(glContext);
+
     SDL_Quit();
 
     return 0;

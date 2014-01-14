@@ -8,6 +8,7 @@
 
 #include <iostream>
 
+#include <OpenGL/gl3.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <OpenGL/glu.h>

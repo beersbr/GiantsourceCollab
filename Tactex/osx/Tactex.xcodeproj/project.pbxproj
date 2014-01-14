@@ -10,6 +10,8 @@
 		4A46E6AEB5CA8772EA9D7179 /* KeyboardHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EC5A35BBF99A54942DCC /* KeyboardHandler.cpp */; };
 		4A46E6C91C3676DA06E8A470 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EE08C3B0C8522B0EFD78 /* Game.cpp */; };
 		4A46E84A1653E2C53A2D586A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A46E80C4E792C0A0C95DA57 /* Cocoa.framework */; };
+		4A46E9B92EB0644632B30F87 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A46E25AC2D8C07C307F9AA6 /* OpenGL.framework */; };
+		4A46E9C373FE28D1E1811BC9 /* GLEW.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB46A2431885273200B565FD /* GLEW.framework */; };
 		4A46ED676E6752408D6B5684 /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EEA9234C75D44AE36504 /* Configurator.cpp */; };
 		4A46EEBA6E0E34F918182721 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4A46E797BAD8BEBCE6D46917 /* game.config */; };
 		FB1C020518827E9B00B0D5C9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020418827E9B00B0D5C9 /* SDL2_image.framework */; };
@@ -21,7 +23,6 @@
 		FB1C021018827F5800B0D5C9 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1C020F18827F5800B0D5C9 /* Main.cpp */; };
 		FB46A2441885273200B565FD /* GLEW.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB46A2431885273200B565FD /* GLEW.framework */; };
 		FB5D66FC188521030089E15A /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5D66FB188521030089E15A /* GLUT.framework */; };
-		FBD4ACA41882CC0C00E64324 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBD4ACA31882CC0C00E64324 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		4A46E0C2A5A5CB6061702CA6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4A46E25AC2D8C07C307F9AA6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		4A46E520369112B440FB2D1F /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
 		4A46E5ACF463A6FC21F7615A /* KeyboardHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardHandler.h; sourceTree = "<group>"; };
 		4A46E647EA59EF96130D6406 /* Tactex-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = "Tactex-Info.plist"; sourceTree = "<group>"; };
@@ -59,7 +61,6 @@
 		FB1C020F18827F5800B0D5C9 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
 		FB46A2431885273200B565FD /* GLEW.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLEW.framework; path = ../../../../../Frameworks/GLEW.framework; sourceTree = "<group>"; };
 		FB5D66FB188521030089E15A /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
-		FBD4ACA31882CC0C00E64324 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +74,8 @@
 				FB1C020718827EAF00B0D5C9 /* SDL2_mixer.framework in Frameworks */,
 				FB1C020518827E9B00B0D5C9 /* SDL2_image.framework in Frameworks */,
 				4A46E84A1653E2C53A2D586A /* Cocoa.framework in Frameworks */,
-				FBD4ACA41882CC0C00E64324 /* OpenGL.framework in Frameworks */,
+				4A46E9C373FE28D1E1811BC9 /* GLEW.framework in Frameworks */,
+				4A46E9B92EB0644632B30F87 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,12 +114,12 @@
 			children = (
 				FB46A2431885273200B565FD /* GLEW.framework */,
 				FB5D66FB188521030089E15A /* GLUT.framework */,
-				FBD4ACA31882CC0C00E64324 /* OpenGL.framework */,
 				FB1C020818827EB700B0D5C9 /* SDL2.framework */,
 				FB1C020618827EAF00B0D5C9 /* SDL2_mixer.framework */,
 				FB1C020418827E9B00B0D5C9 /* SDL2_image.framework */,
 				4A46E80C4E792C0A0C95DA57 /* Cocoa.framework */,
 				4A46E9F3BBAF44E45A6DC833 /* Other Frameworks */,
+				4A46E25AC2D8C07C307F9AA6 /* OpenGL.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -343,6 +345,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/brettbeers/Frameworks,
+					"\"${PROJECT_DIR}/../../../../../Frameworks\"/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -363,6 +366,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/brettbeers/Frameworks,
+					"\"${PROJECT_DIR}/../../../../../Frameworks\"/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
