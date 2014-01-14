@@ -40,7 +40,7 @@ void GameState::HandleInput(SDL_Event& event) {
                 case SDLK_ESCAPE:
                     printf( "ESCAPE\n" );
 
-                    gameEngine->setGameState(CLEANUP);
+                    gameEngine->SetGameState(CLEANUP);
 
                     break;
                 case SDLK_UP:

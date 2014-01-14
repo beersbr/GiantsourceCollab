@@ -6,15 +6,16 @@
 
 Player::Player()
 {
+    //EntityEntity();
     gameEngine* gEngine = gameEngine::getInstance();
     hitPoints = exp = 0;
     playerId = -1;
-    //Load the dot image
     image =gEngine->LoadImage( "player.png" );
 }
 
-Player::Player(int _x, int _y=0, int _z=0, std::string _playerTarget = std::string(), int _hp=0)
+Player::Player(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 {
+    //Entity(_x,_y,_z);
     gameEngine* gEngine = gameEngine::getInstance();
     hitPoints = _hp;
     int exp = 0;
@@ -24,8 +25,6 @@ Player::Player(int _x, int _y=0, int _z=0, std::string _playerTarget = std::stri
 
 void Player::Spawn()
     {
-
-	vel = new Vector();
 
 	SDL_Surface* tempSurface = IMG_Load("player.png");
 	
@@ -48,7 +47,7 @@ void Player::Spawn()
 
 void Player::Move(SDL_Event& event)
     {
-
+        gameEngine* gEngine = gameEngine::getInstance();
         float frameMoveSpeed = this->moveSpeed;
         //zombieGame* game = zombieGame::getInstance();
 
@@ -138,11 +137,16 @@ void Player::Update(SDL_Event& event)
 
 }
 
+void Player::TakeDamage(float dmg) {
+
+
+}
+
 
 Player::~Player()
 {
-	delete vel;
-	vel = nullptr;
+	//delete vel;
+	//vel = nullptr;
 
     hitPoints = exp = 0;
 }

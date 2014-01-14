@@ -7,19 +7,21 @@
 //
 
 #include <iostream>
-#include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
-#include "config.h"
 #include <stack>
+#include <string>
 #include <stdio.h>
+
+//ENGINE FILES
+#include "config.h"
 #include "gameEngine.h"
 #include "GameState.h"
+#include "Vector.h"
 #include "Entity.h"
-
 #include "Player.h"
 #include "Enemy.h"
-#include <string>
+
 
 struct StateStruct
 {
@@ -28,9 +30,11 @@ struct StateStruct
 
 // Global data //
 std::stack<StateStruct> gameStates;
+
 gameEngine* gEngine = gameEngine::getInstance();
-    int main( int argc, char* args[] )
-    {
+
+int main( int argc, char* args[] )
+{
         gEngine->Setup();
 
         gEngine->Run();
@@ -38,4 +42,4 @@ gameEngine* gEngine = gameEngine::getInstance();
         gEngine->Cleanup();
 
         return 0;
-    }
+}

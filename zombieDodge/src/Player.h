@@ -6,32 +6,35 @@
 // Created by Matt Jacobs on 1/9/14.
 // Copyright (c) 2014 Brett Beers. All rights reserved.
 //
-#include <SDL2\SDL.h>
-#include <SDL2_image\SDL_image.h>
 
-#include "common.h"
-#include "gameEngine.h"
-#include "Vector.h"
-#include "Size.h"
 #include <iostream>
 #include <assert.h>
 #include <math.h>
+
+#include "gameEngine.h"
+#include "common.h"
+#include "Vector.h"
+#include "Size.h"
 #include "Entity.h"
+
 
 class Player : public Entity {
 
 public:
 
-    Player() : Entity(){};
-    Player(int _x=0, int _y=0, int _z=0,std::string playerTarget, int _hp) : Entity(_x,_y,_z){};
+    Player();
+    Player(int _x=0, int _y=0, int _z=0,std::string playerTarget = std::string(), int _hp=1);
+    ~Player();
 
     Vector pos;
-
+    Vector vel;
+    int x,y,z = 0;
     float hitPoints, exp;
     int playerId;
     SDL_Surface *image = NULL;
 
-    gameEngine* gEngine = gameEngine::getInstance();
+    //gameEngine* gEngine = gameEngine::getInstance();
+
 
 
    // this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.CurrentPlayer.sprite.h, frameWidth: GAME.CurrentPlayer.sprite.w});
@@ -58,15 +61,15 @@ public:
     std::string name;
     std::string playerTarget;
 
-    virtual void Update(SDL_Event& event);
-    static void Spawn();
-    static void TakeDamage(float dmg);
+    virtual void Update(SDL_Event& event) = 0;
+    virtual void Spawn();
+    virtual void TakeDamage(float dmg);
 
     virtual void Move(SDL_Event& event);
     virtual void Shoot(int x, int y);
 
     virtual void Draw();
-}
+};
 
 #endif
 

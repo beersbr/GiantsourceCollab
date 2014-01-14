@@ -7,7 +7,7 @@
 
 class GameState {
 public:
-    GameState(int _stateId, std::string _name, int _key) {stateId=_stateId; name=_name; key=_key;}
+    GameState(int _stateId, std::string _name, int _key);
     int stateId, key;
     std::string name;
     std::string background;

@@ -69,7 +69,7 @@ SDL_Surface* gameEngine::LoadImage( const std::string& path )
     return optimizedImage;
 }
 
-void gameEngine::ApplySurface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL )
+void gameEngine::ApplySurface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip)
 {
     //Holds offsets
     SDL_Rect offset;
@@ -138,11 +138,14 @@ bool gameEngine::GameInit () {
 
     bool gameInit = true;
 
+    printf( "GAME INIT\n" );
+
 
     //Once a config is in place, grab all the user data from the config and create the new player that way,
     //Config playerConfig = getConfig(_playerTarget);
     if (currentPlayer == nullptr) {
-        currentPlayer = new Player();
+        printf( "CREATE PLAYER\n" );
+        currentPlayer = new Player(300,200,0,'player1',1);
 
     }
 
@@ -202,20 +205,12 @@ void gameEngine::Update(SDL_Event &event) {
         case 1:
             //Load the Game Level
 
-
-
             //Fill the screen white
             SDL_FillRect( this->gameSurface, &this->gameSurface->clip_rect, SDL_MapRGB( this->gameSurface->format, 0xFF, 0xFF, 0xFF ) );
 
             currentPlayer->Update(event);
+            currentPlayer->Draw();
 
-            //Show the dot on the screen
-            //myDot.show();
-
-            //Update the screen
-
-
-            //Player::update();
             this->gameInput(event);
             break;
 
@@ -404,10 +399,8 @@ void gameEngine::menuInput(SDL_Event &event) {
         }
     }
 
+
 }
-
-
-};
 
 void gameEngine::gameInput(SDL_Event &event) {
 
@@ -435,5 +428,5 @@ void gameEngine::SetGameState(int state) {
 
 SDL_Surface* gameEngine::getBackground() {
 
-
+  return gameBackground;
 }
