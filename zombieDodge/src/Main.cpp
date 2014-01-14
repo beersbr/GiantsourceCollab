@@ -16,22 +16,19 @@
 #include "gameEngine.h"
 #include "GameState.h"
 #include "Entity.h"
+
 #include "Player.h"
 #include "Enemy.h"
-
 #include <string>
 
-
-    struct StateStruct
-    {
-        void (*StatePointer)();
-    };
+struct StateStruct
+{
+    void (*StatePointer)();
+};
 
 // Global data //
-    std::stack<StateStruct> gameStates;
-
-    gameEngine* gEngine = gameEngine::getInstance();
-
+std::stack<StateStruct> gameStates;
+gameEngine* gEngine = gameEngine::getInstance();
     int main( int argc, char* args[] )
     {
         gEngine->Setup();
@@ -42,6 +39,3 @@
 
         return 0;
     }
-
-
-

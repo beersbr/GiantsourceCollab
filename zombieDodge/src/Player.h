@@ -6,14 +6,17 @@
 // Created by Matt Jacobs on 1/9/14.
 // Copyright (c) 2014 Brett Beers. All rights reserved.
 //
+#include <SDL2\SDL.h>
+#include <SDL2_image\SDL_image.h>
 
+#include "common.h"
+#include "gameEngine.h"
+#include "Vector.h"
+#include "Size.h"
 #include <iostream>
 #include <assert.h>
 #include <math.h>
 #include "Entity.h"
-#include "Vector.h"
-#include "gameEngine.h"
-#include <SDL2/SDL.h>
 
 class Player : public Entity {
 
@@ -63,9 +66,7 @@ public:
     virtual void Shoot(int x, int y);
 
     virtual void Draw();
-
-};
-
+}
 
 #endif
 

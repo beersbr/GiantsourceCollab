@@ -3,8 +3,6 @@
 #include "config.h"
 #include <SDL2_image/SDL_image.h>
 #include "gameEngine.h"
-#include "Player.h"
-
 
 Player::Player()
 {
@@ -21,27 +19,32 @@ Player::Player(int _x, int _y=0, int _z=0, std::string _playerTarget = std::stri
     hitPoints = _hp;
     int exp = 0;
     std::string playerId = _playerTarget;
-    //Load the dot image   d
-
-
-
-    //image =game->LoadImage( "player.png" );
 }
-
-
 
 
 void Player::Spawn()
     {
 
+	vel = new Vector();
 
-    }
+	SDL_Surface* tempSurface = IMG_Load("player.png");
+	
+    if(tempSurface == NULL)
+		return;
 
-void Player::TakeDamage(float dmg)
-{
+	image = SDL_ConvertSurface(tempSurface, tempSurface->format, NULL);
 
 
+	if(image == NULL)
+	{
+		SDL_FreeSurface(tempSurface);
+		return;
+	}
+
+	SDL_FreeSurface(tempSurface);
+	tempSurface = NULL;
 }
+
 
 void Player::Move(SDL_Event& event)
     {
@@ -110,7 +113,6 @@ void Player::Move(SDL_Event& event)
 
             Vector updatePos =pos*(gEngine->getTimer() / FRAME_RATE);
             pos = updatePos + pos;
-
     }
 
 void Player::Draw()
@@ -134,4 +136,14 @@ void Player::Update(SDL_Event& event)
 
         Move(event);
 
-    }
+}
+
+
+Player::~Player()
+{
+	delete vel;
+	vel = nullptr;
+
+    hitPoints = exp = 0;
+}
+

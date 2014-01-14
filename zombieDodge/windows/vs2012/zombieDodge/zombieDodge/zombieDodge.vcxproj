@@ -86,20 +86,25 @@ copy "$(ProjectDir)..\..\..\..\images\*" $(TargetDir)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\Configurator.cpp" />
+    <ClCompile Include="..\..\..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\..\..\src\Game.cpp" />
     <ClCompile Include="..\..\..\..\src\Main.cpp" />
     <ClCompile Include="..\..\..\..\src\Player.cpp" />
     <ClCompile Include="..\..\..\..\src\Vector.cpp" />
+    <ClCompile Include="..\..\..\..\src\zombieGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\common.h" />
     <ClInclude Include="..\..\..\..\src\config.h" />
     <ClInclude Include="..\..\..\..\src\Configurator.h" />
+    <ClInclude Include="..\..\..\..\src\Entity.h" />
     <ClInclude Include="..\..\..\..\src\Game.h" />
     <ClInclude Include="..\..\..\..\src\Player.h" />
     <ClInclude Include="..\..\..\..\src\ResourceLoader.h" />
     <ClInclude Include="..\..\..\..\src\Singleton.h" />
+    <ClInclude Include="..\..\..\..\src\Size.h" />
     <ClInclude Include="..\..\..\..\src\Vector.h" />
+    <ClInclude Include="..\..\..\..\src\zombieGame.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
