@@ -24,4 +24,43 @@ private:
 	static int SetId();
 };
 
+
+
+/*
+ Player* p = new Player();
+ Monster* r = new Monster();
+ 
+ Entity* e = (Entity*)r;
+ 
+ e->Draw();
+ */
+
+
+/*
+ 
+ 
+ zGame->Run();
+ 
+ Update(std::vector<Entity*> list)
+ {
+ 
+ for(int i=0; i < list.length; ++i;)
+ 
+ {
+ list[i]->Draw();
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Vector a = Vector(1,1,1), b = Vector(2,2,2);
+ 
+ Vector c = a+b;
+ 
+ a+3;
+ */
+
 #endif
