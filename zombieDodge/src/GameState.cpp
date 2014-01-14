@@ -1,5 +1,7 @@
-#import "GameState.h"
-#import "config.h"
+#include "GameState.h"
+#include "config.h"
+
+gameEngine* GameState::engine = nullptr;
 
 GameState::GameState(int _stateId, std::string _name, int _key) {
 
@@ -9,11 +11,9 @@ GameState::GameState(int _stateId, std::string _name, int _key) {
 
 }
 
-
-
 bool GameState::Setup(){
 
-    gameEngine->getInstance();
+    GameState::engine = gameEngine::getInstance();
 
     //Initialization flag
     bool success = true;
@@ -40,7 +40,7 @@ void GameState::HandleInput(SDL_Event& event) {
                 case SDLK_ESCAPE:
                     printf( "ESCAPE\n" );
 
-                    gameEngine->SetGameState(CLEANUP);
+                GameState::engine->SetGameState(CLEANUP);
 
                     break;
                 case SDLK_UP:

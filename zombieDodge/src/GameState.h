@@ -12,7 +12,7 @@ public:
     std::string name;
     std::string background;
 
-    static gameEngine* gameEngine;
+    static gameEngine* engine;
 
     virtual void Draw() = 0;
     virtual void HandleInput(SDL_Event& event) = 0;

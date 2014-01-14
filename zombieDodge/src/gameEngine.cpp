@@ -145,7 +145,7 @@ bool gameEngine::GameInit () {
     //Config playerConfig = getConfig(_playerTarget);
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
-        currentPlayer = new Player(300,200,0,'player1',1);
+        currentPlayer = new Player(300, 200, 0, "player1", 1);
 
     }
 

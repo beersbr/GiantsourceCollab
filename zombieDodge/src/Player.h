@@ -3,6 +3,9 @@
 // Copyright (c) 2014 Brett Beers. All rights reserved.
 //
 
+#ifndef __PLAYER_H_
+#define __PLAYER_H_
+
 #include <iostream>
 #include <assert.h>
 #include <math.h>
@@ -19,13 +22,16 @@
 class Player : public Entity{
 public:
 	Player();
+    Player(int _x, int _y, int _z, std::string _playerTarget, int _hp);
 	~Player();
 
-    void Update();
+    void Update(SDL_Event& event);
+    void Update(); // because it has to be there
     void Spawn();
-    void Move();
+    void Move(SDL_Event& event);
     void Draw();
     void TakeDamage(int dmg);
+    void Shoot(int dx, int dy);
 
 public:
 	Vector* vel;
@@ -35,4 +41,16 @@ public:
 
     int hitPoints;
 	int exp;
+    bool isSprinting;
+    int nonSprintElapsedTime;
+    int sprintSpeed;
+    int sprintInterval;
+    int lastSprintTime;
+    int sprintLength;
+    int sprintElapsedTime;
+    int moveSpeed;
+    int sprintTime;
+
 };
+
+#endif // __PLAYER_H_
