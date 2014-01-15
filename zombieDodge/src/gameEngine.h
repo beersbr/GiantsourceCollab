@@ -58,6 +58,8 @@ public:
     //The window we'll be rendering to
     SDL_Window* gameWindow;
 
+    SDL_Texture* PlayerImage;
+
     //The surface contained by the window
     SDL_Surface* gameSurface;
 
