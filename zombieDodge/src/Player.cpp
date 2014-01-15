@@ -9,7 +9,7 @@ Player::Player()
 
     gameEngine* gEngine = gameEngine::getInstance();
     hitPoints = exp = 0;
-    image =gEngine->LoadImage( "player.png" );
+    //image = gEngine->LoadTexture("player.png", gEngine->gameRender);
 }
 
 Player::Player(int _x, int _y, int _z, std::string _playerTarget, int _hp)
@@ -22,25 +22,30 @@ Player::Player(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 }
 
 
-void Player::Spawn()
+bool Player::Spawn()
     {
 
-	SDL_Surface* tempSurface = IMG_Load("player.png");
-	
-    if(tempSurface == NULL)
-		return;
+    bool spawned = true;
+    gameEngine* gEngine = gameEngine::getInstance();
 
-	image = SDL_ConvertSurface(tempSurface, tempSurface->format, NULL);
+	image = gEngine->LoadTexture("player.png");
+
+    //Draw the image
+    //gEngine->RenderTexture(image, gEngine->gameRender, 300, 400);
+
+        std::cout << "SPAWN THE PLAYER  " <<   std::endl;
+
+    //SDL_DestroyTexture(tempSurface);
 
 
-	if(image == NULL)
-	{
-		SDL_FreeSurface(tempSurface);
-		return;
-	}
+    if(image == NULL)  {
+        spawned = false;
+        std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
 
-	SDL_FreeSurface(tempSurface);
-	tempSurface = NULL;
+    }
+
+        return spawned;
+
 }
 
 
@@ -118,7 +123,7 @@ void Player::Draw()
 
     gameEngine* gEngine = gameEngine::getInstance();
 
-    gEngine->ApplySurface(static_cast<float>(pos->x), static_cast<float>(pos->y), image, gEngine->getGameSurface() );
+  //  gEngine->RenderTexture(image, 300, 400);
 
 }
 

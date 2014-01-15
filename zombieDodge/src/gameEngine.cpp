@@ -97,22 +97,66 @@ SDL_Surface* gameEngine::LoadImage( const std::string path )
     return optimizedSurface;
 }
 
-void gameEngine::ApplySurface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip)
+void gameEngine::logSDLError(std::ostream &os, const std::string &msg){
+    os << msg << " error: " << SDL_GetError() << std::endl;
+}
+
+void gameEngine::ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination)
 {
-    //Holds offsets
-    SDL_Rect offset;
+    SDL_Rect pos;
+    pos.x = x;
+    pos.y = y;
+    SDL_QueryTexture(source, NULL, NULL, &pos.w, &pos.h);
+    SDL_RenderCopy(destination, source, NULL, &pos);
 
-    //Get offsets
-    offset.x = x;
-    offset.y = y;
+}
+SDL_Texture* gameEngine::LoadTexture(const std::string &file, SDL_Renderer *ren){
+    SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
+    if (texture == nullptr)
+        printf( "Failed to load  texture!\n" );
+    return texture;
+}
+SDL_Texture* gameEngine::LoadTexture(const std::string &file){
 
-    //Blit
-    SDL_BlitSurface( source, clip, destination, &offset );
+    printf( "Loading Texture %s:", file.c_str());
+
+    SDL_Texture *texture = IMG_LoadTexture(gameRender, file.c_str());
+    if (texture == nullptr)
+        printf( "Failed to load  texture!\n" );
+    return texture;
 }
 
 
+void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h){
+    //Setup the destination rectangle to be at the position we want
+    SDL_Rect dst;
+    dst.x = x;
+    dst.y = y;
+    dst.w = w;
+    dst.h = h;
+    SDL_RenderCopy(ren, tex, NULL, &dst);
+}
+
+void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
+    int w, h;
+    printf( "RENDER THE TEXTURE!\n" );
+    SDL_QueryTexture(tex, NULL, NULL, &w, &h);
+    RenderTexture(tex, ren, x, y, w, h);
+}
+
+void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y){
+    int w, h;
+
+    printf( "RENDER THE PLAYER TEXTURE!\n" );
+    SDL_QueryTexture(tex, NULL, NULL, &w, &h);
+    RenderTexture(tex, gameRender, x, y, w, h);
+}
+
 bool gameEngine::LoadScreen()
 {
+
+    std::cout << "LOAD BACKGROUND FOR  = " <<  gameState << std::endl;
+
     //Loading success flag
     bool success = true;
 
@@ -120,19 +164,16 @@ bool gameEngine::LoadScreen()
 
     {
         case SETUP:
-            gameBackground = LoadImage( "welcome.jpg" );
-            break;
-
         case MENU:
-            gameBackground = LoadImage( "welcome.jpg" );
+            gameBackground = LoadTexture("welcome.jpg");
             break;
 
         case PLAYING:
-            gameBackground = LoadImage( "welcome.jpg" );
+            gameBackground = LoadTexture("swamp.jpg");
             break;
 
         case GAME_OVER:
-            gameBackground = LoadImage( "welcome.jpg" );
+            gameBackground = LoadTexture("welcome.jpg");
             break;
 
         default:
@@ -199,7 +240,7 @@ bool gameEngine::Setup(){
                 SDL_WINDOWPOS_CENTERED,     // y position, centered
                 WINDOW_WIDTH,                        // width, in pixels
                 WINDOW_HEIGHT,                        // height, in pixels
-                SDL_WINDOW_OPENGL           // flags
+                NULL
         );
         if( gameWindow == NULL )
         {
@@ -217,8 +258,10 @@ bool gameEngine::Setup(){
             }
             else
             {
+
+                gameRender = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
                 //Get window surface
-                gameSurface = SDL_GetWindowSurface( gameWindow);
+                //gameSurface = SDL_GetWindowSurface( gameWindow);
             }
         }
     }
@@ -245,7 +288,7 @@ bool gameEngine::GameInit () {
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player(300, 200, 0, "player1", 1);
-
+        gameInit = currentPlayer->Spawn();
     }
 
     //Also set initial game state object
@@ -254,66 +297,40 @@ bool gameEngine::GameInit () {
 
 }
 
-float gameEngine::getTimer() {
 
-    float timer = SDL_GetTicks() - gameEngine::gameTimer;
-
-    return  timer;
-
-}
-
-SDL_Surface* gameEngine::getGameSurface () {
-
-    return this->gameSurface;
-
-
-}
-
-SDL_Window* gameEngine::getWindow() {
-
-    return this->gameWindow;
-}
-
-
-
-void gameEngine::SetPlayer(std::string playerId) {
-
-    if (currentPlayer == NULL) {
-        currentPlayer = new Player();
-    }
-
-}
 void gameEngine::Update(SDL_Event &event) {
+
+
 
     switch(gameState) {
 
         case SETUP:
-            //Load the Welcome screen
+
             //this->loadStateResources( this->currentGameState);
             break;
 
         case MENU:
             //Load the Welcome screen
-            LoadScreen();
+
             this->MenuInput(event);
-            Draw();
+
             break;
 
         case PLAYING:
-            //Load the Game Level
 
-            //Fill the screen white
-            SDL_FillRect( this->gameSurface, &this->gameSurface->clip_rect, SDL_MapRGB( this->gameSurface->format, 0xFF, 0xFF, 0xFF ) );
-
+            //Update the Player
             currentPlayer->Update(event);
-            currentPlayer->Draw();
 
+            //Update the Monsters
+
+            //Update the Bullets
+
+            //General Game input handler
             this->GameInput(event);
             break;
 
         case GAME_OVER:
-            //Load the Welcome screen
-            LoadScreen();
+
             this->MenuInput(event);
             break;
 
@@ -324,6 +341,8 @@ void gameEngine::Update(SDL_Event &event) {
 
     }
 
+    Draw();
+
 
 
 }
@@ -331,13 +350,43 @@ void gameEngine::Update(SDL_Event &event) {
 
 void gameEngine::Draw() {
 
+
+    //Clear the Screen
+    SDL_RenderClear(gameRender);
+    /*
+    gameBackground = LoadTexture("welcome.jpg", gameRender);
     //Apply the image
     SDL_BlitSurface(  gameBackground, NULL,  gameSurface, NULL );
 
     //Update the surface
     SDL_UpdateWindowSurface(  gameWindow );
+      */
+
+    //Loads the current level texture background as gameBackground
+    LoadScreen();
+
+    //Load the Background image to the render Window last
+    int iW, iH;
+    SDL_QueryTexture(gameBackground, NULL, NULL, &iW, &iH);
+    int x = WINDOW_WIDTH / 2 - iW / 2;
+    int y = WINDOW_HEIGHT / 2 - iH / 2;
+
+    //Draw the image
+    RenderTexture(gameBackground, gameRender, x, y);
 
 
+    if ( this->gameState == PLAYING) {
+
+        //Draw Player
+        //currentPlayer->Draw();
+
+        //Draw Enemies
+    }
+
+
+
+    //Update the screen
+    SDL_RenderPresent(gameRender);
 
 }
 
@@ -351,7 +400,7 @@ void gameEngine::Run() {
             SDL_Event event;
             while( SDL_PollEvent( &event ) != 0 ){
                 if( event.type == SDL_KEYDOWN ) {
-                    std::cout << "CODE = " <<  event.key.keysym.sym << std::endl;
+                   // std::cout << "CODE = " <<  event.key.keysym.sym << std::endl;
                     //Select surfaces based on key press
                     switch( event.key.keysym.sym ) {
 
@@ -371,27 +420,38 @@ void gameEngine::Run() {
                 }
             }
 
-            if (this->gameState != CLEANUP) {
-                //std::cout << "GAME STATE = " <<  this->gameState << std::endl;
-                if ((this->gameState == PLAYING) && (!gameReady)){
+            switch(this->gameState) {
 
-                    gameReady = GameInit();
+                case PLAYING:
+                    if ((!gameReady)){
 
-                }
+                        gameReady = GameInit();
+                        if ((!gameReady)) {
 
-                //Move to gamestates
-                this->Update(event);
+                            this->gameState = CLEANUP;
+                        }
 
-                this->Draw();
+                     }
 
-                this->gameTimer = SDL_GetTicks();
+                case GAME_OVER:
+
+
+
+
+                 default:
+
+
+                    break;
+
+
+
             }
-        }
 
-        if (this->gameState == GAME_OVER) {
+            this->Update(event);
 
-            this->gameState = CLEANUP;
+            this->Draw();
 
+            this->gameTimer = SDL_GetTicks();
 
         }
 
@@ -411,7 +471,11 @@ void gameEngine::Cleanup(){
 
     this->gameState = EXIT;
 
-    SDL_FreeSurface(  this->gameBackground );
+    SDL_DestroyTexture(gameBackground);
+
+    SDL_DestroyRenderer(gameRender);
+
+    //SDL_FreeSurface(  this->gameBackground );
     this->gameBackground = NULL;
 
     //Destroy window
@@ -419,7 +483,9 @@ void gameEngine::Cleanup(){
     this->gameWindow = NULL;
 
     // Tell SDL to shutdown and free any resources it was using. //
+    IMG_Quit();
     SDL_Quit();
+
 
 }
 
@@ -430,25 +496,28 @@ void gameEngine::MenuInput(SDL_Event &event) {
 
     //User requests quit
     if( event.type == SDL_KEYDOWN ) {
-        std::cout << "CODE = " <<  event.key.keysym.sym << std::endl;
+        std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
+       //std::cout << "SPACE KEY = " <<  SDLK_SPACE << std::endl;
         //Select surfaces based on key press
         switch( event.key.keysym.sym ) {
             case SDLK_ESCAPE:
-                printf( "ESCAPE\n" );
+                printf( "MENU ESCAPE\n" );
 
-                this->gameState = CLEANUP;
+                gameState = CLEANUP;
 
                 break;
             case SDLK_UP:
-                printf( "KEY UP Menu\n" );
-                //this->currentGameState = 1;
+                printf( "PLAY GAME\n" );
+                gameState = PLAYING;
                 break;
             case SDLK_DOWN:
                 printf( "KEY DOWN Menu\n" );
                 break;
 
-            case SDLK_SPACE:
-                this->gameState = PLAYING;
+            case SDLK_p:
+                printf( "P KEY\n" );
+
+                gameState = PLAYING;
 
                 break;
 
@@ -461,16 +530,22 @@ void gameEngine::MenuInput(SDL_Event &event) {
 void gameEngine::GameInput(SDL_Event &event) {
 
 
-    switch(event.key.keysym.sym ) {
+    //User requests quit
+    if( event.type == SDL_KEYDOWN ) {
+        std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
+        //std::cout << "SPACE KEY = " <<  SDLK_SPACE << std::endl;
+        //Select surfaces based on key press
+        switch( event.key.keysym.sym ) {
+            case SDLK_ESCAPE:
+                printf( "GAME ESCAPE\n" );
 
-        case SDLK_UP:
-            printf( "KEY UP\n" );
-            break;
-        case SDLK_DOWN:
-            printf( "KEY DOWN\n" );
-            break;
+                gameState = CLEANUP;
 
+                break;
+
+        }
     }
+
 
 };
 
@@ -482,7 +557,38 @@ void gameEngine::SetGameState(int state) {
 
 }
 
-SDL_Surface* gameEngine::getBackground() {
+SDL_Texture* gameEngine::getBackground() {
 
   return gameBackground;
+}
+
+
+float gameEngine::getTimer() {
+
+    float timer = SDL_GetTicks() - gameEngine::gameTimer;
+
+    return  timer;
+
+}
+
+SDL_Surface* gameEngine::getGameSurface () {
+
+    return this->gameSurface;
+
+
+}
+/*
+SDL_Window* gameEngine::getWindow() {
+
+    return this->gameWindow;
+}
+
+
+  */
+void gameEngine::SetPlayer(std::string playerId) {
+
+    if (currentPlayer == NULL) {
+        currentPlayer = new Player();
+    }
+
 }

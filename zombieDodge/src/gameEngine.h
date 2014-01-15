@@ -25,29 +25,35 @@ public:
     static gameEngine* getInstance();
     SDL_Event getEvent();
     bool gameReady = false;
-    SDL_Window* getWindow();
-    SDL_Surface* getGameSurface();
-    SDL_Surface* getBackground();
-    float getTimer();
+
+
     float gameTimer;
     Player* currentPlayer = nullptr;
     int gameState=0;
+
+    //-----------Main Functions
     bool Setup();
     void Run();
-    void Draw();
+    bool GameInit();
     void Update(SDL_Event &event);
+    void Draw();
     void Cleanup();
+
+     //----------Interface Functions
     void SetPlayer(std::string playerId);
-    bool LoadScreen();
-    bool loadStateResources(int screenId);
+    float getTimer();
+    void SetGameState(int state);
+
+    //-----------Input Functions
     void MenuInput(SDL_Event &event);
     void GameInput(SDL_Event &event);
-    SDL_Surface* LoadImage(const std::string path);
-    void ApplySurface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL );
 
-    void SetGameState(int state);
-    bool GameInit();
-    //Loads Optimized Surface
+    //-----------Graphics Functions
+
+    //SDL_Window* getWindow();
+    SDL_Surface* getGameSurface();
+    SDL_Texture* getBackground();
+    //SDL_Renderer* getRender();
 
     //The window we'll be rendering to
     SDL_Window* gameWindow;
@@ -56,8 +62,22 @@ public:
     SDL_Surface* gameSurface;
 
     //The image we will load and show on the screen
-    SDL_Surface* gameBackground;
+    SDL_Texture* gameBackground;
 
+    //SDL_Surface* gameBackground;
+
+    SDL_Renderer* gameRender;
+
+    SDL_Surface* LoadImage(const std::string path);
+    static SDL_Texture* LoadTexture(const std::string &file, SDL_Renderer *ren);
+    SDL_Texture* LoadTexture(const std::string &file);
+    void logSDLError(std::ostream &os, const std::string &msg);
+    void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h);
+    void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y);
+    void RenderTexture(SDL_Texture *tex, int x, int y);
+    bool LoadScreen();
+    bool loadStateResources(int screenId);
+    void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 
 
 

@@ -27,7 +27,7 @@ public:
 
     void Update(SDL_Event& event);
     void Update(); // because it has to be there
-    void Spawn();
+    bool Spawn();
     void Move(SDL_Event& event);
     void Draw();
     void TakeDamage(int dmg);
@@ -37,10 +37,11 @@ public:
 	Vector* vel;
 	Size<int> size;
 
-	SDL_Surface* image;
+	SDL_Texture* image;
 
     int hitPoints;
 	int exp;
+
     bool isSprinting;
     int nonSprintElapsedTime;
     int sprintSpeed;
