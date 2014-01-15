@@ -7,18 +7,20 @@
 Player::Player()
 {
 
-    gameEngine* gEngine = gameEngine::getInstance();
     hitPoints = exp = 0;
-    //image = gEngine->LoadTexture("player.png", gEngine->gameRender);
+    playerId = "player1";
+    pos->x = 300;
+    pos->y = 300;
+
 }
 
 Player::Player(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 {
-    //Entity(_x,_y,_z);
-    gameEngine* gEngine = gameEngine::getInstance();
+
     hitPoints = _hp;
     int exp = 0;
-    std::string playerId = _playerTarget;
+    playerId = _playerTarget;
+
 }
 
 
@@ -28,8 +30,8 @@ bool Player::Spawn()
     bool spawned = true;
     gameEngine* gEngine = gameEngine::getInstance();
 
-	image = gEngine->LoadTexture("player.png");
 
+    image = gEngine->LoadTexture("player.png");
     //Draw the image
     //gEngine->RenderTexture(image, gEngine->gameRender, 300, 400);
 
@@ -39,7 +41,7 @@ bool Player::Spawn()
 
 
     if(image == NULL)  {
-        spawned = false;
+        //spawned = false;
         std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
 
     }
@@ -120,8 +122,8 @@ void Player::Move(SDL_Event& event)
 
 void Player::Draw()
 {
-
-    gameEngine* gEngine = gameEngine::getInstance();
+    //std::cout << "RENDER PLAYER TEXTURE -> " << std::endl;
+   // gameEngine* gEngine = gameEngine::getInstance();
 
   //  gEngine->RenderTexture(image, 300, 400);
 

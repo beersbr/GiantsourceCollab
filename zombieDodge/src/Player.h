@@ -41,7 +41,7 @@ public:
 
     int hitPoints;
 	int exp;
-
+    std::string playerId;
     bool isSprinting;
     int nonSprintElapsedTime;
     int sprintSpeed;

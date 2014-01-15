@@ -39,40 +39,6 @@ gameEngine::gameEngine(gameEngine&)
 SDL_Surface* gameEngine::LoadImage( const std::string path )
 {
 
-    /*
-    //The image that's loaded
-    SDL_Surface* loadedImage = NULL;
-
-    //The optimized surface that will be used
-    SDL_Surface* optimizedImage = NULL;
-
-    //Load the image
-    loadedImage = IMG_Load( path.c_str() );
-
-
-    std::cout << "ladoing = " << path << std::endl;
-
-    //If the image loaded
-    if( loadedImage != NULL )
-    {
-        //Create an optimized surface
-        optimizedImage = SDL_ConvertSurfaceFormat( loadedImage, SDL_PIXELTYPE_UNKNOWN,NULL);
-
-        //Free the old surface
-        SDL_FreeSurface( loadedImage );
-
-        //If the surface was optimized
-        if( optimizedImage != NULL )
-        {
-            //Color key surface
-            SDL_SetColorKey( optimizedImage, SDL_TRUE, SDL_MapRGB( gameSurface->format, 0, 0xFF, 0xFF ) );
-        }
-    }
-
-    //Return the optimized surface
-    return optimizedImage;
-    */
-
     SDL_Surface* optimizedSurface = NULL;
 
     //Load image at specified path
@@ -146,7 +112,6 @@ void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 
 void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y){
     int w, h;
-
     printf( "RENDER THE PLAYER TEXTURE!\n" );
     SDL_QueryTexture(tex, NULL, NULL, &w, &h);
     RenderTexture(tex, gameRender, x, y, w, h);
@@ -216,7 +181,26 @@ bool gameEngine::loadStateResources(int screenId)
     return success;
 };
 
+bool gameEngine::GameInit () {
 
+    bool gameInit = true;
+
+    printf( "GAME INIT\n" );
+
+
+    //Once a config is in place, grab all the user data from the config and create the new player that way,
+    //Config playerConfig = getConfig(_playerTarget);
+    if (currentPlayer == nullptr) {
+        printf( "CREATE PLAYER\n" );
+        currentPlayer = new Player();
+        gameInit = currentPlayer->Spawn();
+    }
+
+    //Also set initial game state object
+
+    return gameInit;
+
+}
 bool gameEngine::Setup(){
 
     gameState = SETUP;
@@ -276,26 +260,7 @@ bool gameEngine::Setup(){
 
 }
 
-bool gameEngine::GameInit () {
 
-    bool gameInit = true;
-
-    printf( "GAME INIT\n" );
-
-
-    //Once a config is in place, grab all the user data from the config and create the new player that way,
-    //Config playerConfig = getConfig(_playerTarget);
-    if (currentPlayer == nullptr) {
-        printf( "CREATE PLAYER\n" );
-        currentPlayer = new Player(300, 200, 0, "player1", 1);
-        gameInit = currentPlayer->Spawn();
-    }
-
-    //Also set initial game state object
-
-    return gameInit;
-
-}
 
 
 void gameEngine::Update(SDL_Event &event) {
@@ -376,8 +341,18 @@ void gameEngine::Draw() {
 
 
     if ( this->gameState == PLAYING) {
-
+        //std::cout << "SHOULD GO DRAW PLAYER-> " << std::endl;
         //Draw Player
+        /*
+        if (currentPlayer->image == nullptr) {
+            printf( "IMAGE IS NULL:\n");
+            //currentPlayer->image = LoadTexture("player.png");
+
+        }
+        */
+        //image = LoadTexture("player.png");
+        RenderTexture( LoadTexture("player.png"), gameRender, 300, 400);
+        //image = gEngine->LoadTexture("player.png");
         //currentPlayer->Draw();
 
         //Draw Enemies
@@ -426,6 +401,7 @@ void gameEngine::Run() {
                     if ((!gameReady)){
 
                         gameReady = GameInit();
+
                         if ((!gameReady)) {
 
                             this->gameState = CLEANUP;
@@ -496,7 +472,7 @@ void gameEngine::MenuInput(SDL_Event &event) {
 
     //User requests quit
     if( event.type == SDL_KEYDOWN ) {
-        std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
+        //std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
        //std::cout << "SPACE KEY = " <<  SDLK_SPACE << std::endl;
         //Select surfaces based on key press
         switch( event.key.keysym.sym ) {
@@ -532,7 +508,7 @@ void gameEngine::GameInput(SDL_Event &event) {
 
     //User requests quit
     if( event.type == SDL_KEYDOWN ) {
-        std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
+        //std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
         //std::cout << "SPACE KEY = " <<  SDLK_SPACE << std::endl;
         //Select surfaces based on key press
         switch( event.key.keysym.sym ) {
