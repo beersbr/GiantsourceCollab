@@ -50,7 +50,7 @@
 		4A46E520369112B440FB2D1F /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
 		4A46E5ACF463A6FC21F7615A /* KeyboardHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardHandler.h; sourceTree = "<group>"; };
 		4A46E647EA59EF96130D6406 /* Tactex-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = "Tactex-Info.plist"; sourceTree = "<group>"; };
-		4A46E6B2ABF615EF7B01DC1A /* simpleVertexShader.vs */ = {isa = PBXFileReference; lastKnownFileType = file.vs; path = simpleVertexShader.vs; sourceTree = "<group>"; };
+		4A46E6B2ABF615EF7B01DC1A /* simpleVertexShader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.vs; path = simpleVertexShader.vs; sourceTree = "<group>"; };
 		4A46E6D31156EBB02AD3C38C /* Tactex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tactex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A46E797BAD8BEBCE6D46917 /* game.config */ = {isa = PBXFileReference; lastKnownFileType = file.config; path = game.config; sourceTree = "<group>"; };
 		4A46E80C4E792C0A0C95DA57 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -348,6 +348,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CACHE_ROOT)/SharedPrecompiledHeaderscompilpre";
+				SYMROOT = "$(PROJECT_DIR)";
 			};
 			name = Release;
 		};

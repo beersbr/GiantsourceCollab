@@ -20,6 +20,13 @@ int Game::setup(){
         return -1;
     }
 
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION,3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION,2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
     window = SDL_CreateWindow(
             "SDL 2 window",             // window title
             SDL_WINDOWPOS_CENTERED,     // x position, centered
@@ -30,14 +37,6 @@ int Game::setup(){
     );
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
-
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION,3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION,2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
     glContext = SDL_GL_CreateContext(window);
 
     // setup opengl
@@ -53,12 +52,12 @@ int Game::setup(){
         throw 1;
     }
 
-    glShadeModel(GL_SMOOTH);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepth(1.0f);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_EQUAL);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+//    glShadeModel(GL_SMOOTH);
+//    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+//    glClearDepth(1.0f);
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_EQUAL);
+//    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     // setup the viewport
 
@@ -67,16 +66,16 @@ int Game::setup(){
     if(height == 1)
         height = 1;
 
-    GLfloat ratio = (GLfloat)width/(GLfloat)height;
-    glViewport(0, 0, (GLsizei)width, (GLsizei)height);
-    glMatrixMode(GL_PROJECTION);
+//    GLfloat ratio = (GLfloat)width/(GLfloat)height;
+//    glViewport(0, 0, (GLsizei)width, (GLsizei)height);
+//    glMatrixMode(GL_PROJECTION);
 
-    glLoadIdentity();
+//    glLoadIdentity();
 
-    gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+//    gluPerspective(45.0f, ratio, 0.1f, 100.0f);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+//    glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
 
     printf("shader lang: %s\n",glGetString(GL_SHADING_LANGUAGE_VERSION));
 
@@ -89,6 +88,25 @@ int Game::run(){
 
     KeyboardHandler* keyboard = KeyboardHandler::getInstance();
 
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+
+    GLuint VertexArrayID;
+    glGenVertexArrays(1, &VertexArrayID);
+    glBindVertexArray(VertexArrayID);
+
+    GLuint programID = LoadShaders( "shaders/simpleVertexShader.vs", "shaders/simpleFragmentShader.fs" );
+
+    static const GLfloat g_vertex_buffer_data[] = {
+            -1.0f, -1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+            0.0f,  1.0f, 0.0f,
+    };
+
+    GLuint vertexbuffer;
+    glGenBuffers(1, &vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
     while(gameRunning)
     {
         keyboard->update();
@@ -98,38 +116,24 @@ int Game::run(){
 
         // render some stuff
 
-        glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        glUseProgram(programID);
+        glEnableVertexAttribArray(0);
 
-        GLuint VertexArrayID;
-        glGenVertexArrays(1, &VertexArrayID);
-        glBindVertexArray(VertexArrayID);
-
-        GLuint programID = LoadShaders( "shaders/simpleVertexShader.fs", "shaders/simpleFragmentShader.fs" );
-
-
-
-        static const GLfloat g_vertex_buffer_data[] = {
-                -1.0f, -1.0f, 0.0f,
-                1.0f, -1.0f, 0.0f,
-                0.0f,  1.0f, 0.0f,
-        };
-
-        GLuint vertexbuffer;
-
-        // Generate 1 buffer, put the resulting identifier in vertexbuffer
-        glGenBuffers(1, &vertexbuffer);
-
-        // The following commands will talk about our 'vertexbuffer' buffer
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glVertexAttribPointer(
+                0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+                3,                  // size
+                GL_FLOAT,           // type
+                GL_FALSE,           // normalized?
+                0,                  // stride
+                (void*)0            // array buffer offset
+        );
 
-        // Give our vertices to OpenGL.
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
         glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
         glDisableVertexAttribArray(0);
-
-        // do something with the
 
         SDL_GL_SwapWindow(window);
     }
