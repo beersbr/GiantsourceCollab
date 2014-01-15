@@ -31,8 +31,9 @@ int Game::setup(){
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION,4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION,3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION,2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -77,6 +78,8 @@ int Game::setup(){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    printf("shader lang: %s\n",glGetString(GL_SHADING_LANGUAGE_VERSION));
+
     return 0;
 }
 
@@ -102,7 +105,31 @@ int Game::run(){
         glGenVertexArrays(1, &VertexArrayID);
         glBindVertexArray(VertexArrayID);
 
-        // do something with the 
+        GLuint programID = LoadShaders( "shaders/simpleVertexShader.fs", "shaders/simpleFragmentShader.fs" );
+
+
+
+        static const GLfloat g_vertex_buffer_data[] = {
+                -1.0f, -1.0f, 0.0f,
+                1.0f, -1.0f, 0.0f,
+                0.0f,  1.0f, 0.0f,
+        };
+
+        GLuint vertexbuffer;
+
+        // Generate 1 buffer, put the resulting identifier in vertexbuffer
+        glGenBuffers(1, &vertexbuffer);
+
+        // The following commands will talk about our 'vertexbuffer' buffer
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+
+        // Give our vertices to OpenGL.
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+        glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+        glDisableVertexAttribArray(0);
+
+        // do something with the
 
         SDL_GL_SwapWindow(window);
     }

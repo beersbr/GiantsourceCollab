@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A46E6381E596F46F140700D /* simpleFragmentShader.fs in Resources */ = {isa = PBXBuildFile; fileRef = 4A46E964B72D993009CC92C2 /* simpleFragmentShader.fs */; };
 		4A46E6AEB5CA8772EA9D7179 /* KeyboardHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EC5A35BBF99A54942DCC /* KeyboardHandler.cpp */; };
 		4A46E6C91C3676DA06E8A470 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EE08C3B0C8522B0EFD78 /* Game.cpp */; };
+		4A46E755E8E092E62DFD2939 /* simpleVertexShader.vs in Resources */ = {isa = PBXBuildFile; fileRef = 4A46E6B2ABF615EF7B01DC1A /* simpleVertexShader.vs */; };
 		4A46E84A1653E2C53A2D586A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A46E80C4E792C0A0C95DA57 /* Cocoa.framework */; };
 		4A46E9B92EB0644632B30F87 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A46E25AC2D8C07C307F9AA6 /* OpenGL.framework */; };
 		4A46E9C373FE28D1E1811BC9 /* GLEW.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB46A2431885273200B565FD /* GLEW.framework */; };
 		4A46ED676E6752408D6B5684 /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EEA9234C75D44AE36504 /* Configurator.cpp */; };
+		4A46EEA34B769AAFF8E23E02 /* GLCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EA4EF3D41B719D17D589 /* GLCommon.cpp */; };
 		4A46EEBA6E0E34F918182721 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4A46E797BAD8BEBCE6D46917 /* game.config */; };
 		FB1C020518827E9B00B0D5C9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020418827E9B00B0D5C9 /* SDL2_image.framework */; };
 		FB1C020718827EAF00B0D5C9 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020618827EAF00B0D5C9 /* SDL2_mixer.framework */; };
@@ -42,14 +45,18 @@
 
 /* Begin PBXFileReference section */
 		4A46E0C2A5A5CB6061702CA6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4A46E1A8FE907657C8BC0B6A /* GLCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCommon.h; sourceTree = "<group>"; };
 		4A46E25AC2D8C07C307F9AA6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		4A46E520369112B440FB2D1F /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
 		4A46E5ACF463A6FC21F7615A /* KeyboardHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardHandler.h; sourceTree = "<group>"; };
 		4A46E647EA59EF96130D6406 /* Tactex-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = "Tactex-Info.plist"; sourceTree = "<group>"; };
+		4A46E6B2ABF615EF7B01DC1A /* simpleVertexShader.vs */ = {isa = PBXFileReference; lastKnownFileType = file.vs; path = simpleVertexShader.vs; sourceTree = "<group>"; };
 		4A46E6D31156EBB02AD3C38C /* Tactex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tactex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A46E797BAD8BEBCE6D46917 /* game.config */ = {isa = PBXFileReference; lastKnownFileType = file.config; path = game.config; sourceTree = "<group>"; };
 		4A46E80C4E792C0A0C95DA57 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4A46E916933D7E1E33C02FE3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4A46E964B72D993009CC92C2 /* simpleFragmentShader.fs */ = {isa = PBXFileReference; lastKnownFileType = file.fs; path = simpleFragmentShader.fs; sourceTree = "<group>"; };
+		4A46EA4EF3D41B719D17D589 /* GLCommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCommon.cpp; sourceTree = "<group>"; };
 		4A46EBA2CECAC8101C88B1B5 /* Configurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configurator.h; sourceTree = "<group>"; };
 		4A46EC5A35BBF99A54942DCC /* KeyboardHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardHandler.cpp; sourceTree = "<group>"; };
 		4A46ECC2F7ADD9B59AE11D7C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -127,6 +134,8 @@
 		4A46E85B014631A73FF2BAD9 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				4A46E6B2ABF615EF7B01DC1A /* simpleVertexShader.vs */,
+				4A46E964B72D993009CC92C2 /* simpleFragmentShader.fs */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
@@ -185,6 +194,8 @@
 				4A46E5ACF463A6FC21F7615A /* KeyboardHandler.h */,
 				4A46EEA9234C75D44AE36504 /* Configurator.cpp */,
 				4A46EBA2CECAC8101C88B1B5 /* Configurator.h */,
+				4A46E1A8FE907657C8BC0B6A /* GLCommon.h */,
+				4A46EA4EF3D41B719D17D589 /* GLCommon.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -242,6 +253,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A46EEBA6E0E34F918182721 /* game.config in Resources */,
+				4A46E755E8E092E62DFD2939 /* simpleVertexShader.vs in Resources */,
+				4A46E6381E596F46F140700D /* simpleFragmentShader.fs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +269,7 @@
 				4A46E6C91C3676DA06E8A470 /* Game.cpp in Sources */,
 				4A46E6AEB5CA8772EA9D7179 /* KeyboardHandler.cpp in Sources */,
 				4A46ED676E6752408D6B5684 /* Configurator.cpp in Sources */,
+				4A46EEA34B769AAFF8E23E02 /* GLCommon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

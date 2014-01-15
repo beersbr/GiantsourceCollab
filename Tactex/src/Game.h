@@ -13,7 +13,9 @@
 #include <SDL2/SDL_opengl.h>
 #include <OpenGL/glu.h>
 
+#include "GLCommon.h"
 #include "KeyboardHandler.h"
+
 
 class Game {
 
