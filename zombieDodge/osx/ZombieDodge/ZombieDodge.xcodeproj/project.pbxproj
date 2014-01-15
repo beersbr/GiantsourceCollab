@@ -92,9 +92,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1B0BA0187737C100A02E35 /* SDL2.framework in Frameworks */,
 				FB1B0B9E187737C100A02E35 /* SDL2_image.framework in Frameworks */,
 				FB1B0B9F187737C100A02E35 /* SDL2_mixer.framework in Frameworks */,
-				FB1B0BA0187737C100A02E35 /* SDL2.framework in Frameworks */,
 				FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */,
 				FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */,
 			);
@@ -362,8 +362,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(inherited)\"",
-					/Users/brettbeers/Frameworks,
 					"/Users/Frameworks/**",
+					"$(HOME)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -383,7 +383,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/brettbeers/Frameworks,
+					"$(HOME)/Frameworks",
 					"/Users/Frameworks/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
