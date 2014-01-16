@@ -48,17 +48,59 @@ bool Player::Spawn()
 }
 
 
-void Player::Update(SDL_Event& event)
-{
-
-    std::cout << "UPDATING PLAYER -> " << std::endl;
-    Move();
-
-}
 void Player::Update()
 {
-    float frameMoveSpeed = 1.5;
+    float frameMoveSpeed = this->moveSpeed;
     Vector moveOffset = Vector();
+
+
+
+
+    if(InputHandler::getInstance()->keyIsDown( SDL_SCANCODE_LSHIFT)) {
+        if(! isSprinting){
+
+            nonSprintElapsedTime += gameEngine::getInstance()->getTimer();
+
+            if(nonSprintElapsedTime > sprintInterval || lastSprintTime == -1){
+                frameMoveSpeed = sprintSpeed;
+                isSprinting = true;
+                // lastSprintTime = +(new Date());
+                nonSprintElapsedTime = 0;
+                sprintLength +=  gameEngine::getInstance()->getTimer();
+            }
+
+        }
+        else{
+
+            sprintElapsedTime += gameEngine::getInstance()->getTimer();
+            if(sprintElapsedTime > sprintTime){
+                isSprinting = false;
+                sprintElapsedTime = 0;
+            }
+            else{
+                frameMoveSpeed = sprintSpeed;
+                sprintLength += gameEngine::getInstance()->getTimer();
+            }
+
+        }
+    }
+    else {
+
+        // Not sprinting
+        isSprinting = false;
+        sprintElapsedTime = 0;
+        nonSprintElapsedTime += gameEngine::getInstance()->getTimer();
+        if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
+
+        /*
+         case SDLK_UP: Shoot(0,-1);; break;
+         case SDLK_DOWN:Shoot(0,1);
+         case SDLK_LEFT: Shoot(-1,0);
+         case SDLK_RIGHT: Shoot(1,0); break;
+         default: break;
+         */
+    }
+
 
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W)){
         moveOffset.y -= frameMoveSpeed;
@@ -76,90 +118,7 @@ void Player::Update()
     (*this->pos) += moveOffset;
 }
 
-void Player::HandleInput(SDL_Event& event) {
-
-
-        gameEngine* gEngine = gameEngine::getInstance();
-        //std::cout << "KY PRESSED IN PLAYER " << event.key.keysym.sym << std::endl;
-
-        float frameMoveSpeed = this->moveSpeed;
-        //std::cout << "MOVING PLAYER -> " << std::endl;
-        //zombieGame* game = zombieGame::getInstance();
-
-
-        //Select surfaces based on key press
-
-        if (event.key.keysym.sym== SDLK_RSHIFT) {
-            if(! isSprinting){
-
-                nonSprintElapsedTime += gEngine->getTimer();
-
-                if(nonSprintElapsedTime > sprintInterval || lastSprintTime == -1){
-                    frameMoveSpeed = sprintSpeed;
-                    isSprinting = true;
-                    // lastSprintTime = +(new Date());
-                    nonSprintElapsedTime = 0;
-                    sprintLength +=  gEngine->getTimer();
-                }
-
-            }
-            else{
-
-                sprintElapsedTime += gEngine->getTimer();
-                if(sprintElapsedTime > sprintTime){
-                    isSprinting = false;
-                    sprintElapsedTime = 0;
-                }
-                else{
-                    frameMoveSpeed = sprintSpeed;
-                    sprintLength += gEngine->getTimer();
-                }
-
-            }
-        }
-        else {
-
-            // Not sprinting
-            isSprinting = false;
-            sprintElapsedTime = 0;
-            nonSprintElapsedTime += gEngine->getTimer();
-            if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
-
-        }
-
-
-
-        switch( event.key.keysym.sym ) {
-
-            case SDLK_w: pos->y -= frameMoveSpeed;
-
-                std::cout << "-----------------------MOVE UP---------------------------" << std::endl;
-
-                break;
-
-            case SDLK_s: pos->y += frameMoveSpeed;
-                std::cout << "-----------------------MOVE DOWN---------------------------" << std::endl;
-
-                break;
-            case SDLK_a: pos->x -= frameMoveSpeed;
-                std::cout << "-----------------------MOVE LEFT---------------------------" << std::endl;
-                break;
-
-
-            case SDLK_d: pos->x += frameMoveSpeed;
-                std::cout << "-----------------------MOVE RIGHT---------------------------" << std::endl;
-
-                break;
-
-            case SDLK_UP: Shoot(0,-1);; break;
-            case SDLK_DOWN:Shoot(0,1);
-            case SDLK_LEFT: Shoot(-1,0);
-            case SDLK_RIGHT: Shoot(1,0); break;
-            default: break;
-        }
-
-}
-
+/*
 void Player::Move()
 {
    // std::cout << "IN PLAYER MOVE FUNCTION TYPE = " << event.type << std::endl;
@@ -171,7 +130,7 @@ void Player::Move()
         (*pos) = updatePos + (*pos);
 
 }
-
+*/
 void Player::Shoot(int _x, int _y)
 {
 

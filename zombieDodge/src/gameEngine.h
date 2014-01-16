@@ -49,7 +49,7 @@ public:
     bool Setup();
     void Run();
     bool GameInit();
-    void Update(SDL_Event &event);
+    void Update();
     void Draw();
     void Cleanup();
 
@@ -59,8 +59,8 @@ public:
     void SetGameState(int state);
 
     //-----------Input Functions
-    void MenuInput(SDL_Event &event);
-    void GameInput(SDL_Event &event);
+    void MenuInput();
+    void GameInput();
 
     //-----------Graphics Functions
 

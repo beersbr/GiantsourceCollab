@@ -319,7 +319,7 @@ void gameEngine::Run() {
 
             }
 
-            this->Update(event);
+            this->Update();
 
             this->Draw();
 
@@ -340,7 +340,7 @@ void gameEngine::Run() {
 }
 
 
-void gameEngine::Update(SDL_Event &event) {
+void gameEngine::Update() {
 
 
 
@@ -354,13 +354,13 @@ void gameEngine::Update(SDL_Event &event) {
         case MENU:
             //Load the Welcome screen
 
-            this->MenuInput(event);
+            this->MenuInput();
 
             break;
 
         case PLAYING:
 
-            this->GameInput(event);
+            this->GameInput();
 //            currentPlayer->HandleInput(event);
 
             //Update the Player
@@ -376,7 +376,7 @@ void gameEngine::Update(SDL_Event &event) {
 
         case GAME_OVER:
 
-            this->MenuInput(event);
+            this->MenuInput();
             break;
 
         default:
@@ -477,64 +477,24 @@ void gameEngine::Cleanup(){
 
 
 
-void gameEngine::MenuInput(SDL_Event &event) {
+void gameEngine::MenuInput() {
 
 
-    //User requests quit
-    if( event.type == SDL_KEYDOWN ) {
-        //std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
-       //std::cout << "SPACE KEY = " <<  SDLK_SPACE << std::endl;
-        //Select surfaces based on key press
-        switch( event.key.keysym.sym ) {
-            case SDLK_ESCAPE:
-                printf( "MENU ESCAPE\n" );
-
-                gameState = CLEANUP;
-
-                break;
-            case SDLK_UP:
-                printf( "PLAY GAME\n" );
-
-                gameState = PLAYING;
-                LoadScreen();
-                break;
-            case SDLK_DOWN:
-                printf( "KEY DOWN Menu\n" );
-                break;
-
-            case SDLK_p:
-                printf( "P KEY\n" );
-
-                gameState = PLAYING;
-
-                break;
-
-        }
+    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_ESCAPE)){
+        gameState = CLEANUP;
     }
 
-
+    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_SPACE)){
+        gameState = PLAYING;
+        LoadScreen();
+    }
 }
 
-void gameEngine::GameInput(SDL_Event &event) {
+void gameEngine::GameInput() {
 
-
-    //User requests quit
-    if( event.type == SDL_KEYDOWN ) {
-        //std::cout << "KEY = " <<  event.key.keysym.sym << std::endl;
-        //std::cout << "SPACE KEY = " <<  SDLK_SPACE << std::endl;
-        //Select surfaces based on key press
-        switch( event.key.keysym.sym ) {
-            case SDLK_ESCAPE:
-                printf( "GAME ESCAPE\n" );
-
-                gameState = CLEANUP;
-
-                break;
-
-        }
-
+    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_ESCAPE)){
+        gameState = CLEANUP;
     }
-
 
 };
 

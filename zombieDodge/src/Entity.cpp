@@ -31,7 +31,7 @@ int Entity::GetId()
 	return _id;
 }
 
-void Entity::Update(SDL_Event& event) {
+void Entity::Update() {
 
 
 

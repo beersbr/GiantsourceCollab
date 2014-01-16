@@ -12,8 +12,8 @@ public:
 	virtual ~Entity();
 
     virtual void Draw(SDL_Renderer *renderer) = 0;
-	virtual void Update(SDL_Event& event) = 0;
-    virtual void HandleInput(SDL_Event& event) = 0;
+	virtual void Update() = 0;
+
 
 	int GetId();
 

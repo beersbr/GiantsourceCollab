@@ -1,34 +1,41 @@
-#ifndef  ENEMY_H
-#define ENEMY_H
+//
+// Created by Matt Jacobs on 1/9/14.
+// Copyright (c) 2014 Brett Beers. All rights reserved.
+//
 
+#ifndef __ENEMY_H_
+#define __ENEMY_H_
 #include "Entity.h"
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
 
-class Enemy : public Entity {
+class Enemy : public Entity{
+public:
+    Enemy();
+    Enemy(int _x, int _y, int _z, std::string _playerTarget, int _hp);
+	~Enemy();
+
+
+    bool Spawn();
+    //void Move();
+    void Update(); // because it has to be there
+    void Draw(SDL_Renderer *renderer);
+    void TakeDamage(int dmg);
+    void Shoot(int dx, int dy);
 
 public:
+	Vector* vel;
+	Size<int> size;
 
+	SDL_Texture* image;
 
-    Enemy() : Entity(){};
-    Enemy(int _x=0, int _y=0, int _z=0) : Entity(_x,_y,_z){};
-
-    Vector pos;
-
-    float hitPoints, exp;
-    int moveSpeed = 150; // pixels/second
-
-
-    int configIndex;
-    std::string name;
-
-    virtual void Update();
-    static void Spawn();
-    static void Move();
-
-    virtual  void TakeDamage(int dmg);
-
-    virtual void Draw();
+    float hitPoints;
+    float exp;
+    std::string enemyId;
+    bool isFollow = false;
+    float moveSpeed = 10.0;
+  
 
 };
 
-
-#endif
+#endif // __ENEMY_H_

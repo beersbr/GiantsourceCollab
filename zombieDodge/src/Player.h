@@ -15,11 +15,10 @@ public:
     Player(int _x, int _y, int _z, std::string _playerTarget, int _hp);
 	~Player();
 
-    void Update(SDL_Event& event);
-    void Update(); // because it has to be there
+
     bool Spawn();
-    void Move();
-    void HandleInput(SDL_Event& event);
+    //void Move();
+    void Update(); // because it has to be there
     void Draw(SDL_Renderer *renderer);
     void TakeDamage(int dmg);
     void Shoot(int dx, int dy);
@@ -30,7 +29,7 @@ public:
 
 	SDL_Texture* image;
 
-    int hitPoints;
+    float hitPoints;
     float exp;
     std::string playerId;
     bool isSprinting;
@@ -40,8 +39,8 @@ public:
     float lastSprintTime;
     float sprintLength;
     float sprintElapsedTime;
-    float moveSpeed;
-    float sprintTime;
+    float moveSpeed = 10.0;
+    float sprintTime = 15.0;
 
 };
 
