@@ -19,6 +19,7 @@ public:
 
 public:
 	Vector* pos;
+    Vector* vel;
 
 private:
 	int _id;

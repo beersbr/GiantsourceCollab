@@ -3,7 +3,7 @@
 
 Enemy::Enemy()
 {
-
+    printf( "CREATE ENEMY\n" );
     hitPoints = exp = 0;
     enemyId = "enemy1";
     pos->x = 300;
@@ -23,74 +23,87 @@ Enemy::Enemy(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 
 bool Enemy::Spawn()
 {
-
     bool spawned = true;
-    gameEngine* gEngine = gameEngine::getInstance();
 
+    image = gameEngine::getInstance()->LoadTexture("enemy.png");
 
-    image = gEngine->LoadTexture("zombie.png");
-    //Draw the image
-    //gEngine->RenderTexture(image, gEngine->gameRender, 300, 400);
-
-    std::cout << "SPAWN THE PLAYER  " <<   std::endl;
-
-    //SDL_DestroyTexture(tempSurface);
-
+    std::cout << "SPAWN THE ENEMY  " <<   std::endl;
 
     if(image == NULL)  {
-        //spawned = false;
         std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
+        spawned = false;
+    }
+    //moveSpeed = 12.0;
+    vel = new Vector();
+    int start = rand() % 4 +1;
+    std::cout << "-------------------------START ENEMY POSISIOTN = " << start << std::endl;
+    switch(start) {
+
+        case 1:
+
+            pos->x = static_cast<float>(rand() % WINDOW_WIDTH + 1);
+            pos->y =0.0;
+            vel->y = static_cast<float>(rand() % moveSpeed + 1);
+
+            break;
+
+        case 2:
+
+            pos->x =static_cast<float>(rand() % WINDOW_WIDTH + 1);
+            pos->y =static_cast<float>(WINDOW_HEIGHT);
+            vel->y = -static_cast<float>(rand() % moveSpeed + 1);
+
+            break;
+
+        case 3:
+            pos->x =static_cast<float>(WINDOW_WIDTH);
+            pos->y =static_cast<float>(rand() % WINDOW_HEIGHT + 1);
+            vel->x = -static_cast<float>(rand() % moveSpeed + 1);
+            break;
+
+        case 4:
+            pos->x =0.0;
+            pos->y =static_cast<float>(rand() % WINDOW_HEIGHT + 1);
+            vel->x = static_cast<float>(rand() % moveSpeed + 1);
+            break;
+
 
     }
+
+   // vel->z = 0.0;
 
     return spawned;
 
 }
 
 
-void Player::Update()
+void Enemy::Update()
 {
-    float frameMoveSpeed = this->moveSpeed;
-    Vector moveOffset = Vector();
+    //float frameMoveSpeed = moveSpeed;
+    printf( "UPDATE ENEMY--------------------\n" );
 
-    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W)){
-        moveOffset.y -= frameMoveSpeed;
-    }
-    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_S)){
-        moveOffset.y += frameMoveSpeed;
-    }
-    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_A)){
-        moveOffset.x -= frameMoveSpeed;
-    }
-    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_D)){
-        moveOffset.x += frameMoveSpeed;
-    }
+    Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
+    // std::cout << "timer -> " << gEngine->getTimer() << std::endl;
+    std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
+    (*this->pos) += updatePos;
+
+    std::cout << "DONE ENEMY  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
+
+      /*
+    Vector moveOffset = Vector(vel->x,vel->y,vel->z);
+    moveOffset*(gameEngine::getInstance()->gameTimer / 1000);
+
+    //vel *= (gameEngine::getInstance()->gameTimer / 1000);
 
     (*this->pos) += moveOffset;
+
+    */
 }
-
-/*
-void Player::Move()
-{
-   // std::cout << "IN PLAYER MOVE FUNCTION TYPE = " << event.type << std::endl;
-
-        gameEngine* gEngine = gameEngine::getInstance();
-        Vector updatePos = (*pos) * (gEngine->getTimer() / FRAME_RATE);
-       // std::cout << "timer -> " << gEngine->getTimer() << std::endl;
-        std::cout << "DONE PLAYER  MOVE -> " << std::endl;
-        (*pos) = updatePos + (*pos);
-
-}
-*/
 
 void Enemy::Draw(SDL_Renderer *renderer)
 {
-    //std::cout << "RENDER PLAYER TEXTURE -> " << std::endl;
-    gameEngine* gEngine = gameEngine::getInstance();
-    std::cout << "POS x IN DRAW-> " << pos->x << std::endl;
-    std::cout << "POS y  in DRAW" << pos->y << std::endl;
-    // gEngine->RenderTexture(image, 300, 200);
-    gEngine->RenderTexture(image, pos->x, pos->y);
+
+    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
 
 }
 

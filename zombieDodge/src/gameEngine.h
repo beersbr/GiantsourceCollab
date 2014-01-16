@@ -43,7 +43,10 @@ public:
 
     float gameTimer;
     Player* currentPlayer = nullptr;
+    Enemy* currentEnemy = nullptr;
     int gameState=0;
+    int playerCnt =0;
+    int enemyCnt = 0;
 
     //-----------Main Functions
     bool Setup();
@@ -93,6 +96,9 @@ public:
     void RenderTexture(SDL_Texture *tex, int x, int y);
     bool LoadScreen();
     bool loadStateResources(int screenId);
+    int totalEnemyCnt = 0;
+    std::map<int, Enemy*> enemies;
+
     void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 
 

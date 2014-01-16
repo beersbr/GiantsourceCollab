@@ -49,7 +49,7 @@ bool Player::Spawn()
 
 
 void Player::Update()
-{
+{      std::cout << "UPDATE PLAYER  -> " << std::endl;
     float frameMoveSpeed = this->moveSpeed;
     Vector moveOffset = Vector();
 
@@ -115,7 +115,12 @@ void Player::Update()
         moveOffset.x += frameMoveSpeed;
     }
 
+   // std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
     (*this->pos) += moveOffset;
+
+    std::cout << "---------DONE PLAYER  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
+
+
 }
 
 /*
@@ -139,12 +144,7 @@ void Player::Shoot(int _x, int _y)
 
 void Player::Draw(SDL_Renderer *renderer)
 {
-    //std::cout << "RENDER PLAYER TEXTURE -> " << std::endl;
-    gameEngine* gEngine = gameEngine::getInstance();
-    std::cout << "POS x IN DRAW-> " << pos->x << std::endl;
-    std::cout << "POS y  in DRAW" << pos->y << std::endl;
-    // gEngine->RenderTexture(image, 300, 200);
-    gEngine->RenderTexture(image, pos->x, pos->y);
+    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
 
 }
 

@@ -136,7 +136,7 @@ bool gameEngine::LoadScreen()
             break;
 
         case GAME_OVER:
-            gameBackground = LoadTexture("welcome.jpg");
+            gameBackground = LoadTexture("gameover.jpg");
             break;
 
         default:
@@ -191,9 +191,15 @@ bool gameEngine::GameInit () {
    // if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
-    currentPlayer->pos->x = 100;
-    currentPlayer->pos->y = 100;
+        currentPlayer->pos->x = 100;
+        currentPlayer->pos->y = 100;
         gameInit = currentPlayer->Spawn();
+
+        currentEnemy = new Enemy();
+        currentEnemy->Spawn();
+        enemies[0] = currentEnemy;
+
+
     //}
 
     //Also set initial game state object
@@ -352,7 +358,6 @@ void gameEngine::Update() {
             break;
 
         case MENU:
-            //Load the Welcome screen
 
             this->MenuInput();
 
@@ -361,11 +366,36 @@ void gameEngine::Update() {
         case PLAYING:
 
             this->GameInput();
-//            currentPlayer->HandleInput(event);
+            if (gameReady){
+                //Update the Player
+                currentPlayer->Update();
+                std::cout << "------------------------------enemyCnt  " <<   enemyCnt << std::endl;
+                //if (static_cast<float>(rand() % static_cast<int>(gameTimer + 1))< gameTimer * 0.05) {
+                   if (enemyCnt> 40) {
+                       std::cout << "------------------------------SPAWN ANOTHER ENEMY  " <<   std::endl;
 
-            //Update the Player
-            currentPlayer->Update();
+                        totalEnemyCnt++;
+                        std::string enemyType;
 
+                        Enemy *enemy = new Enemy();
+                        enemy->Spawn();
+
+                        enemies[totalEnemyCnt] = enemy;
+                       enemyCnt = 0;
+                   }
+
+                enemyCnt++;
+               // }
+
+                for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
+
+                    e->second->Update();
+
+                }
+
+
+                //currentEnemy->Update();
+            }
             //Update the Monsters
 
             //Update the Bullets
@@ -398,17 +428,6 @@ void gameEngine::Draw() {
 
     //Clear the Screen
     SDL_RenderClear(gameRender);
-    /*
-    gameBackground = LoadTexture("welcome.jpg", gameRender);
-    //Apply the image
-    SDL_BlitSurface(  gameBackground, NULL,  gameSurface, NULL );
-
-    //Update the surface
-    SDL_UpdateWindowSurface(  gameWindow );
-      */
-
-    //Loads the current level texture background as gameBackground
-
 
     //Load the Background image to the render Window last
     int iW, iH;
@@ -421,33 +440,32 @@ void gameEngine::Draw() {
 
 
     if ( this->gameState == PLAYING) {
-        //std::cout << "SHOULD GO DRAW PLAYER-> " << std::endl;
-        //Draw Player
 
-        //if (currentPlayer->image == nullptr) {
-        //  printf( "IMAGE IS NULL:\n");
-        // currentPlayer->image = LoadTexture("player.png");
-
-        //}
-
-        //image = LoadTexture("player.png");
-        //RenderTexture( LoadTexture("player.png"), gameRender, 300, 400);
-        //RenderTexture(currentPlayer->image, gameRender, 300, 400);
-
-
-        //image = gEngine->LoadTexture("player.png");
         if (gameReady) {
             currentPlayer->Draw(gameRender);
-        }   else {
+
+            for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
+
+                e->second->Draw(gameRender);
+                /*
+                if (e->second->pos->x > WINDOW_WIDTH) {
+                    enemies.erase (e->first);
+
+                } else if (e->second->pos->y > WINDOW_HEIGHT) {
+                    enemies.erase (e->first);
+                }
+                  */
+            }
+
+            //currentEnemy->Draw(gameRender);
+            //Draw Enemies
+
+       }   else {
             std::cout << "GAME NOT READY-> " << std::endl;
 
         }
 
-
-        //Draw Enemies
     }
-
-
 
     //Update the screen
     SDL_RenderPresent(gameRender);
@@ -490,10 +508,13 @@ void gameEngine::MenuInput() {
     }
 }
 
+
+
 void gameEngine::GameInput() {
 
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_ESCAPE)){
-        gameState = CLEANUP;
+        gameState = GAME_OVER;
+        LoadScreen();
     }
 
 };

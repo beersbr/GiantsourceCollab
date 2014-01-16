@@ -9,7 +9,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 
+
 class Enemy : public Entity{
+
 public:
     Enemy();
     Enemy(int _x, int _y, int _z, std::string _playerTarget, int _hp);
@@ -21,7 +23,7 @@ public:
     void Update(); // because it has to be there
     void Draw(SDL_Renderer *renderer);
     void TakeDamage(int dmg);
-    void Shoot(int dx, int dy);
+
 
 public:
 	Vector* vel;
@@ -33,7 +35,7 @@ public:
     float exp;
     std::string enemyId;
     bool isFollow = false;
-    float moveSpeed = 10.0;
+    int moveSpeed = 10;
   
 
 };
