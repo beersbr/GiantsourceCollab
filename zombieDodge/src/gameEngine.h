@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <math.h>
 #include <string>
+#include "InputHandler.h"
 #include "config.h"
 #include "common.h"
 #include "GameState.h"

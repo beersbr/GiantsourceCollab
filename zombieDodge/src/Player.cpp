@@ -57,7 +57,23 @@ void Player::Update(SDL_Event& event)
 }
 void Player::Update()
 {
+    float frameMoveSpeed = 1.5;
+    Vector moveOffset = Vector();
 
+    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W)){
+        moveOffset.y -= frameMoveSpeed;
+    }
+    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_S)){
+        moveOffset.y += frameMoveSpeed;
+    }
+    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_A)){
+        moveOffset.x -= frameMoveSpeed;
+    }
+    if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_D)){
+        moveOffset.x += frameMoveSpeed;
+    }
+
+    (*this->pos) += moveOffset;
 }
 
 void Player::HandleInput(SDL_Event& event) {

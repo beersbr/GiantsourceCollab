@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A46E0B89C98161E20EAB96B /* InputHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E8B26597721798A0E56C /* InputHandler.cpp */; };
 		4A46E1BF25BB8349B9EEB0EA /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E3A5C2BE534A8D1D478F /* Vector.cpp */; };
 		4A46E78B450805044DCEE49D /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E90527F1BA066BE8C536 /* Configurator.cpp */; };
 		4A46E8EF69835C60483F3F3B /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EFEF7E3107564206EFFF /* Game.cpp */; };
@@ -55,7 +56,9 @@
 		4A46E3A5C2BE534A8D1D478F /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
 		4A46E50C312BFDDA3184AE1E /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		4A46E7DC7E66848B35217F7A /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		4A46E8B26597721798A0E56C /* InputHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputHandler.cpp; sourceTree = "<group>"; };
 		4A46E90527F1BA066BE8C536 /* Configurator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Configurator.cpp; sourceTree = "<group>"; };
+		4A46EA7A55C520757267AF8A /* InputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputHandler.h; sourceTree = "<group>"; };
 		4A46EAF2EF3E26A0B8061328 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		4A46ECE21E2F57EDD6AB1B83 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
 		4A46EFEF7E3107564206EFFF /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
@@ -198,6 +201,8 @@
 				F5F5ACAD1A2CA0576CDEFB01 /* gameEngine.h */,
 				F5F5A305BF2395F554285D0F /* gameEngine.cpp */,
 				F5F5AF417D113E62A1EE738B /* Entity.cpp */,
+				4A46E8B26597721798A0E56C /* InputHandler.cpp */,
+				4A46EA7A55C520757267AF8A /* InputHandler.h */,
 			);
 			name = src;
 			path = ../../src;
@@ -280,6 +285,7 @@
 				F5F5A31BE89F758DF209C7E9 /* GameState.cpp in Sources */,
 				F5F5AE4E1CCAA577121D5F31 /* gameEngine.cpp in Sources */,
 				F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */,
+				4A46E0B89C98161E20EAB96B /* InputHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

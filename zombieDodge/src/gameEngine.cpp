@@ -191,6 +191,8 @@ bool gameEngine::GameInit () {
    // if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
+    currentPlayer->pos->x = 100;
+    currentPlayer->pos->y = 100;
         gameInit = currentPlayer->Spawn();
     //}
 
@@ -272,24 +274,17 @@ void gameEngine::Run() {
         {
             SDL_Event event;
             while( SDL_PollEvent( &event ) != 0 ){
-                if( event.type == SDL_KEYDOWN ) {
-                   // std::cout << "CODE = " <<  event.key.keysym.sym << std::endl;
-                    //Select surfaces based on key press
-                    switch( event.key.keysym.sym ) {
-
-                        default:
-                            break;
-
-                    }
-
-                }
-
-                else
-                if( event.type == SDL_QUIT )
+                switch(event.type)
                 {
-
-                    this->gameState = CLEANUP;
-
+                    case SDL_KEYDOWN:
+                        InputHandler::getInstance()->keyDown(event.key.keysym.scancode);
+                        break;
+                    case SDL_KEYUP:
+                        InputHandler::getInstance()->keyUp(event.key.keysym.scancode);
+                        break;
+                    case SDL_QUIT:
+                        this->gameState = CLEANUP;
+                        break;
                 }
             }
 
@@ -366,10 +361,10 @@ void gameEngine::Update(SDL_Event &event) {
         case PLAYING:
 
             this->GameInput(event);
-            currentPlayer->HandleInput(event);
+//            currentPlayer->HandleInput(event);
 
             //Update the Player
-            currentPlayer->Update(event);
+            currentPlayer->Update();
 
             //Update the Monsters
 
