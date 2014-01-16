@@ -15,6 +15,7 @@
 
 #include "GLCommon.h"
 #include "KeyboardHandler.h"
+#include "Configurator.h"
 
 
 class Game {

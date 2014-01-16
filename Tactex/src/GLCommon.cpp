@@ -15,7 +15,6 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
         while(getline(VertexShaderStream, Line))
             VertexShaderCode += "\n" + Line;
         VertexShaderStream.close();
-        std::cout << "VERTEX: " << std::endl << VertexShaderCode << std::endl;
     }
 
     // Read the Fragment Shader code from the file
@@ -26,8 +25,6 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
         while(getline(FragmentShaderStream, Line))
             FragmentShaderCode += "\n" + Line;
         FragmentShaderStream.close();
-
-        std::cout << "FRAGMENT: " << std::endl << FragmentShaderCode << std::endl;
     }
 
     GLint Result = GL_FALSE;

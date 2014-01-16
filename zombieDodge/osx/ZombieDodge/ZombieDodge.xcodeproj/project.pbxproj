@@ -328,6 +328,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SYMROOT = /users;
 			};
 			name = Debug;
 		};
@@ -360,6 +361,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
+				SYMROOT = /users;
 			};
 			name = Release;
 		};
@@ -378,6 +380,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "ZombieDodge/ZombieDodge-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				OBJROOT = "$(P";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = "$(PROJECT_DIR)/build/debug";
@@ -400,6 +403,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "ZombieDodge/ZombieDodge-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				OBJROOT = "$(P";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = "$(PROJECT_DIR)/build/release";

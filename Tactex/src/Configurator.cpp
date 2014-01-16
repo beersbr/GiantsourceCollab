@@ -23,8 +23,15 @@ std::map<std::string, std::string>* Configurator::open(const std::string filepat
     {
         std::string line = Configurator::readline(ifp);
 
+        line = Configurator::strip(line);
+
+        if(line.empty())
+            break;
+
         // split the line by the '='
         std::vector<std::string> strings =  Configurator::split(line, '=');
+
+        std::cout << strings[0] << " " << strings[1] << std::endl;
 
         if(strings.size() == 2){
             std::string key = Configurator::strip(strings[0]);
@@ -46,12 +53,15 @@ std::string Configurator::readline(std::fstream& f)
         throw ConfiguratorException::BadStreamException();
 
     std::string str;
+    char token = 0;
     while(!f.eof() && f.peek() != '\n')
     {
-        char token = 0;
         f.read(&token, 1);
         str.append(&token);
+        token = 0;
     }
+    f.read(&token, 1);
+    str.append(&token);
 
     return str;
 }
@@ -73,6 +83,8 @@ std::vector<std::string> Configurator::split(std::string& str, const char t)
     }
     std::string lastToken = str.substr(startIndex, index);
 
+
+    std::cout << "last token: " << lastToken << std::endl;
     tokens.push_back(lastToken);
 
     return tokens;

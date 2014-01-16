@@ -14,6 +14,8 @@ Game* Game::getInstance(){
 }
 
 int Game::setup(){
+    std::map<std::string, std::string>* config = Configurator::open("config/game.config");
+
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "ERROR SDL_Init" << std::endl;
@@ -28,7 +30,7 @@ int Game::setup(){
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     window = SDL_CreateWindow(
-            "SDL 2 window",             // window title
+            ((*config)["window_title"]).c_str(),             // window title
             SDL_WINDOWPOS_CENTERED,     // x position, centered
             SDL_WINDOWPOS_CENTERED,     // y position, centered
             800,                        // width, in pixels
