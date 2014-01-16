@@ -1,12 +1,16 @@
 #ifndef  __ENGINE_H
 #define __ENGINE_H
-#include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
-#include <iosfwd>
+
 #include <iostream>
+#include <stack>
+#include <string>
+#include <stdio.h>
+#include <iosfwd>
 #include <assert.h>
 #include <math.h>
-#include <string>
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
+
 #include "InputHandler.h"
 #include "config.h"
 #include "common.h"

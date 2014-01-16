@@ -6,12 +6,7 @@
 //  Copyright (c) 2014 Matt Jacobs. All rights reserved.
 //
 
-#include <iostream>
-#include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
-#include <stack>
-#include <string>
-#include <stdio.h>
+
 
 //ENGINE FILES
 
