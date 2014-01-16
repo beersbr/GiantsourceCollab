@@ -14,13 +14,9 @@
 #include <stdio.h>
 
 //ENGINE FILES
-#include "config.h"
+
 #include "gameEngine.h"
-#include "GameState.h"
-#include "Vector.h"
-#include "Entity.h"
-#include "Player.h"
-#include "Enemy.h"
+
 
 struct StateStruct
 {

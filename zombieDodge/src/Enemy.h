@@ -2,7 +2,6 @@
 #define ENEMY_H
 
 #include "Entity.h"
-#include "Vector.h"
 
 class Enemy : public Entity {
 

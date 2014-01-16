@@ -1,7 +1,9 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
-
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
 #include "Vector.h"
+#include "Size.h"
 
 class Entity {
 public:
@@ -9,8 +11,9 @@ public:
     Entity(int x, int y, int z);
 	virtual ~Entity();
 
-    virtual void Draw() = 0;
-	virtual void Update() = 0;
+    virtual void Draw(SDL_Renderer *renderer) = 0;
+	virtual void Update(SDL_Event& event) = 0;
+    virtual void HandleInput(SDL_Event& event) = 0;
 
 	int GetId();
 

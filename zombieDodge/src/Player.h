@@ -5,19 +5,9 @@
 
 #ifndef __PLAYER_H_
 #define __PLAYER_H_
-
-#include <iostream>
-#include <assert.h>
-#include <math.h>
-
+#include "Entity.h"
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
-
-#include "common.h"
-
-#include "Vector.h"
-#include "Size.h"
-#include "Entity.h"
 
 class Player : public Entity{
 public:
@@ -28,8 +18,9 @@ public:
     void Update(SDL_Event& event);
     void Update(); // because it has to be there
     bool Spawn();
-    void Move(SDL_Event& event);
-    void Draw();
+    void Move();
+    void HandleInput(SDL_Event& event);
+    void Draw(SDL_Renderer *renderer);
     void TakeDamage(int dmg);
     void Shoot(int dx, int dy);
 
@@ -40,17 +31,17 @@ public:
 	SDL_Texture* image;
 
     int hitPoints;
-	int exp;
+    float exp;
     std::string playerId;
     bool isSprinting;
-    int nonSprintElapsedTime;
-    int sprintSpeed;
-    int sprintInterval;
-    int lastSprintTime;
-    int sprintLength;
-    int sprintElapsedTime;
-    int moveSpeed;
-    int sprintTime;
+    float nonSprintElapsedTime;
+    float sprintSpeed;
+    float sprintInterval;
+    float lastSprintTime;
+    float sprintLength;
+    float sprintElapsedTime;
+    float moveSpeed;
+    float sprintTime;
 
 };
 

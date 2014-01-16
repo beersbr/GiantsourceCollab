@@ -1,7 +1,4 @@
-
-#include <SDL2/SDL.h>
-#include "config.h"
-#include <SDL2_image/SDL_image.h>
+#include "Player.h"
 #include "gameEngine.h"
 
 Player::Player()
@@ -51,13 +48,29 @@ bool Player::Spawn()
 }
 
 
-void Player::Move(SDL_Event& event)
+void Player::Update(SDL_Event& event)
 {
-    gameEngine* gEngine = gameEngine::getInstance();
-    float frameMoveSpeed = this->moveSpeed;
-    //zombieGame* game = zombieGame::getInstance();
 
-    if(event.type == SDL_KEYDOWN ) {
+    std::cout << "UPDATING PLAYER -> " << std::endl;
+    Move();
+
+}
+void Player::Update()
+{
+
+}
+
+void Player::HandleInput(SDL_Event& event) {
+
+
+        gameEngine* gEngine = gameEngine::getInstance();
+        //std::cout << "KY PRESSED IN PLAYER " << event.key.keysym.sym << std::endl;
+
+        float frameMoveSpeed = this->moveSpeed;
+        //std::cout << "MOVING PLAYER -> " << std::endl;
+        //zombieGame* game = zombieGame::getInstance();
+
+
         //Select surfaces based on key press
 
         if (event.key.keysym.sym== SDLK_RSHIFT) {
@@ -68,7 +81,7 @@ void Player::Move(SDL_Event& event)
                 if(nonSprintElapsedTime > sprintInterval || lastSprintTime == -1){
                     frameMoveSpeed = sprintSpeed;
                     isSprinting = true;
-                   // lastSprintTime = +(new Date());
+                    // lastSprintTime = +(new Date());
                     nonSprintElapsedTime = 0;
                     sprintLength +=  gEngine->getTimer();
                 }
@@ -76,25 +89,25 @@ void Player::Move(SDL_Event& event)
             }
             else{
 
-                 sprintElapsedTime += gEngine->getTimer();
-                 if(sprintElapsedTime > sprintTime){
-                     isSprinting = false;
-                     sprintElapsedTime = 0;
-                 }
-                 else{
-                     frameMoveSpeed = sprintSpeed;
-                     sprintLength += gEngine->getTimer();
-                 }
+                sprintElapsedTime += gEngine->getTimer();
+                if(sprintElapsedTime > sprintTime){
+                    isSprinting = false;
+                    sprintElapsedTime = 0;
+                }
+                else{
+                    frameMoveSpeed = sprintSpeed;
+                    sprintLength += gEngine->getTimer();
+                }
 
             }
         }
         else {
 
-             // Not sprinting
-             isSprinting = false;
-             sprintElapsedTime = 0;
-             nonSprintElapsedTime += gEngine->getTimer();
-             if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
+            // Not sprinting
+            isSprinting = false;
+            sprintElapsedTime = 0;
+            nonSprintElapsedTime += gEngine->getTimer();
+            if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
 
         }
 
@@ -102,33 +115,46 @@ void Player::Move(SDL_Event& event)
 
         switch( event.key.keysym.sym ) {
 
-            case SDLK_w: pos->y -= frameMoveSpeed; break;
-            case SDLK_s: pos->y += frameMoveSpeed; break;
-            case SDLK_a: pos->x -= frameMoveSpeed; break;
-            case SDLK_d: pos->x += frameMoveSpeed; break;
+            case SDLK_w: pos->y -= frameMoveSpeed;
+
+                std::cout << "-----------------------MOVE UP---------------------------" << std::endl;
+
+                break;
+
+            case SDLK_s: pos->y += frameMoveSpeed;
+                std::cout << "-----------------------MOVE DOWN---------------------------" << std::endl;
+
+                break;
+            case SDLK_a: pos->x -= frameMoveSpeed;
+                std::cout << "-----------------------MOVE LEFT---------------------------" << std::endl;
+                break;
+
+
+            case SDLK_d: pos->x += frameMoveSpeed;
+                std::cout << "-----------------------MOVE RIGHT---------------------------" << std::endl;
+
+                break;
 
             case SDLK_UP: Shoot(0,-1);; break;
             case SDLK_DOWN:Shoot(0,1);
             case SDLK_LEFT: Shoot(-1,0);
             case SDLK_RIGHT: Shoot(1,0); break;
+            default: break;
         }
 
-
-    }
-
-        Vector updatePos = (*pos) * (gEngine->getTimer() / FRAME_RATE);
-        (*pos) = updatePos + (*pos);
 }
 
-void Player::Draw()
+void Player::Move()
 {
-    //std::cout << "RENDER PLAYER TEXTURE -> " << std::endl;
-   // gameEngine* gEngine = gameEngine::getInstance();
+   // std::cout << "IN PLAYER MOVE FUNCTION TYPE = " << event.type << std::endl;
 
-  //  gEngine->RenderTexture(image, 300, 400);
+        gameEngine* gEngine = gameEngine::getInstance();
+        Vector updatePos = (*pos) * (gEngine->getTimer() / FRAME_RATE);
+       // std::cout << "timer -> " << gEngine->getTimer() << std::endl;
+        std::cout << "DONE PLAYER  MOVE -> " << std::endl;
+        (*pos) = updatePos + (*pos);
 
 }
-
 
 void Player::Shoot(int _x, int _y)
 {
@@ -136,16 +162,17 @@ void Player::Shoot(int _x, int _y)
 
 }
 
-void Player::Update(SDL_Event& event)
+void Player::Draw(SDL_Renderer *renderer)
 {
-        Move(event);
+    //std::cout << "RENDER PLAYER TEXTURE -> " << std::endl;
+    gameEngine* gEngine = gameEngine::getInstance();
+    std::cout << "POS x IN DRAW-> " << pos->x << std::endl;
+    std::cout << "POS y  in DRAW" << pos->y << std::endl;
+    // gEngine->RenderTexture(image, 300, 200);
+    gEngine->RenderTexture(image, pos->x, pos->y);
 
 }
 
-void Player::Update()
-{
-
-}
 
 void Player::TakeDamage(int dmg)
 {
@@ -156,8 +183,8 @@ void Player::TakeDamage(int dmg)
 
 Player::~Player()
 {
-	//delete vel;
-	//vel = nullptr;
+	delete vel;
+	vel = nullptr;
 
     hitPoints = exp = 0;
 }

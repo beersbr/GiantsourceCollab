@@ -17,6 +17,7 @@
 		F5F5A31BE89F758DF209C7E9 /* GameState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9DF5F125D394E080E5F /* GameState.cpp */; };
 		F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AF417D113E62A1EE738B /* Entity.cpp */; };
 		F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */; };
+		F5F5AA9CF4FA6BB44CE61B42 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B9D187737C100A02E35 /* SDL2.framework */; };
 		F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */; };
 		F5F5AE4E1CCAA577121D5F31 /* gameEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A305BF2395F554285D0F /* gameEngine.cpp */; };
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
@@ -97,6 +98,7 @@
 				FB1B0B9F187737C100A02E35 /* SDL2_mixer.framework in Frameworks */,
 				FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */,
 				FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */,
+				F5F5AA9CF4FA6BB44CE61B42 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +365,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(inherited)\"",
 					"/Users/Frameworks/**",
-					"$(HOME)/Frameworks",
+					"\"$(HOME)/Frameworks\"",
+					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -385,6 +388,7 @@
 					"$(inherited)",
 					"$(HOME)/Frameworks",
 					"/Users/Frameworks/**",
+					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";

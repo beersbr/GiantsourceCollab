@@ -1,11 +1,20 @@
-#ifndef  ENGINE_H
-#define ENGINE_H
-
-
-#include <iostream>
+#ifndef  __ENGINE_H
+#define __ENGINE_H
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <iosfwd>
+#include <iostream>
+#include <assert.h>
+#include <math.h>
+#include <string>
+#include "config.h"
+#include "common.h"
+#include "GameState.h"
+#include "Vector.h"
+#include "Entity.h"
 #include "Player.h"
+#include "Enemy.h"
+
 
 enum GAMESTATES {
 

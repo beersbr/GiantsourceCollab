@@ -31,7 +31,13 @@ int Entity::GetId()
 	return _id;
 }
 
-void Entity::Update() {
+void Entity::Update(SDL_Event& event) {
+
+
+
+}
+
+void Entity::Draw(SDL_Renderer *renderer) {
 
 
 

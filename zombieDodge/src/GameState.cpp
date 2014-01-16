@@ -1,7 +1,5 @@
 #include "GameState.h"
-#include "config.h"
 
-gameEngine* GameState::engine = nullptr;
 
 GameState::GameState(int _stateId, std::string _name, int _key) {
 
@@ -13,7 +11,7 @@ GameState::GameState(int _stateId, std::string _name, int _key) {
 
 bool GameState::Setup(){
 
-    GameState::engine = gameEngine::getInstance();
+
 
     //Initialization flag
     bool success = true;
@@ -33,6 +31,8 @@ bool GameState::LoadResources()
 
 void GameState::HandleInput(SDL_Event& event) {
 
+    gameEngine* engine = gameEngine::getInstance();
+
     if( event.type == SDL_KEYDOWN ) {
             std::cout << "CODE = " <<  event.key.keysym.sym << std::endl;
             //Select surfaces based on key press
@@ -40,7 +40,7 @@ void GameState::HandleInput(SDL_Event& event) {
                 case SDLK_ESCAPE:
                     printf( "ESCAPE\n" );
 
-                GameState::engine->SetGameState(CLEANUP);
+                    engine->SetGameState(CLEANUP);
 
                     break;
                 case SDLK_UP:

@@ -1,8 +1,6 @@
-#include <iosfwd>
+#ifndef  __GAMESTATE_H
+#define __GAMESTATE_H
 
-#ifndef  GAMESTATE_H
-#define GAMESTATE_H
-#include <string>
 #include "gameEngine.h"
 
 class GameState {
@@ -11,9 +9,6 @@ public:
     int stateId, key;
     std::string name;
     std::string background;
-
-    static gameEngine* engine;
-
     virtual void Draw() = 0;
     virtual void HandleInput(SDL_Event& event) = 0;
     virtual bool LoadResources() = 0;
