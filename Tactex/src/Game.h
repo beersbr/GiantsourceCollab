@@ -13,6 +13,10 @@
 #include <SDL2/SDL_opengl.h>
 #include <OpenGL/glu.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "GLCommon.h"
 #include "KeyboardHandler.h"
 #include "Configurator.h"

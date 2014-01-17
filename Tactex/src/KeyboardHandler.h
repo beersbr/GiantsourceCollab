@@ -13,7 +13,7 @@ class KeyboardHandler {
 public:
     static KeyboardHandler * getInstance();
 
-    void update();
+    void update(SDL_Event& e);
 
     bool keyDown(const SDL_Scancode key);
 

@@ -29,12 +29,15 @@ int Game::setup(){
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
+    int width = atoi((*config)["window_width"].c_str());
+    int height = atoi((*config)["window_height"].c_str());
+
     window = SDL_CreateWindow(
             ((*config)["window_title"]).c_str(),             // window title
             SDL_WINDOWPOS_CENTERED,     // x position, centered
             SDL_WINDOWPOS_CENTERED,     // y position, centered
-            800,                        // width, in pixels
-            600,                        // height, in pixels
+            width,                        // width, in pixels
+            height,                        // height, in pixels
             SDL_WINDOW_OPENGL           // flags
     );
 
@@ -42,7 +45,6 @@ int Game::setup(){
     glContext = SDL_GL_CreateContext(window);
 
     // setup opengl
-
     SDL_RendererInfo displayRendererInfo;
     SDL_GetRendererInfo(renderer, &displayRendererInfo);
 
@@ -54,30 +56,8 @@ int Game::setup(){
         throw 1;
     }
 
-//    glShadeModel(GL_SMOOTH);
-//    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-//    glClearDepth(1.0f);
-//    glEnable(GL_DEPTH_TEST);
-//    glDepthFunc(GL_EQUAL);
-//    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-    // setup the viewport
-
-    int width = 800, height = 600;
-
     if(height == 1)
         height = 1;
-
-//    GLfloat ratio = (GLfloat)width/(GLfloat)height;
-//    glViewport(0, 0, (GLsizei)width, (GLsizei)height);
-//    glMatrixMode(GL_PROJECTION);
-
-//    glLoadIdentity();
-
-//    gluPerspective(45.0f, ratio, 0.1f, 100.0f);
-
-//    glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
 
     printf("shader lang: %s\n",glGetString(GL_SHADING_LANGUAGE_VERSION));
 
@@ -98,44 +78,156 @@ int Game::run(){
 
     GLuint programID = LoadShaders( "shaders/simpleVertexShader.vs", "shaders/simpleFragmentShader.fs" );
 
+    GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+    GLuint OffsetID = glGetUniformLocation(programID, "offset");
+    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+
+    glm::mat4 View = glm::lookAt(
+            glm::vec3(0,0,10), // Camera is at (4,3,3), in World Space
+            glm::vec3(0,0,0), // and looks at the origin
+            glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+    );
+
+    // Model matrix : an identity matrix (model will be at the origin)
+    glm::mat4 Model = glm::mat4(1.0f);
+    glm::mat4 MVP = Projection * View * Model;
+
     static const GLfloat g_vertex_buffer_data[] = {
-            -1.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-            0.0f,  1.0f, 0.0f,
+
+            // west
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+
+            -1.0f, -1.0f, -1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+            // bottom
+             1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, -1.0f,
+
+             1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+
+            // back
+             1.0f,  1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+             1.0f,  1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+
+            // front
+            -1.0f,  1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f,
+
+             1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f,
+
+            // right
+             1.0f,  1.0f,  1.0f,
+             1.0f, -1.0f, -1.0f,
+             1.0f,  1.0f, -1.0f,
+
+             1.0f, -1.0f, -1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f,
+
+            // top
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+             1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f,  1.0f,
+
+
     };
+    static const GLushort g_element_buffer_data[] = { 0, 1, 2 };
 
     GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
+    glm::vec3 cameraPos = glm::vec3(0, 0, 10);
+
     while(gameRunning)
     {
-        keyboard->update();
+        SDL_Event event;
+        while(SDL_PollEvent(&event))
+        {
+            keyboard->update(event);
+        }
 
         if(keyboard->keyDown(SDL_SCANCODE_Q))
             gameRunning = false;
 
         // render some stuff
 
+        if(keyboard->keyDown(SDL_SCANCODE_A))
+        {
+            cameraPos = glm::rotateY(cameraPos, 1.0f);
+        }
+        if(keyboard->keyDown(SDL_SCANCODE_D))
+        {
+            cameraPos = glm::rotateY(cameraPos, -1.0f);
+        }
+        if(keyboard->keyDown(SDL_SCANCODE_W))
+        {
+            cameraPos[1] += 1.0f;
+        }
+        if(keyboard->keyDown(SDL_SCANCODE_S))
+        {
+            cameraPos[1] -= 1.0f;
+        }
 
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        glUseProgram(programID);
-        glEnableVertexAttribArray(0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(
-                0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-                3,                  // size
-                GL_FLOAT,           // type
-                GL_FALSE,           // normalized?
-                0,                  // stride
-                (void*)0            // array buffer offset
+        glm::mat4 View = glm::lookAt(
+                cameraPos, // Camera is at (4,3,3), in World Space
+                glm::vec3(0,0,0), // and looks at the origin
+                glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
 
+        // Model matrix : an identity matrix (model will be at the origin)
+        glm::mat4 Model = glm::mat4(1.0f);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
-        glDisableVertexAttribArray(0);
+
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+        for(int i = -5; i < 5; i++)
+        {
+            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(3.0f*i, 0, 0));
+
+            glUseProgram(programID);
+            glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+            glUniform1f(OffsetID, (float)i);
+
+            glEnableVertexAttribArray(0);
+            glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+            glVertexAttribPointer(
+                    0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                    3,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+            );
+
+            // Draw the triangle !
+            glDrawArrays(GL_TRIANGLES, 0, 12*3); // 3 indices starting at 0 -> 1 triangle
+
+            glDisableVertexAttribArray(0);
+        }
+
+
 
         SDL_GL_SwapWindow(window);
     }
