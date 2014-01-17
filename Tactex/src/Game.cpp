@@ -6,6 +6,8 @@
 
 #include "Game.h"
 
+#define SIGN(v) ( (v < 0 ? -1 : 1) )
+
 Game* Game::getInstance(){
     if(!Game::_instance)
         Game::_instance = new Game();
@@ -80,7 +82,7 @@ int Game::run(){
 
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     GLuint OffsetID = glGetUniformLocation(programID, "offset");
-    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
 
     glm::mat4 View = glm::lookAt(
             glm::vec3(0,0,10), // Camera is at (4,3,3), in World Space
@@ -158,7 +160,18 @@ int Game::run(){
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
     glm::vec3 cameraPos = glm::vec3(0, 0, 10);
+    glm::vec3 cameraLookAt = glm::vec3(0, 0, 0);
 
+    // cuz I can
+    struct{
+        int x, y;
+    } typedef MousePos;
+
+    MousePos mousePos;
+
+    SDL_SetRelativeMouseMode((SDL_bool)true);
+
+    SDL_GetRelativeMouseState(&mousePos.x,&mousePos.y);
     while(gameRunning)
     {
         SDL_Event event;
@@ -166,33 +179,72 @@ int Game::run(){
         {
             keyboard->update(event);
         }
+        SDL_GetRelativeMouseState(&mousePos.x,&mousePos.y);
 
         if(keyboard->keyDown(SDL_SCANCODE_Q))
             gameRunning = false;
 
-        // render some stuff
+        if(mousePos.x != 0 and mousePos.y != 0)
+        {
+            if(mousePos.x != 0)
+            {
+                glm::vec3 base = cameraLookAt - cameraPos;
+                base = glm::rotateY(base, -1*(mousePos.x/10.0f));
+                cameraLookAt = cameraPos + base;
+            }
+            if(mousePos.y != 0)
+            {
+                glm::vec3 base = cameraLookAt - cameraPos;
+                glm::vec3 axis = glm::rotateY(base, 90.0f);
+
+                axis = glm::normalize(axis);
+                glm::vec3 offset = glm::rotate(base, (float)mousePos.y/10, axis);
+                glm::vec3 adder = offset - base;
+                cameraLookAt += adder;
+            }
+        }
 
         if(keyboard->keyDown(SDL_SCANCODE_A))
         {
-            cameraPos = glm::rotateY(cameraPos, 1.0f);
+            glm::vec3 rot90 = (cameraLookAt - cameraPos);
+            rot90[1] = 0.0f;
+            rot90 = glm::rotateY(rot90, 90.0f);
+
+            rot90 = glm::normalize(rot90);
+            cameraLookAt += rot90;
+            cameraPos += rot90;
         }
         if(keyboard->keyDown(SDL_SCANCODE_D))
         {
-            cameraPos = glm::rotateY(cameraPos, -1.0f);
+            glm::vec3 rot90 = (cameraLookAt - cameraPos);
+            rot90[1] = 0.0f;
+            rot90 = glm::rotateY(rot90, 90.0f);
+
+            rot90 = glm::normalize(rot90);
+            cameraLookAt -= rot90;
+            cameraPos -= rot90;
         }
         if(keyboard->keyDown(SDL_SCANCODE_W))
         {
-            cameraPos[1] += 1.0f;
+            glm::vec3 offset = cameraLookAt - cameraPos;
+            offset = glm::normalize(offset);
+
+            cameraLookAt += offset;
+            cameraPos += offset;
         }
         if(keyboard->keyDown(SDL_SCANCODE_S))
         {
-            cameraPos[1] -= 1.0f;
+            glm::vec3 offset = cameraLookAt - cameraPos;
+            offset = glm::normalize(offset);
+
+            cameraLookAt -= offset;
+            cameraPos -= offset;
         }
 
 
         glm::mat4 View = glm::lookAt(
                 cameraPos, // Camera is at (4,3,3), in World Space
-                glm::vec3(0,0,0), // and looks at the origin
+                cameraLookAt, // and looks at the origin
                 glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
 
@@ -202,9 +254,11 @@ int Game::run(){
 
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-        for(int i = -5; i < 5; i++)
+        for(int k = -6; k < 6; k++)
+        for(int j = -6; j < 6; j++)
+        for(int i = -6; i < 6; i++)
         {
-            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(3.0f*i, 0, 0));
+            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(3.0f*i, 3.0f*k, 3.0f*j));
 
             glUseProgram(programID);
             glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
