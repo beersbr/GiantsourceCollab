@@ -38,7 +38,7 @@ bool Enemy::Spawn()
     bool spawned = true;
 
     image = gameEngine::getInstance()->LoadTexture("enemy.png");
-
+    spawnFX = Mix_LoadWAV( "zombieRising.wav" );
     int w, h;
     //printf( "RENDER THE PLAYER TEXTURE!\n" );
     SDL_QueryTexture(image, NULL, NULL, &w, &h);
@@ -92,7 +92,7 @@ bool Enemy::Spawn()
     }
 
    // vel->z = 0.0;
-
+    Mix_PlayChannel( -1, spawnFX, 0 );
     return spawned;
 
 }
@@ -102,6 +102,8 @@ void Enemy::Update()
 {
     //float frameMoveSpeed = moveSpeed;
     printf( "UPDATE ENEMY--------------------\n" );
+
+
 
     Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
     // std::cout << "timer -> " << gEngine->getTimer() << std::endl;
@@ -140,6 +142,7 @@ Enemy::~Enemy()
 {
     delete vel;
     vel = nullptr;
+    Mix_FreeChunk(spawnFX);
 
     hitPoints = exp = 0;
 }

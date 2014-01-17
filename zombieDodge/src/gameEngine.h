@@ -10,7 +10,7 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
-
+#include <SDL2_mixer/SDL_mixer.h>
 #include "InputHandler.h"
 #include "config.h"
 #include "common.h"
@@ -37,7 +37,7 @@ class gameEngine {
 
 public:
     static gameEngine* getInstance();
-    SDL_Event getEvent();
+
     bool gameReady = false;
 
 
@@ -47,6 +47,7 @@ public:
     int gameState=0;
     int playerCnt =0;
     int enemyCnt = 0;
+    int followEnemyCnt = 0;
 
     //-----------Main Functions
     bool Setup();
@@ -87,9 +88,12 @@ public:
 
     SDL_Renderer* gameRender;
 
+
+
     SDL_Surface* LoadImage(const std::string path);
     static SDL_Texture* LoadTexture(const std::string &file, SDL_Renderer *ren);
     SDL_Texture* LoadTexture(const std::string &file);
+    static Vector getPlayerPos();
     void logSDLError(std::ostream &os, const std::string &msg);
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h);
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y);

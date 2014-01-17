@@ -11,16 +11,6 @@ gameEngine* gameEngine::getInstance() {
 
 }
 
-SDL_Event gameEngine::getEvent() {
-
-    SDL_Event gameEvent;
-    SDL_PollEvent( &gameEvent );
-
-    return gameEvent;
-
-}
-
-
 gameEngine::gameEngine() {
 
 
@@ -179,11 +169,14 @@ bool gameEngine::loadStateResources(int screenId)
     return success;
 };
 
+
 bool gameEngine::GameInit () {
 
     bool gameInit = true;
 
     printf( "GAME INIT\n" );
+
+    //Load the sound effects
 
 
     //Once a config is in place, grab all the user data from the config and create the new player that way,
@@ -252,6 +245,12 @@ bool gameEngine::Setup(){
                 gameRender = SDL_CreateRenderer(gameWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
                 //Get window surface
                 //gameSurface = SDL_GetWindowSurface( gameWindow);
+            }
+
+            //Initialize SDL_mixer
+            if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+            {
+                return false;
             }
         }
     }
@@ -371,7 +370,7 @@ void gameEngine::Update() {
                 currentPlayer->Update();
                 std::cout << "------------------------------enemyCnt  " <<   enemyCnt << std::endl;
                 //if (static_cast<float>(rand() % static_cast<int>(gameTimer + 1))< gameTimer * 0.05) {
-                   if (enemyCnt> 40) {
+                   if (enemyCnt> 30) {
                        std::cout << "------------------------------SPAWN ANOTHER ENEMY  " <<   std::endl;
 
                         totalEnemyCnt++;
@@ -379,8 +378,16 @@ void gameEngine::Update() {
 
                         Enemy *enemy = new Enemy();
                         enemy->Spawn();
+                        if (followEnemyCnt == 7) {
 
+                           enemy->isFollow = true;
+                            //printf("FOLLOW THE PLAYER-----!!!!_!_!_!_!_!_!_!_!_!_!_!_!_!_");
+                            followEnemyCnt = 0;
+                        }
+                        followEnemyCnt++;
                         enemies[totalEnemyCnt] = enemy;
+
+
                        enemyCnt = 0;
                    }
 
@@ -388,6 +395,16 @@ void gameEngine::Update() {
                // }
 
                 for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
+
+
+                    if ( e->second->isFollow) {
+                        //Vector* playerVector = new Vector (currentPlayer->pos->x,currentPlayer->pos->y,currentPlayer->pos->z);
+
+                       Vector moveEnemy = ((*currentPlayer->pos) - (*e->second->pos));
+
+                        (*e->second->vel) =   ((moveEnemy.toUnit()) * (e->second->moveSpeed));
+
+                    }
 
                     e->second->Update();
 
@@ -493,6 +510,8 @@ void gameEngine::Cleanup(){
     SDL_DestroyWindow( gameWindow );
     this->gameWindow = NULL;
 
+
+    Mix_CloseAudio();
     // Tell SDL to shutdown and free any resources it was using. //
     IMG_Quit();
     SDL_Quit();

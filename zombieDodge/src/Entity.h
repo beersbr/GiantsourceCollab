@@ -33,7 +33,7 @@ private:
 
 /*
  Player* p = new Player();
- Monster* r = new Monster();
+ Monster* r = new Monster();                             d
  
  Entity* e = (Entity*)r;
  

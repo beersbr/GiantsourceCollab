@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
-
+#include <SDL2_mixer/SDL_mixer.h>
 
 class Enemy : public Entity{
 
@@ -30,6 +30,7 @@ public:
 	Size<int> size;
     SDL_Rect hitBox;
 	SDL_Texture* image;
+    Mix_Chunk *spawnFX = NULL;
 
     float hitPoints;
     float exp;
