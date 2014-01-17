@@ -188,7 +188,7 @@ bool gameEngine::GameInit () {
 
     //Once a config is in place, grab all the user data from the config and create the new player that way,
     //Config playerConfig = getConfig(_playerTarget);
-   // if (currentPlayer == nullptr) {
+    if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
         currentPlayer->pos->x = 100;
@@ -200,7 +200,7 @@ bool gameEngine::GameInit () {
         enemies[0] = currentEnemy;
 
 
-    //}
+    }
 
     //Also set initial game state object
 
@@ -391,6 +391,13 @@ void gameEngine::Update() {
 
                     e->second->Update();
 
+                    if((CheckCollision(e->second->GetHitBox(), currentPlayer->GetHitBox() ) ))
+                    {
+                        printf("GAMEOVER");
+                        gameState = GAME_OVER;
+                    }
+
+
                 }
 
 
@@ -405,7 +412,7 @@ void gameEngine::Update() {
             break;
 
         case GAME_OVER:
-
+            LoadScreen();
             this->MenuInput();
             break;
 
@@ -503,22 +510,20 @@ void gameEngine::MenuInput() {
     }
 
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_SPACE)){
+        gameReady = false;
+        currentPlayer = nullptr;
+        enemies.clear();
         gameState = PLAYING;
         LoadScreen();
     }
 }
 
-
-
 void gameEngine::GameInput() {
 
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_ESCAPE)){
         gameState = GAME_OVER;
-        LoadScreen();
     }
-
-};
-
+}
 
 void gameEngine::SetGameState(int state) {
 

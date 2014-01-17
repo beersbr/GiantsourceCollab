@@ -22,8 +22,8 @@ public:
     void Draw(SDL_Renderer *renderer);
     void TakeDamage(int dmg);
     void Shoot(int dx, int dy);
-
-public:
+    SDL_Rect GetHitBox();
+    SDL_Rect hitBox;
 	Vector* vel;
 	Size<int> size;
 

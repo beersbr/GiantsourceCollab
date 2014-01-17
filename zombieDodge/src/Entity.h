@@ -20,6 +20,7 @@ public:
 public:
 	Vector* pos;
     Vector* vel;
+    SDL_Rect hitBox;
 
 private:
 	int _id;

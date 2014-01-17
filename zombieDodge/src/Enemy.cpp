@@ -6,8 +6,13 @@ Enemy::Enemy()
     printf( "CREATE ENEMY\n" );
     hitPoints = exp = 0;
     enemyId = "enemy1";
-    pos->x = 300;
-    pos->y = 300;
+    pos->x = 0;
+    pos->y = 0;
+
+    //Initialize the offsets
+    hitBox.x = 0;
+    hitBox.y = 0;
+
 
 }
 
@@ -20,12 +25,28 @@ Enemy::Enemy(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 
 }
 
+SDL_Rect Enemy::GetHitBox() {
+
+       hitBox.x = pos->x;
+       hitBox.y = pos->y;
+
+    return hitBox;
+}
 
 bool Enemy::Spawn()
 {
     bool spawned = true;
 
     image = gameEngine::getInstance()->LoadTexture("enemy.png");
+
+    int w, h;
+    //printf( "RENDER THE PLAYER TEXTURE!\n" );
+    SDL_QueryTexture(image, NULL, NULL, &w, &h);
+
+    //Set the square's dimentions
+    hitBox.w = w;
+    hitBox.h = h;
+
 
     std::cout << "SPAWN THE ENEMY  " <<   std::endl;
 

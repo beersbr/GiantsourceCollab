@@ -29,10 +29,16 @@ bool Player::Spawn()
 
 
     image = gEngine->LoadTexture("player.png");
-    //Draw the image
-    //gEngine->RenderTexture(image, gEngine->gameRender, 300, 400);
 
-        std::cout << "SPAWN THE PLAYER  " <<   std::endl;
+    int w, h;
+        //printf( "RENDER THE PLAYER TEXTURE!\n" );
+    SDL_QueryTexture(image, NULL, NULL, &w, &h);
+
+        //Set the square's dimentions
+    hitBox.w = w;
+    hitBox.h = h;
+
+    std::cout << "SPAWN THE PLAYER  " <<   std::endl;
 
     //SDL_DestroyTexture(tempSurface);
 
@@ -46,8 +52,13 @@ bool Player::Spawn()
         return spawned;
 
 }
+SDL_Rect Player::GetHitBox() {
 
+    hitBox.x = pos->x;
+    hitBox.y = pos->y;
 
+    return hitBox;
+}
 void Player::Update()
 {      std::cout << "UPDATE PLAYER  -> " << std::endl;
     float frameMoveSpeed = this->moveSpeed;

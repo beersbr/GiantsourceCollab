@@ -23,12 +23,12 @@ public:
     void Update(); // because it has to be there
     void Draw(SDL_Renderer *renderer);
     void TakeDamage(int dmg);
-
+    SDL_Rect GetHitBox();
 
 public:
 	Vector* vel;
 	Size<int> size;
-
+    SDL_Rect hitBox;
 	SDL_Texture* image;
 
     float hitPoints;
