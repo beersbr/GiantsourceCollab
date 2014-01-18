@@ -27,8 +27,8 @@ public:
 	Vector* vel;
 	Size<int> size;
 
-	SDL_Texture* image;
-
+	//SDL_Texture* image;
+    Sprite* image;
     float hitPoints;
     float exp;
     std::string playerId;

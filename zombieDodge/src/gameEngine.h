@@ -17,6 +17,7 @@
 #include "GameState.h"
 #include "Vector.h"
 #include "Entity.h"
+#include "Sprite.h"
 #include "Player.h"
 #include "Enemy.h"
 
@@ -89,6 +90,8 @@ public:
     SDL_Renderer* gameRender;
 
 
+    float CameraX;
+    float CameraY;
 
     SDL_Surface* LoadImage(const std::string path);
     static SDL_Texture* LoadTexture(const std::string &file, SDL_Renderer *ren);

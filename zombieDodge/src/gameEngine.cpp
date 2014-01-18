@@ -112,6 +112,15 @@ bool gameEngine::LoadScreen()
 
     //Loading success flag
     bool success = true;
+     /*
+    CameraX = 300;
+    CameraY = 250;
+
+    grass = new Sprite(gameRender,"swamp.jpg", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, &CameraX, &CameraY);
+    MouseX = 0;
+    MouseY = 0;
+       */
+
 
     switch(gameState)
 

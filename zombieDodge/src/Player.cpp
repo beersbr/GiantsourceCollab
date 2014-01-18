@@ -27,6 +27,11 @@ bool Player::Spawn()
     bool spawned = true;
     gameEngine* gEngine = gameEngine::getInstance();
 
+    image = new Sprite("player.png", 300,250, 100,120);
+        bob->SetUpAnimation(4,4);
+        bob->SetOrgin(bob->GetWidth()/2.0f, bob->GetHeight());
+
+
 
     image = gEngine->LoadTexture("player.png");
 

@@ -15,6 +15,7 @@
 		EA3B1B3D188741E9008DD3C9 /* swamp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EA3B1B3A188741E9008DD3C9 /* swamp.jpg */; };
 		EA3B1B3E188741E9008DD3C9 /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EA3B1B3B188741E9008DD3C9 /* welcome.jpg */; };
 		F5F5A076A898B435614DED30 /* Enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A59011CD6EA9291FA5DD /* Enemy.cpp */; };
+		F5F5A0A24BB0A6ECF76DBCDC /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AE9033696E6BD4364A06 /* Sprite.cpp */; };
 		F5F5A31BE89F758DF209C7E9 /* GameState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9DF5F125D394E080E5F /* GameState.cpp */; };
 		F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AF417D113E62A1EE738B /* Entity.cpp */; };
 		F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */; };
@@ -76,6 +77,8 @@
 		F5F5AAB51A8EE840022DE35A /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		F5F5ACAD1A2CA0576CDEFB01 /* gameEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameEngine.h; sourceTree = "<group>"; };
 		F5F5AE7FF7B33515326B1A99 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		F5F5AE9033696E6BD4364A06 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
+		F5F5AEBF42237537385C50E2 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		F5F5AF417D113E62A1EE738B /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1B0B621877369800A02E35 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -203,6 +206,8 @@
 				F5F5AF417D113E62A1EE738B /* Entity.cpp */,
 				4A46E8B26597721798A0E56C /* InputHandler.cpp */,
 				4A46EA7A55C520757267AF8A /* InputHandler.h */,
+				F5F5AE9033696E6BD4364A06 /* Sprite.cpp */,
+				F5F5AEBF42237537385C50E2 /* Sprite.h */,
 			);
 			name = src;
 			path = ../../src;
@@ -286,6 +291,7 @@
 				F5F5AE4E1CCAA577121D5F31 /* gameEngine.cpp in Sources */,
 				F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */,
 				4A46E0B89C98161E20EAB96B /* InputHandler.cpp in Sources */,
+				F5F5A0A24BB0A6ECF76DBCDC /* Sprite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
