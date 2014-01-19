@@ -6,13 +6,14 @@
 #ifndef __PLAYER_H_
 #define __PLAYER_H_
 #include "Entity.h"
+#include "Sprite.h"
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 
 class Player : public Entity{
 public:
 	Player();
-    Player(int _x, int _y, int _z, std::string _playerTarget, int _hp);
+    Player(float _x, float _y, float _z, std::string _playerTarget, int _hp);
 	~Player();
 
 
@@ -27,10 +28,11 @@ public:
 	Vector* vel;
 	Size<int> size;
 
-	//SDL_Texture* image;
-    Sprite* image;
+	SDL_Texture* image;
+    //Sprite sprite;
     float hitPoints;
     float exp;
+    bool spawned = false;
     std::string playerId;
     bool isSprinting;
     float nonSprintElapsedTime;

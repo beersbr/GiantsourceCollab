@@ -98,6 +98,29 @@ void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
     RenderTexture(tex, ren, x, y, w, h);
 }
 
+void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y,int w,int h){
+
+    RenderTexture(tex, gameRender, x, y, w, h);
+}
+
+
+void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y, int w, int h, SDL_Rect clip){
+    //Setup the destination rectangle to be at the position we want
+    SDL_Rect dst;
+    dst.x = x;
+    dst.y = y;
+    dst.w = w;
+    dst.h = h;
+
+    SDL_Rect clipper;
+    clipper.x = 0;
+    clipper.y = 0;
+    clipper.w = 34;
+    clipper.h = 94;
+
+    SDL_RenderCopy(gameRender, tex, &clipper, &dst);
+}
+
 void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y){
     int w, h;
     //printf( "RENDER THE PLAYER TEXTURE!\n" );
@@ -193,14 +216,18 @@ bool gameEngine::GameInit () {
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
-        currentPlayer->pos->x = 100;
-        currentPlayer->pos->y = 100;
-        gameInit = currentPlayer->Spawn();
+        //currentPlayer->pos->x = 100;
+        //currentPlayer->pos->y = 100;
+        while(!currentPlayer->Spawn()) {
 
+
+
+        }
+        /*
         currentEnemy = new Enemy();
         currentEnemy->Spawn();
         enemies[0] = currentEnemy;
-
+          */
 
     }
 
@@ -376,9 +403,13 @@ void gameEngine::Update() {
             this->GameInput();
             if (gameReady){
                 //Update the Player
-                currentPlayer->Update();
+                if (currentPlayer->spawned == true) {
+                 currentPlayer->Update();
+                }
                 std::cout << "------------------------------enemyCnt  " <<   enemyCnt << std::endl;
                 //if (static_cast<float>(rand() % static_cast<int>(gameTimer + 1))< gameTimer * 0.05) {
+
+                   /*
                    if (enemyCnt> 30) {
                        std::cout << "------------------------------SPAWN ANOTHER ENEMY  " <<   std::endl;
 
@@ -399,6 +430,7 @@ void gameEngine::Update() {
 
                        enemyCnt = 0;
                    }
+
 
                 enemyCnt++;
                // }
@@ -425,7 +457,7 @@ void gameEngine::Update() {
 
 
                 }
-
+                   */
 
                 //currentEnemy->Update();
             }
@@ -476,19 +508,20 @@ void gameEngine::Draw() {
 
         if (gameReady) {
             currentPlayer->Draw(gameRender);
-
+            /*
             for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
 
                 e->second->Draw(gameRender);
-                /*
+
                 if (e->second->pos->x > WINDOW_WIDTH) {
                     enemies.erase (e->first);
 
                 } else if (e->second->pos->y > WINDOW_HEIGHT) {
                     enemies.erase (e->first);
                 }
-                  */
+
             }
+            */
 
             //currentEnemy->Draw(gameRender);
             //Draw Enemies

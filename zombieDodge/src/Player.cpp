@@ -8,15 +8,21 @@ Player::Player()
     playerId = "player1";
     pos->x = 300;
     pos->y = 300;
+    pos->z = 0;
+    spawned =false;
 
 }
 
-Player::Player(int _x, int _y, int _z, std::string _playerTarget, int _hp)
+Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
 {
 
     hitPoints = _hp;
     int exp = 0;
     playerId = _playerTarget;
+    pos->x = _x;
+    pos->y = _y;
+    pos->z = _z;
+    spawned =false;
 
 }
 
@@ -24,24 +30,30 @@ Player::Player(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 bool Player::Spawn()
     {
 
-    bool spawned = true;
+    bool spriteCreated = false;
     gameEngine* gEngine = gameEngine::getInstance();
 
-    image = new Sprite("player.png", 300,250, 100,120);
-        bob->SetUpAnimation(4,4);
-        bob->SetOrgin(bob->GetWidth()/2.0f, bob->GetHeight());
+        /*
+    printf( "CREATE SPRITE\n" );
+    sprite = new Sprite("player1Sprite.png", pos->x, pos->y, 34,94);
+
+    printf( "SET ANIMATION of PLAYER\n" );
+    sprite->SetUpAnimation(2,1);
+    printf( "SET ORIGIN OF PLAYER\n" );
+    sprite->SetOrigin(34/2.0f, 94);
+
+     */
 
 
-
-    image = gEngine->LoadTexture("player.png");
+    image = gEngine->LoadTexture("player1Sprite.png");
 
     int w, h;
         //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    SDL_QueryTexture(image, NULL, NULL, &w, &h);
+    //SDL_QueryTexture(image, NULL, NULL, &w, &h);
 
         //Set the square's dimentions
-    hitBox.w = w;
-    hitBox.h = h;
+   // hitBox.w = w;
+    //hitBox.h = h;
 
     std::cout << "SPAWN THE PLAYER  " <<   std::endl;
 
@@ -52,9 +64,13 @@ bool Player::Spawn()
         //spawned = false;
         std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
 
+    }  else {
+
+        spawned = true;
+        spriteCreated = true;
     }
 
-        return spawned;
+        return spriteCreated;
 
 }
 SDL_Rect Player::GetHitBox() {
@@ -68,10 +84,7 @@ void Player::Update()
 {      std::cout << "UPDATE PLAYER  -> " << std::endl;
     float frameMoveSpeed = this->moveSpeed;
     Vector moveOffset = Vector();
-
-
-
-
+    //sprite->PlayAnimation(1,2,1,200);
     if(InputHandler::getInstance()->keyIsDown( SDL_SCANCODE_LSHIFT)) {
         if(! isSprinting){
 
@@ -134,6 +147,10 @@ void Player::Update()
    // std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
     (*this->pos) += moveOffset;
 
+    //sprite->SetPosition(pos->x, pos->y);
+
+
+
     std::cout << "---------DONE PLAYER  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
 
 
@@ -160,7 +177,10 @@ void Player::Shoot(int _x, int _y)
 
 void Player::Draw(SDL_Renderer *renderer)
 {
-    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
+    std::cout << "--------SPRITE DRAW=" << std::endl;
+    //sprite->Draw(renderer, pos->x, pos->y);
+    std::cout << "DONE DRAWING" << std::endl;
+    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,34,94);
 
 }
 
