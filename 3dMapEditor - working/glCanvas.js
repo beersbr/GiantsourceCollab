@@ -3,9 +3,16 @@
     
     this.gl = null;
 
+    this.canvasName = args.canvasName || null;
+    
     this.x = args.x || 0.0;
     this.y = args.y || 0.0;
     this.z = args.z || -5.0;
+    
+    this.maxX = args.maxX || 1;
+    this.maxY = args.maxY || 1;
+    this.maxZ = args.maxZ || 1;
+    
         
     this.xRot = args.xRot || 0;
     this.xSpeed = args.xSpeed || 0;
@@ -184,15 +191,27 @@
     
     
     
-    this.webGLStart = function(e) {
-        var canvas = document.getElementById(e);
+    this.init = function() {
+        var canvas = document.getElementById(this.canvasName);
         this.initGL(canvas);
         this.initShaders();
         
-        this.cubes.push(new glCube({"canvas":this}));
-        this.cubes[0].initBuffers();
-        this.cubes[0].initTextures();
+        // Create grid of cubes
+        for(var ix = 0; ix < this.maxX; ix++) {
+          
+          for(var iy = 0; iy < this.maxY; iy++) {
+            
+            for(var iz = 0; iz < this.maxZ; iz++) {
+              
+              this.cubes.push(new glCube({"canvas":this, "x":ix, "y":iy, "z":iz}));        
+              this.cubes[this.cubes.length - 1].initBuffers();
+              this.cubes[this.cubes.length - 1].initTextures();
     
+            }
+          }
+        }
+        
+        
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.enable(this.gl.DEPTH_TEST);
     
@@ -201,13 +220,19 @@
     
         this.tick();
     }
-  
+    
+    this.init();
   }
   
   
   function glCube(args) {
     
     var canvas = args.canvas || null;
+    
+    var x = args.x || 1;
+    var y = args.y || 1;
+    var z = args.z || 1;
+    
     this.cubeVertexPositionBuffer = null;
     this.cubeVertexTextureCoordBuffer = null;
     this.uCubeVertexIndexBuffer = null;
@@ -389,7 +414,7 @@
      
       var newImage = new Image(); 
       var faceName = "";
-      var texture = this.canvas.gl.createTexture();
+      var texture = canvas.gl.createTexture();
       texture.image = newImage;
       
      
@@ -423,7 +448,7 @@
       cubeTextures[faceName] = texture;
       
       newImage.onload = function () {
-        this.handleLoadedTexture(cubeTextures[faceName]);
+        canvas.handleLoadedTexture(cubeTextures[faceName]);
       }
       
       newImage.src = _fileName;

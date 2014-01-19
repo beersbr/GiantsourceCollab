@@ -14,9 +14,9 @@
     
   <body>
     
-    <div id="tileStatsWindow">
-      <canvas id="mapEditor" style="border: none;" width="500" height="500"></canvas>
-      <iframe src="cubeEditor.html" height="900" width="600"></iframe>
+    <div id="some-container">
+      <canvas id="mapEditor" style="border: none;" width="1000" height="1000"></canvas>
+      <iframe id="if_cubeEditor" src="cubeEditor.html" height="900" width="600"></iframe>
     </div> 
 
     
@@ -57,11 +57,19 @@
     
     <script>
       
-      var cubeEditCanvas;
+      var mapEditCanvas;
       
       window.onload = function() {
-        cubeEditCanvas = new glCanvas();
-        cubeEditCanvas.webGLStart("mapEditor");
+        
+        var glArgs = {};        
+        glArgs.canvasName = "mapEditor";
+        glArgs.z = -50.0;
+        glArgs.xRot = -45;
+        glArgs.yRot = -5;
+        glArgs.zRot = -15;
+        
+        mapEditCanvas = new glCanvas(glArgs);
+        
       }
       
     </script>

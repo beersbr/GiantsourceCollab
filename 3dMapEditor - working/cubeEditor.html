@@ -30,7 +30,7 @@
        </div>
        <section id="section-up" class="section-active">
          <label for="tile-up-hp">hp: </label><input class="input-small" type="text" id="tile-up-hp" />
-         <label for="tile-up-image">image: </label><select class="tile-image" id="tile-up-image" onchange="changeTexture('u',$(this).val())"></select>
+         <label for="tile-up-image">image: </label><select class="tile-image" id="tile-up-image" onchange="cubeEditCanvas.cubes[0].changeTexture('u',$(this).val())"></select>
          <label for="tile-up-damage">damage: </label><input type="text" id="tile-up-damage" />
          <label for="tile-up-type">type: </label><select class="tile-type" id="tile-up-type"></select>
          <label for="tile-up-onStep">onStep: </label><textarea id="tile-up-onStep"></textarea>
@@ -38,7 +38,7 @@
        </section>
        <section id="section-down">
          <label for="tile-down-hp">hp: </label><input class="input-small" type="text" id="tile-down-hp" />
-         <label for="tile-down-image">image: </label><select class="tile-image" id="tile-down-image" onchange="changeTexture('d',$(this).val())"></select>
+         <label for="tile-down-image">image: </label><select class="tile-image" id="tile-down-image" onchange="cubeEditCanvas.changeTexture('d',$(this).val())"></select>
          <label for="tile-down-damage">damage: </label><input type="text" id="tile-down-damage" />
          <label for="tile-down-type">type: </label><select class="tile-type" id="tile-down-type"></select>
          <label for="tile-down-onStep">onStep: </label><textarea id="tile-down-onStep"></textarea>
@@ -46,7 +46,7 @@
        </section>
        <section id="section-north">
          <label for="tile-north-hp">hp: </label><input class="input-small" type="text" id="tile-north-hp" />
-         <label for="tile-north-image">image: </label><select class="tile-image" id="tile-north-image" onchange="changeTexture('n',$(this).val())"></select>
+         <label for="tile-north-image">image: </label><select class="tile-image" id="tile-north-image" onchange="cubeEditCanvas.changeTexture('n',$(this).val())"></select>
          <label for="tile-north-damage">damage: </label><input type="text" id="tile-north-damage" />
          <label for="tile-north-type">type: </label><select class="tile-type" id="tile-north-type"></select>
          <label for="tile-north-onStep">onStep: </label><textarea id="tile-north-onStep"></textarea>
@@ -54,7 +54,7 @@
        </section>
        <section id="section-south">
          <label for="tile-south-hp">hp: </label><input class="input-small" type="text" id="tile-south-hp" />
-         <label for="tile-south-image">image: </label><select class="tile-image" id="tile-south-image" onchange="changeTexture('s',$(this).val())"></select>
+         <label for="tile-south-image">image: </label><select class="tile-image" id="tile-south-image" onchange="cubeEditCanvas.changeTexture('s',$(this).val())"></select>
          <label for="tile-south-damage">damage: </label><input type="text" id="tile-south-damage" />
          <label for="tile-south-type">type: </label><select class="tile-type" id="tile-south-type"></select>
          <label for="tile-south-onStep">onStep: </label><textarea id="tile-south-onStep"></textarea>
@@ -62,7 +62,7 @@
        </section>
        <section id="section-east">
          <label for="tile-east-hp">hp: </label><input class="input-small" type="text" id="tile-east-hp" />
-         <label for="tile-east-image">image: </label><select class="tile-image" id="tile-east-image" onchange="changeTexture('e',$(this).val())"></select>
+         <label for="tile-east-image">image: </label><select class="tile-image" id="tile-east-image" onchange="cubeEditCanvas.changeTexture('e',$(this).val())"></select>
          <label for="tile-east-damage">damage: </label><input type="text" id="tile-east-damage" />
          <label for="tile-east-type">type: </label><select class="tile-type" id="tile-east-type"></select>
          <label for="tile-east-onStep">onStep: </label><textarea id="tile-east-onStep"></textarea>
@@ -70,7 +70,7 @@
        </section>
        <section id="section-west">
          <label for="tile-west-hp">hp: </label><input class="input-small" type="text" id="tile-west-hp" />
-         <label for="tile-west-image">image: </label><select class="tile-image" id="tile-west-image" onchange="changeTexture('w',$(this).val())"></select>
+         <label for="tile-west-image">image: </label><select class="tile-image" id="tile-west-image" onchange="cubeEditCanvas.changeTexture('w',$(this).val())"></select>
          <label for="tile-west-damage">damage: </label><input type="text" id="tile-west-damage" />
          <label for="tile-west-type">type: </label><select class="tile-type" id="tile-west-type"></select>
          <label for="tile-west-onStep">onStep: </label><textarea id="tile-west-onStep"></textarea>
@@ -121,8 +121,14 @@
       var cubeEditCanvas;
       
       window.onload = function() {
-        cubeEditCanvas = new glCanvas();
-        cubeEditCanvas.webGLStart("cubeEditor");
+        
+        var glArgs = {};
+        glArgs.canvasName = "cubeEditor";
+        glArgs.xRot = -45;
+        glArgs.yRot = -5;
+        glArgs.zRot = -15;
+        
+        cubeEditCanvas = new glCanvas(glArgs);
       }
       
     </script>
