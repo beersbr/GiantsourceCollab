@@ -33,6 +33,11 @@ public:
 
     ~Game();
 
+public:
+    int windowHeight;
+    int windowWidth;
+    std::map<std::string, std::string>* config;
+
 private:
     Game();
     Game(Game&);

@@ -16,7 +16,10 @@ Game* Game::getInstance(){
 }
 
 int Game::setup(){
-    std::map<std::string, std::string>* config = Configurator::open("config/game.config");
+    config = Configurator::open("config/game.config");
+
+    windowWidth = atoi((*config)["window_width"].c_str());
+    windowHeight = atoi((*config)["window_height"].c_str());
 
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -31,15 +34,12 @@ int Game::setup(){
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    int width = atoi((*config)["window_width"].c_str());
-    int height = atoi((*config)["window_height"].c_str());
-
     window = SDL_CreateWindow(
             ((*config)["window_title"]).c_str(),             // window title
             SDL_WINDOWPOS_CENTERED,     // x position, centered
             SDL_WINDOWPOS_CENTERED,     // y position, centered
-            width,                        // width, in pixels
-            height,                        // height, in pixels
+            windowWidth,                        // width, in pixels
+            windowHeight,                        // height, in pixels
             SDL_WINDOW_OPENGL           // flags
     );
 
@@ -57,9 +57,6 @@ int Game::setup(){
         std::cout << "BROKEN!" << std::endl;
         throw 1;
     }
-
-    if(height == 1)
-        height = 1;
 
     printf("shader lang: %s\n",glGetString(GL_SHADING_LANGUAGE_VERSION));
 
@@ -82,7 +79,7 @@ int Game::run(){
 
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     GLuint OffsetID = glGetUniformLocation(programID, "offset");
-    glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
+    glm::mat4 Projection = glm::perspective(45.0f, (static_cast<float>(windowWidth)) / (static_cast<float>(windowHeight)), 0.1f, 1000.0f);
 
     glm::mat4 View = glm::lookAt(
             glm::vec3(0,0,10), // Camera is at (4,3,3), in World Space
