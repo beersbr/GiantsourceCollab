@@ -175,17 +175,17 @@
     
     
     this.tick = function() {
-        //tick = this.tick;
-        //requestAnimFrame(function(){tick();});
         handleKeys();
         this.drawScene();
         this.animate();
+        self = this;
+        requestAnimFrame(function(){self.tick();});
     }
     
     
     
-    this.webGLStart = function() {
-        var canvas = document.getElementById("cubeEditor");
+    this.webGLStart = function(e) {
+        var canvas = document.getElementById(e);
         this.initGL(canvas);
         this.initShaders();
         
