@@ -1,0 +1,456 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+<style>
+canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; }
+</style>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="keyboard.js"></script>
+    <script src="tools.js"></script>
+    <script src="list.js"></script>
+    <script src="vector.js"></script>
+    <script src="resources.js"></script>
+    <script src="sprite.js"></script>
+    <script src="entity.js"></script>
+    <script src="gameconfig.js"></script>
+<script>
+    
+    var configObj = {
+            "settings": {
+                "title": "Cube Editor",
+                "width": 800,
+                "height": 600,
+                "quadrant": {
+                    "w": 400,
+                    "h": 600
+                },
+                "resourcePath" : "resources"
+            },
+            "resources": {
+                "screens": {
+                    "welcome": {
+                        "name": "Welcome",
+                        "src": "welcome.jpg"
+                    },
+                    "gameover": {
+                        "name": "Game Over",
+                        "src": "gameover.jpg"
+                    }
+                }
+            }
+        }
+
+
+    function Cube(args){
+        if(args == undefined) args = {};
+        InheritFrom(this, Entity, args);
+        //console.log(args);
+        console.log(' NAME = ' +GAME.CurrentPlayer.name)
+        this.image = RESOURCES.get(GAME.CurrentPlayer.name);
+        //this.sprite = new Sprite({ image: this.image, frameTime: (1000/60 * 8), frameHeight: GAME.CurrentPlayer.sprite.h, frameWidth: GAME.CurrentPlayer.sprite.w});
+
+
+        this.update = function(){
+
+            var frameMoveSpeed = moveSpeed;
+
+            
+            // Update character movement
+
+            if (GAME.Keyboard.keyIsDown("a")) {
+                this.velocity.x -= frameMoveSpeed;
+            }
+            if (GAME.Keyboard.keyIsDown("d")) {
+                this.velocity.x += frameMoveSpeed;
+            }
+            if (GAME.Keyboard.keyIsDown("w")) {
+                this.velocity.y -= frameMoveSpeed;
+            }
+            if (GAME.Keyboard.keyIsDown("s")) {
+                this.velocity.y += frameMoveSpeed;
+            }
+
+            // only shoot in one direction at a time, so we use if else
+
+            // had to change to shoot function to update the elapsed time every frame
+
+            if (GAME.Keyboard.keyIsDown("left_arrow") || GAME.Keyboard.keyIsDown("j")) {
+                this.shoot(VECTOR.LEFT);
+            }
+            else if (GAME.Keyboard.keyIsDown("right_arrow") || GAME.Keyboard.keyIsDown("l")) {
+                this.shoot(VECTOR.RIGHT);
+            }
+            else if (GAME.Keyboard.keyIsDown("up_arrow") || GAME.Keyboard.keyIsDown("i")) {
+                this.shoot(VECTOR.UP);
+            }
+            else if (GAME.Keyboard.keyIsDown("down_arrow") || GAME.Keyboard.keyIsDown("k")) {
+                this.shoot(VECTOR.DOWN);
+            }
+            else {
+                this.shoot(null);
+            }
+        
+            this.velocity = VECTOR.multiplyScalar(this.velocity, (GAME.elapsedTime / 1000));
+            this.position = VECTOR.add(this.position, this.velocity);
+        }
+
+        this.shoot = function(direction) {
+            if(! isShooting && direction != null){
+                lastShotTime = +(new Date());
+                isShooting = true;
+                // spawn a bullet with the direction 
+                GAME.bullets.push(new Bullet({playerTarget:this.playerTarget,direction:direction, position: this.position}));
+                this.shotsFired++;
+
+                var shootAudio = RESOURCES.get(GAMECONFIG.players[this.playerTarget].fx.shoot.name);
+                shootAudio.load();
+                shootAudio.volume = 0.3;
+                shootAudio.play();
+            }
+            else {
+                lastShotElapsedTime += GAME.elapsedTime;
+                if(lastShotElapsedTime > shootInterval){
+                    isShooting = false;
+                    lastShotElapsedTime = 0.0;
+                }
+            }
+        }
+        
+        // Calculate percentage of run bar to show
+        this.runBar = function() {
+          
+          var runBar = {};
+          
+          // Run bar color
+          runBar.containerColor = "rgb(24, 24, 24)";
+          runBar.color = "rgb(24, 240, 204)";
+          
+          // Run bar coordinates
+          runBar.x = 25;
+          runBar.y = 30;
+          //runBar.w = 100;
+          runBar.h = 10;
+          
+          // If sprinting, decrease the bar
+          if(isSprinting){
+            runBarPercent = 100 - parseInt((sprintElapsedTime / sprintTime) * 100);
+          }
+          
+          // ElseIf not sprinting, but still within sprintTime
+          else if(nonSprintElapsedTime + sprintLength < sprintTime && lastSprintTime > 0){
+            runBarPercent = 100 - (parseInt(((nonSprintElapsedTime + sprintLength) / sprintTime) * 100));
+          }
+          
+          // Elseif not sprinting, 
+          else if(nonSprintElapsedTime > 0 && nonSprintElapsedTime < sprintInterval && lastSprintTime > 0){
+            runBarPercent = parseInt((nonSprintElapsedTime / sprintInterval) * 100);
+          }
+          
+          
+          runBar.w = runBarPercent
+          
+          // Display Run bar container
+          GAME.renderingContext.fillStyle = runBar.containerColor;
+          GAME.renderingContext.fillRect(runBar.x-1,runBar.y-1,102,runBar.h+2); 
+          
+          // Display Run bar
+          GAME.renderingContext.fillStyle = runBar.color;
+          GAME.renderingContext.fillRect(runBar.x,runBar.y,runBar.w,runBar.h); 
+          
+        }
+
+        this.draw = function (rc) {
+            var r = this.toRect();
+            rc.save();
+            var image = this.sprite.render();
+            rc.drawImage(image, r.x, r.y, r.w, r.h);
+            //rc.fillStyle = "rgb(255, 0, 255)";
+            //rc.fillRect(r.x, r.y, r.w, r.h);
+            rc.restore();
+        }
+    }// end of Cube
+
+    GAME = (function () {
+
+
+
+        var startTime = 0.0;
+
+        var game = {};
+       
+
+        Object.defineProperty(game, "renderingContext", {
+            set: function (e) {
+
+                var temp = _renderingContext;
+                _renderingContext = e.getContext("2d");
+                _renderingContext.canvas = temp;
+                game.rc = _renderingContext;
+            },
+            get: function () {
+                return _renderingContext;
+            }
+        });
+
+        game.states = {};
+        game.selectedPlayer = 'player1';
+        game.currentLevel = 1;
+        game.states.PLAYING = 1;
+        game.states.GAMEOVER = 2;
+        game.states.LOADING = 3;
+        game.quadrants = [];
+        game.enemyCnt = 0;
+        game.state = game.states.LOADING;
+
+        game.loadConfig = function () {
+
+            /*
+            game.Config = eval(configObj);
+            game.Settings = game.Config.settings;
+            GAMECONFIG.enemies = game.Config.enemies;
+            game.PlayerTypes = game.Config.players;
+            GAMECONFIG.fx = game.Config.resources.gameFx;
+            GAMECONFIG.images = game.Config.resources.gameImages;
+            game.Levels = game.Config.resources.levels;
+            GAMECONFIG.screens = game.Config.resources.screens;
+            //delete game.Config;
+            //configObj = {};
+            */
+        
+        }
+
+        game.init = function() {
+            
+//            setupQuadrants();
+            game.CurrentPlayer = GAMECONFIG.players[game.selectedPlayer];
+            game.player = new Player({hitW:game.CurrentPlayer.sprite.hitbox.w,hitH:game.CurrentPlayer.sprite.hitbox.h,x: game.CurrentPlayer.spawn.x, y: game.CurrentPlayer.spawn.y, w: game.CurrentPlayer.sprite.w, h: game.CurrentPlayer.sprite.h,playerTarget:game.selectedPlayer});
+            game.time = +(new Date());
+            game.totalTime = 0;
+            game.score = 0;
+            game.state = game.states.PLAYING;
+            game.enemies = new List();
+            game.bullets = new List();
+            game.enemyCnt = 0;
+            game.states.gameoverPlayed  = false;
+        }
+        
+        //game.loadConfig();
+
+        game.width= 0;
+        game.height = 0;
+
+        var _renderingContext = null;
+        game.Keyboard = new KeyboardHandler();
+     
+        //game.selectedPlayer = 0;
+        game.loadedResources = 0;
+        game.totalResources = 6;
+
+        game.resourcesLoaded = function(){ return game.loadedResources == game.totalResources; }
+
+        game.run = function () {
+            game.previousTime = game.time;
+            game.time = +(new Date());
+            game.elapsedTime = game.time - game.previousTime;
+            game.totalTime += game.elapsedTime;
+
+
+            switch(game.state)
+            {
+                case game.states.LOADING:
+                 
+                    var loadingText = "LOADING";
+                    var loadingLen = _renderingContext.measureText(loadingText);
+                    _renderingContext.save();
+                    _renderingContext.fillStyle = "rgb(255, 255, 255)";
+                    _renderingContext.fillText(loadingText, game.width/2 - loadingLen.width/2, 290);
+                    _renderingContext.restore();
+                
+                    if (RESOURCES.isLoaded()) {
+                        
+                         var screenImage = RESOURCES.get(GAMECONFIG.screens['welcome'].name);
+                        _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
+                        
+                         if(GAME.Keyboard.keyPressed("enter")){
+                            game.state = game.states.PLAYING; 
+                            game.init();
+             
+                        }
+                        
+                        
+                       // game.init();
+                    }
+
+                    break;
+
+                case game.states.PLAYING:
+                    var levelImage = RESOURCES.get(GAMECONFIG.levels[GAME.currentLevel].name);
+                    _renderingContext.drawImage(levelImage, 0, 0, 800, 600);
+
+                    game.update();
+                    game.draw();
+
+                    if(GAME.Keyboard.keyPressed("escape")){
+                        game.state = game.states.GAMEOVER; 
+                    }
+                    break;
+                case game.states.GAMEOVER:
+
+                     var screenImage = RESOURCES.get(GAMECONFIG.screens['gameover'].name);
+                      _renderingContext.drawImage(screenImage, 0, 0, 800, 600);
+
+                      var scoreText = "SCORE: " + game.score;
+
+                      if (!game.states.gameoverPlayed) {
+                          game.states.gameoverPlayed = true;
+                          game.overAudio = RESOURCES.get(GAMECONFIG.fx['gameover'].name);
+                          game.overAudio.volume = 0.2;
+                
+                          game.overAudio.play();
+                      }
+
+                     _renderingContext.font = '40pt Calibri';
+                     _renderingContext.fillStyle = 'red';
+                     _renderingContext.fillText(scoreText, 368, 229);
+
+                    _renderingContext.font = '20pt Calibri';
+                    _renderingContext.fillStyle = 'white';
+                    _renderingContext.fillText('Zombies Killed: ' +game.player.zombiesKilled, 368, 270);
+                    _renderingContext.fillText('Shots Fired: ' +game.player.shotsFired, 368, 300);
+                    _renderingContext.fillText('Accuracy: ' +Math.floor((game.player.zombiesKilled/game.player.shotsFired)*100)+"%", 368, 330);
+                    _renderingContext.fillText('Loser, hit [enter] to try again', 250, 500);
+                        
+                         if(GAME.Keyboard.keyPressed("enter")){
+                            game.state = game.states.PLAYING;
+                            
+                            game.init();
+             
+                        }
+
+                    break;
+            }
+
+            game.Keyboard.cleaner();
+            requestAnimFrame(game.run);
+        }
+
+        game.update = function () {
+            game.score = game.totalTime +(game.player.zombiesKilled*1000);
+           
+             var scoreText = "SCORE: " + game.score + "   ZOMBIES KILLED: " +game.player.zombiesKilled;
+            var scoreLen = _renderingContext.measureText(scoreText);
+            _renderingContext.font = '14pt Calibri';
+            _renderingContext.fillStyle = "rgb(255, 255, 255)";
+            _renderingContext.fillText(scoreText, 25, 20);
+            
+            game.player.update();
+
+            if (RandomInt(game.totalTime) < game.totalTime * 0.05) {
+                game.enemyCnt++;
+
+                if (game.enemyCnt == 40) {
+                    enemyType = 'enemy2'
+                    game.enemyCnt = 0;
+                } else {
+                    enemyType = 'enemy1'
+                }
+
+                game.enemies.push(new Enemy({name:enemyType,hitW:GAMECONFIG.enemies[enemyType].sprite.hitbox.w,hitH:GAMECONFIG.enemies[enemyType].sprite.hitbox.h,w:GAMECONFIG.enemies[enemyType].sprite.w,h:GAMECONFIG.enemies[enemyType].sprite.h}));
+            }
+
+            var bulletsIter = game.bullets.getIterator();
+
+            while(bulletsIter.next()){
+                var enemiesIter = game.enemies.getIterator();
+                var bullet = bulletsIter.value;
+
+                // bullet is off the screen...
+                if(!bullet.update()){
+                    bulletsIter.remove();
+                }
+
+                while(enemiesIter.next()){
+                    var enemy = enemiesIter.value;
+
+                    if(collideRect(bullet.toRect(), enemy.hitBox())){
+                        game.player.zombiesKilled++;
+                        enemiesIter.remove();
+                        bulletsIter.remove();
+                    }
+                }
+            }
+
+            var enemiesIter = game.enemies.getIterator();
+            while(enemiesIter.next()){
+                var enemy = enemiesIter.value;
+                if(collideRect(game.player.hitBox(_renderingContext), enemy.hitBox(_renderingContext))){
+                       game.state = game.states.GAMEOVER; 
+                    }
+
+                if(!enemiesIter.value.update())
+                    enemiesIter.remove();
+            }
+        }
+
+
+        game.draw = function () {
+            game.player.draw(_renderingContext);
+
+
+
+            var enemiesIter = game.enemies.getIterator();
+
+            while(enemiesIter.next()){
+
+                var enemy = enemiesIter.value;
+                enemy.draw(_renderingContext);
+            }
+
+            var bulletsIter = game.bullets.getIterator();
+
+            while(bulletsIter.next()){
+                var bullet = bulletsIter.value;
+                bullet.draw(_renderingContext);
+            }
+        }
+ 
+        return game;
+
+    })();
+
+   
+
+    window.onload = function () {
+        
+        GAMECONFIG.init(configObj);
+
+        //GAMECONFIG(configObj);
+        //console.log(CONFIG.settings);
+        GAME.width = GAMECONFIG.settings.width;
+        GAME.height = GAMECONFIG.settings.width;
+        GAME.renderingContext = document.getElementById("canvas");
+        
+        GAMECONFIG.loadLevelResources(1);
+
+        GAME.run();
+
+    }
+</script>
+</head>
+
+<body>
+<canvas id="canvas" width="800px" height="600px"></canvas>
+    <img id="debug" />
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

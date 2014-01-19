@@ -1,0 +1,222 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Tactex Map Editor</title>
+    <link href="mapEditor.css" rel="stylesheet" />
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">  
+    <style>
+      /* canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; } */
+    </style>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+    <script type="text/javascript" src="webgl-utils.js"></script>
+
+    
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+    
+        varying vec2 vTextureCoord;
+    
+        uniform sampler2D uSampler;
+    
+        void main(void) {
+            gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        }
+    </script>
+    
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec2 aTextureCoord;
+    
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+    
+        varying vec2 vTextureCoord;
+    
+    
+        void main(void) {
+            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+            vTextureCoord = aTextureCoord;
+        }
+    </script>
+    
+    
+    <script type="text/javascript" src="glCommands.js"></script>
+    
+    
+  </head>
+    
+    
+  <body onload="webGLStart();">
+    
+   <div id="tileStatsWindow">
+      <canvas id="cubeEditor" style="border: none;" width="500" height="500"></canvas>
+      <h3>Positioning</h3>
+      <label class='label-small' for="tile-x">x: </label><input class="input-small" type="text" id="tile-x" disabled="disabled"/ value="0">
+      <label class='label-small' for="tile-y">y: </label><input class="input-small" type="text" id="tile-y" disabled="disabled"  value="0"/>
+      <label class='label-small' for="tile-z">z: </label><input class="input-small" type="text" id="tile-z" value="0"/>
+      <div id="section-tabs">
+        <span id="tab-up" data-face="up" class="span-active">Up Face</span>
+        <span id="tab-down" data-face="down">Down Face</span>
+        <span id="tab-north" data-face="north">North Face</span>
+        <span id="tab-south" data-face="south">South Face</span>
+        <span id="tab-east" data-face="east">East Face</span>
+        <span id="tab-west" data-face="west">West Face</span>
+      </div>
+      <section class="section-active" id="section-up">
+        <label for="tile-up-hp">hp: </label><input class="input-small" type="text" id="tile-up-hp" />
+        <label for="tile-up-image">image: </label><select class="tile-image" id="tile-up-image" onchange="changeTexture('u',$(this).val())"></select>
+        <label for="tile-up-damage">damage: </label><input type="text" id="tile-up-damage" />
+        <label for="tile-up-type">type: </label><select class="tile-type" id="tile-up-type"></select>
+        <label for="tile-up-onStep">onStep: </label><textarea id="tile-up-onStep"></textarea>
+        <label for="tile-up-onDeath">onDeath: </label><textarea id="tile-up-onDeath"></textarea>
+      </section>
+      <section id="section-down">
+        <label for="tile-down-hp">hp: </label><input class="input-small" type="text" id="tile-down-hp" />
+        <label for="tile-down-image">image: </label><select class="tile-image" id="tile-down-image" onchange="changeTexture('d',$(this).val())"></select>
+        <label for="tile-down-damage">damage: </label><input type="text" id="tile-down-damage" />
+        <label for="tile-down-type">type: </label><select class="tile-type" id="tile-down-type"></select>
+        <label for="tile-down-onStep">onStep: </label><textarea id="tile-down-onStep"></textarea>
+        <label for="tile-down-onDeath">onDeath: </label><textarea id="tile-down-onDeath"></textarea>
+      </section>
+      <section id="section-north">
+        <label for="tile-north-hp">hp: </label><input class="input-small" type="text" id="tile-north-hp" />
+        <label for="tile-north-image">image: </label><select class="tile-image" id="tile-north-image" onchange="changeTexture('n',$(this).val())"></select>
+        <label for="tile-north-damage">damage: </label><input type="text" id="tile-north-damage" />
+        <label for="tile-north-type">type: </label><select class="tile-type" id="tile-north-type"></select>
+        <label for="tile-north-onStep">onStep: </label><textarea id="tile-north-onStep"></textarea>
+        <label for="tile-north-onDeath">onDeath: </label><textarea id="tile-north-onDeath"></textarea>
+      </section>
+      <section id="section-south">
+        <label for="tile-south-hp">hp: </label><input class="input-small" type="text" id="tile-south-hp" />
+        <label for="tile-south-image">image: </label><select class="tile-image" id="tile-south-image" onchange="changeTexture('s',$(this).val())"></select>
+        <label for="tile-south-damage">damage: </label><input type="text" id="tile-south-damage" />
+        <label for="tile-south-type">type: </label><select class="tile-type" id="tile-south-type"></select>
+        <label for="tile-south-onStep">onStep: </label><textarea id="tile-south-onStep"></textarea>
+        <label for="tile-south-onDeath">onDeath: </label><textarea id="tile-south-onDeath"></textarea>
+      </section>
+      <section id="section-east">
+        <label for="tile-east-hp">hp: </label><input class="input-small" type="text" id="tile-east-hp" />
+        <label for="tile-east-image">image: </label><select class="tile-image" id="tile-east-image" onchange="changeTexture('e',$(this).val())"></select>
+        <label for="tile-east-damage">damage: </label><input type="text" id="tile-east-damage" />
+        <label for="tile-east-type">type: </label><select class="tile-type" id="tile-east-type"></select>
+        <label for="tile-east-onStep">onStep: </label><textarea id="tile-east-onStep"></textarea>
+        <label for="tile-east-onDeath">onDeath: </label><textarea id="tile-east-onDeath"></textarea>
+        </section>
+      <section id="section-west">
+        <label for="tile-west-hp">hp: </label><input class="input-small" type="text" id="tile-west-hp" />
+        <label for="tile-west-image">image: </label><select class="tile-image" id="tile-west-image" onchange="changeTexture('w',$(this).val())"></select>
+        <label for="tile-west-damage">damage: </label><input type="text" id="tile-west-damage" />
+        <label for="tile-west-type">type: </label><select class="tile-type" id="tile-west-type"></select>
+        <label for="tile-west-onStep">onStep: </label><textarea id="tile-west-onStep"></textarea>
+        <label for="tile-west-onDeath">onDeath: </label><textarea id="tile-west-onDeath"></textarea>
+      </section>
+      <input id="saveTile" type="button" value="save" onclick="saveTile()" />
+
+    </div> 
+    
+    <h2>Controls:</h2>
+
+    <ul>
+        <li><code>Page Up</code>/<code>Page Down</code> to zoom out/in</li>
+        <li>Cursor keys: Rotate cube</li>
+        <li><code>F</code> to toggle through three different kinds of texture filters</li>
+    </ul>
+    <script>
+      var faces = ["up","down","north","south","east","west"];
+      var facePositions = {
+        "up" : {"x": 0, "y": 0},
+        "down" : {"x": 0, "y": 180},
+        "north" : {"x": 90, "y": 0},
+        "south" : {"x": 270, "y": 0},
+        "east" : {"x": 360, "y": 270},
+        "west" : {"x": 360, "y": 90}
+      };
+      var imageList = ["tile-dirt-1","tile-grass-1","tile-water-1","tile-wood-1"];
+      var faceObject = {x:0,y:0,z:0,faces:{up:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},down:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},north:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},south:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},east:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},west:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""}}};
+      var tileTypes = {};
+          tileTypes.grass = 1;
+          tileTypes.wood = 2;
+          tileTypes.stone = 3;
+          tileTypes.glass = 4;
+          tileTypes.fire = 5;
+          tileTypes.dirt = 6;
+          tileTypes.water = 7;
+      
+      mapGrid = [[]];
+      
+      mapGrid[0].push(faceObject);
+      
+      function loadTileImages() {
+        // Store the html in a string
+        var h = "";
+        
+        // Start with an option for a new image
+        h += "<option value='0'>Add...</option>";
+        
+        for(var i in imageList) {
+           h += "<option value='"+imageList[i]+".jpg'>"+imageList[i]+".jpg</option>";
+        }
+        $(".tile-image").append(h);
+      }
+      
+      function loadTileTypes() {
+        // Store the html in a string
+        var h = "";
+        
+        for(var t in tileTypes) {
+           h += "<option value='"+tileTypes[t]+"'>"+t+"</option>";
+        }
+        $(".tile-type").append(h);
+      }
+
+      function saveTile() {
+        var row = $("#tile-x").val();
+        var col = $("#tile-y").val();
+        var tile = mapGrid[row][col];
+        
+        // Save tile values
+        tile.enabled = parseInt($("input[name=tile-enabled]:checked").val());
+        tile.z = $("#tile-z").val();
+        tile.hp = $("#tile-hp").val();
+        for(var i in faces) {
+          tile.faces[faces[i]].image = $("#tile-"+faces[i]+"-image").val();
+          tile.faces[faces[i]].damage = $("#tile-"+faces[i]+"-damage").val();
+          tile.faces[faces[i]].type = $("#tile-"+faces[i]+"-type").val();  
+          tile.faces[faces[i]].onStep = $("#tile-"+faces[i]+"-onStep").val();  
+          tile.faces[faces[i]].onDeath = $("#tile-"+faces[i]+"-onDeath").val();  
+        }
+        
+        console.log(tile);
+        
+        //toggleTile({"enabled":tile.enabled,"x":tile.x,"y":tile.y});
+        
+        // Update image
+        $("#mapGrid td#row"+tile.x+"-col"+tile.y+" div").attr("style","background-image:url("+tile.image+")");
+      }
+      
+      function activeFaceTab(face) {
+        // Clear all tabs
+        $("#tileStatsWindow #section-tabs span").removeClass("span-active");        
+        // Set this as active
+        $("#tab-"+face).addClass("span-active");
+        
+        // Clear all sections
+        $("#tileStatsWindow section").removeClass("section-active");        
+        // Set this as active
+        $("#section-"+face).addClass("section-active");
+        
+        // Rotate to that face
+        x = facePositions[face].x;
+        y = facePositions[face].y;
+      }
+      
+      loadTileImages(); 
+      loadTileTypes(); 
+      
+      $("#tileStatsWindow #section-tabs span").click(function() { activeFaceTab($(this).data("face")) });
+      
+    </script>
+  </body>
+
+</html>
