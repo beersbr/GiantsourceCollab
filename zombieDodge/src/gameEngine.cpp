@@ -104,21 +104,38 @@ void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y,int w,int h){
 }
 
 
-void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y, int w, int h, SDL_Rect clip){
+void gameEngine::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h, SDL_Rect clip){
     //Setup the destination rectangle to be at the position we want
+    printf("RENDER TEXTURE------\n");
+
     SDL_Rect dst;
     dst.x = x;
     dst.y = y;
     dst.w = w;
     dst.h = h;
-
+    /*
     SDL_Rect clipper;
-    clipper.x = 0;
-    clipper.y = 0;
-    clipper.w = 34;
-    clipper.h = 94;
+    clipper.x = cropX;
+    clipper.y = cropY;
+    clipper.w = cropW;
+    clipper.h = cropH;
+      */
 
-    SDL_RenderCopy(gameRender, tex, &clipper, &dst);
+    SDL_Rect crop;
+
+    crop.x = clip.x;
+    crop.y = clip.y;
+    crop.w = clip.w;
+    crop.h= clip.h;
+    std::cout << "---------"<< std::endl;
+    std::cout << "CROP THE IMAGE" << std::endl;
+    std::cout << "---------"<< std::endl;
+    std::cout << "x  = " <<  crop.x << std::endl;
+    std::cout << "y  = " <<  crop.y << std::endl;
+    std::cout << "w  = " <<  crop.w << std::endl;
+    std::cout << "h  = " <<  crop.h << std::endl;
+
+    SDL_RenderCopy(gameRender, texture, &clip, &dst);
 }
 
 void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y){
@@ -216,18 +233,15 @@ bool gameEngine::GameInit () {
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
-        //currentPlayer->pos->x = 100;
+        //currentPlayer->clip.x = 41;
+        //currentPlayer->clip.x = 101;
         //currentPlayer->pos->y = 100;
-        while(!currentPlayer->Spawn()) {
+        currentPlayer->Spawn();
 
-
-
-        }
-        /*
         currentEnemy = new Enemy();
         currentEnemy->Spawn();
         enemies[0] = currentEnemy;
-          */
+
 
     }
 
@@ -409,7 +423,7 @@ void gameEngine::Update() {
                 std::cout << "------------------------------enemyCnt  " <<   enemyCnt << std::endl;
                 //if (static_cast<float>(rand() % static_cast<int>(gameTimer + 1))< gameTimer * 0.05) {
 
-                   /*
+
                    if (enemyCnt> 30) {
                        std::cout << "------------------------------SPAWN ANOTHER ENEMY  " <<   std::endl;
 
@@ -457,7 +471,7 @@ void gameEngine::Update() {
 
 
                 }
-                   */
+
 
                 //currentEnemy->Update();
             }
@@ -507,8 +521,9 @@ void gameEngine::Draw() {
     if ( this->gameState == PLAYING) {
 
         if (gameReady) {
+           // currentPlayer->sprite->Draw(gameRender,currentPlayer->pos->x, currentPlayer->pos->y);
             currentPlayer->Draw(gameRender);
-            /*
+
             for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
 
                 e->second->Draw(gameRender);
@@ -521,7 +536,7 @@ void gameEngine::Draw() {
                 }
 
             }
-            */
+
 
             //currentEnemy->Draw(gameRender);
             //Draw Enemies

@@ -13,11 +13,11 @@ Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w,
     posY = _y;
 
     //renderer = render;
-    this->image = NULL;
+    image = NULL;
     printf( "LOAD TEXTURE\n" );
-    this->image = IMG_LoadTexture(render,path.c_str());
+    image =  gameEngine::getInstance()->LoadTexture(path.c_str());
 
-    if ( this->image == NULL)
+    if ( image == NULL)
     {
         std::cout << "Couldn't Load " << path.c_str() << std::endl;
     }
@@ -25,19 +25,18 @@ Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w,
 
     printf( "QUERY TEXTURE\n" );
 
-
-    //rect.x = x;
-    //rect.y = y;
+     //SDL_Rect rect;
+    rect.x = static_cast<int>(_x);
+    rect.y = static_cast<int>(_y);
     rect.w = w;
     rect.h = h;
 
     SDL_QueryTexture(image,NULL,NULL, &imgWidth, &imgHeight);
-    imgHeight = imgHeight;
-    imgWidth = imgWidth;
+
     crop.x = 0;
     crop.y = 0;
-    crop.w = imgWidth;
-    crop.h = imgHeight;
+    crop.w = w;
+    crop.h = h;
     std::cout << "RENDER IMAGE CROP x" <<  crop.x << std::endl;
     std::cout << "RENDER IMAGE CROP y" <<  crop.y << std::endl;
     std::cout << "RENDER IMAGE CROP w" <<  crop.w << std::endl;
@@ -80,67 +79,76 @@ void Sprite::SetUpAnimation(int _frameX, int _frameY)
     frameY = _frameY;
 }
 
-void Sprite::PlayAnimation(int begin, int end, int row, float speed)
+void Sprite::PlayAnimation(int begin, int end, int row, float speed,SDL_Rect clip,int imgWidth, int imgHeight)
 {
 
-    //std::cout << "animationDelay" << animationDelay << std::endl;
-    //std::cout << "ticks" << SDL_GetTicks() << std::endl;
-    if (animationDelay+speed < SDL_GetTicks())
-    {
+    std::cout << "animationDelay" << animationDelay << std::endl;
+    std::cout << "ticks" << SDL_GetTicks() << std::endl;
+   // if (animationDelay+speed < SDL_GetTicks())
+    //{
 
         if (end <= this->currentFrame)
             this->currentFrame = begin;
         else
             this->currentFrame++;
-
+        /*
         std::cout << "CURRENT FRAME X -==" << this->frameX << std::endl;
-        std::cout << "CURRENT IMAGE WIDTH  -==" << this->imgWidth << std::endl;
-        std::cout << "PLAY ANIMATION WITH PRERENDER IMAGE CROP x" << this->crop.x << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP y" << this->crop.y << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP w" << this->crop.w << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP h" << this->crop.h << std::endl;
+        std::cout << "CURRENT IMAGE WIDTH  -==" << imgWidth << std::endl;
+        std::cout << "PLAY ANIMATION WITH PRERENDER IMAGE clip x" << clip.x << std::endl;
+        std::cout << "PLAY ANIMATION WITHRENDER IMAGE clip y" << clip.y << std::endl;
+        std::cout << "PLAY ANIMATION WITHRENDER IMAGE clip w" << clip.w << std::endl;
+        std::cout << "PLAY ANIMATION WITHRENDER IMAGE clip h" << clip.h << std::endl;
 
-        std::cout << "------------" << crop.h << std::endl;
-        std::cout << "------------" << crop.h << std::endl;
-        this->crop.x = this->currentFrame * (this->imgWidth/this->frameX);
-        this->crop.y = row * (this->imgHeight/this->frameY);
-        this->crop.w = this->imgWidth/this->frameX;
-        this->crop.h = this->imgHeight/this->frameY;
-        std::cout << "PLAY ANIMATION WITH RENDER IMAGE CROP x" << this->crop.x << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP y" << this->crop.y << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP x" << this->crop.w << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP y" << this->crop.h << std::endl;
+        std::cout << "------------"  << std::endl;
+        std::cout << "------------" << std::endl;
+        */
+        crop.x = currentFrame * (imgWidth/frameX);
+        crop.y = (row-1) * (imgHeight/frameY);
+        crop.w = imgWidth/frameX;
+        crop.h = imgHeight/frameY;
+        std::cout << "PLAY ANIMATION WITH RENDER IMAGE CROP x" << crop.x << std::endl;
+        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP y" << crop.y << std::endl;
+        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP w" << crop.w << std::endl;
+        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP h" << crop.h << std::endl;
 
-        animationDelay = SDL_GetTicks();
-    }
+        //animationDelay = SDL_GetTicks();
+    //}
 }
 
-void Sprite::DrawSteady()
+void Sprite::Draw(float _x, float _y)
 {
-    SDL_RenderCopy(renderer,image, &crop, &rect);
-}
 
-void Sprite::Draw(SDL_Renderer *renderer, float _x, float _y)
-{
-    SDL_Rect box;
     //Vector* posi = this->position;
+     /*
+    std::cout << "xPosi at draw sprite -> x=" << _x << std::endl;
+    SDL_Rect box;
+    box.x = static_cast<int>(_x);
+    box.y = static_cast<int>(_y);
+    box.w = crop.w;
+    box.h = crop.h;
+     */
 
-    std::cout << "xPosi -> x=" << _x << std::endl;
-    box.x = _x;
-    box.y = _y;
-    box.w = rect.w;
-    box.h = rect.h;
+    gameEngine::getInstance()->RenderTexture(image, _x, _y,crop.w,crop.h,crop);
+      /*
 
     //crop.x = 0;
     //crop.y = 0;
+    SDL_Rect clip;
+
+    clip.x = crop.x;
+    clip.y = crop.y;
+    clip.h = crop.h;
+    clip.w = crop.w;
 
     std::cout << "RENDER IMAGE TO SCREEN --- " << std::endl;
     std::cout << "RENDER IMAGE CROP x" << crop.x << std::endl;
     std::cout << "RENDER IMAGE CROP y" << crop.y << std::endl;
-    std::cout << "RENDER IMAGE CROP x" << crop.w << std::endl;
-    std::cout << "RENDER IMAGE CROP y" << crop.h << std::endl;
+    std::cout << "RENDER IMAGE CROP w" << crop.w << std::endl;
+    std::cout << "RENDER IMAGE CROP h" << crop.h << std::endl;
+    gameEngine::getInstance()->RenderTexture(image, _x, _y,crop.w,crop.h,clip);
 
-    SDL_RenderCopy(renderer,image, &crop, &box);
+    //SDL_RenderCopy(renderer,image, &clip, &box);
+    */
 }
 
 void Sprite::SetX(float _x)

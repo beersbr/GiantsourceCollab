@@ -29,7 +29,7 @@ public:
 	Size<int> size;
 
 	SDL_Texture* image;
-    //Sprite sprite;
+    Sprite* sprite;
     float hitPoints;
     float exp;
     bool spawned = false;
@@ -43,6 +43,23 @@ public:
     float sprintElapsedTime;
     float moveSpeed = 10.0;
     float sprintTime = 15.0;
+    int frameCount = 0;
+
+
+    /***** SPRITE STUFF */
+    float originX;
+    int animationDelay;
+    float originY;
+     int currentRow;
+    int imgWidth;
+    int imgHeight;
+    int currentFrame;
+    int frameEnd;
+    int frameBegin;
+    int frameX;
+    int frameY;
+    SDL_Rect clip;
+
 
 };
 

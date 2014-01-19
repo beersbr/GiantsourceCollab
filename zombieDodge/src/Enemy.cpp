@@ -12,6 +12,11 @@ Enemy::Enemy()
     //Initialize the offsets
     hitBox.x = 0;
     hitBox.y = 0;
+    clip.x = 0;
+    clip.y = 0;
+    clip.w = 70;
+    clip.h = 70;
+
 
 
 }
@@ -37,18 +42,38 @@ bool Enemy::Spawn()
 {
     bool spawned = true;
 
-    image = gameEngine::getInstance()->LoadTexture("enemy.png");
+    image = gameEngine::getInstance()->LoadTexture("zombieSprite.png");
     spawnFX = Mix_LoadWAV( "zombieRising.wav" );
-    int w, h;
+   // int w, h;
     //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    SDL_QueryTexture(image, NULL, NULL, &w, &h);
+    SDL_QueryTexture(image, NULL, NULL, &imgWidth, &imgHeight);
+
+
+
+   // SDL_QueryTexture(image,NULL,NULL, &imgWidth, &imgHeight);
+
+    clip.x = 0;
+    clip.y = 0;
+    clip.w = 70;
+    clip.h = 70;
+
+
+    originX = 0;
+    originY = 0;
+
+    currentFrame = 0;
+    animationDelay=0;
+    frameX = 4;
+    frameY = 1;
+    frameEnd =3;
+    frameBegin = 0;
+    currentRow = 1;
 
     //Set the square's dimentions
-    hitBox.w = w;
-    hitBox.h = h;
+    hitBox.w = imgWidth;
+    hitBox.h = imgHeight;
 
-
-    std::cout << "SPAWN THE ENEMY  " <<   std::endl;
+    std::cout << "SPAWN THE ENEMY  with image height is " << imgHeight<<  std::endl;
 
     if(image == NULL)  {
         std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
@@ -110,6 +135,28 @@ void Enemy::Update()
     std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
     (*this->pos) += updatePos;
 
+
+    std::cout << "------------ ENEMY animationDelay" <<animationDelay << std::endl;
+
+    if ( animationDelay==-1) {
+
+        animationDelay = 0;
+    }
+    if (animationDelay+200 < SDL_GetTicks())
+    {
+        if (frameEnd <= currentFrame)
+            currentFrame = frameBegin;
+        else
+            currentFrame++;
+
+        clip.x = currentFrame * (imgWidth/frameX);
+        clip.y = (currentRow-1) * (imgHeight/frameY);
+        clip.w = imgWidth/frameX;
+        clip.h = imgHeight/frameY;
+
+        animationDelay = SDL_GetTicks();
+    }
+
     std::cout << "DONE ENEMY  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
 
       /*
@@ -125,8 +172,8 @@ void Enemy::Update()
 
 void Enemy::Draw(SDL_Renderer *renderer)
 {
-
-    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
+    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,clip.w,clip.h,clip);
+   // gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
 
 }
 

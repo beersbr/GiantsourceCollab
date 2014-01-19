@@ -11,8 +11,8 @@ public:
     Sprite(std::string FilePath, float _x, float _y, int w, int h);
     ~Sprite();
 
-    void DrawSteady();
-    void Draw(SDL_Renderer *renderer,float _x, float _y);
+
+    void Draw(float _x, float _y);
 
     void SetX(float _x);
     void SetY(float _y);
@@ -27,11 +27,10 @@ public:
     int GetHeight();
 
     void SetOrigin(float _x, float _y);
-    void PlayAnimation(int begin, int end, int row, float speed);
+    void PlayAnimation(int begin, int end, int row, float speed, SDL_Rect clip,int imgWidth, int imgHeight);
     void SetUpAnimation(int frameX, int frameY);
-
-private:
-
+    SDL_Texture* image;
+    SDL_Rect crop;
     //Vector* position;
     //Vector* camera;
     float posX;
@@ -39,11 +38,11 @@ private:
     float originX;
     float originY;
 
-    SDL_Texture* image;
+
 
     SDL_Rect rect;
 
-    SDL_Rect crop;
+
 
     int imgWidth;
     int imgHeight;
@@ -54,6 +53,9 @@ private:
     int frameY;
 
     SDL_Renderer* renderer;
+private:
+
+
 };
 
 #endif

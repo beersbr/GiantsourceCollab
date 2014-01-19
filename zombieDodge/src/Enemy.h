@@ -37,6 +37,20 @@ public:
     std::string enemyId;
     bool isFollow = false;
     int moveSpeed = 10;
+
+    /***** SPRITE STUFF */
+    float originX;
+    int animationDelay;
+    float originY;
+    int currentRow;
+    int imgWidth;
+    int imgHeight;
+    int currentFrame;
+    int frameEnd;
+    int frameBegin;
+    int frameX;
+    int frameY;
+    SDL_Rect clip;
   
 
 };
