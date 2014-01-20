@@ -203,7 +203,9 @@
             
             for(var iz = 0; iz < this.maxZ; iz++) {
               
-              this.cubes.push(new glCube({"canvas":this, "x":ix, "y":iy, "z":iz}));        
+              var cArgs = {"canvas":this, "x":ix, "y":iy, "z":iz};
+        
+              this.cubes.push(new glCube(cArgs));        
               this.cubes[this.cubes.length - 1].initBuffers();
               this.cubes[this.cubes.length - 1].initTextures();
     
