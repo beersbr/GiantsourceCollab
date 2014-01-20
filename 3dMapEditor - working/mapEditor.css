@@ -1,32 +1,3 @@
-#mapOptions { float:left; padding:4px; }
-#mapOptions input { }
-
-#mapGrid { clear:both; float:left }
-#mapGrid table { border: 2px solid #000000; }
-#mapGrid table tr { }
-#mapGrid table tr td { border: 1px solid #000000; height: 50px; width: 50px; }
-#mapGrid table tr td.activeTile { background-color: #6666FF; border-color: #FF0000; }
-#mapGrid table tr td div { height: 100%; width: 100%; }
-#mapGrid .disabledTile { opacity:.5; }
-#mapGrid table tr.newRow td { text-align: center; }
-#mapGrid table tr.newRow td input { font-size: 24px; height:100%; width:100%; }
-#mapGrid table tr td.newCol { text-align: center; }
-#mapGrid table tr td.newCol input { font-size: 24px; height:100%; width:100%; }
-
-#tileStatsWindow { border: 2px solid #000000; float: right; padding: 10px; }
-#cubeEditor { float:left; }
-#tileStatsWindow #section-tabs { clear:both; padding:5px; }
-#tileStatsWindow #section-tabs span { border: 1px solid #000; cursor:pointer; font-size:16px; padding:2px; }
-#tileStatsWindow #section-tabs .span-active { border-bottom-width:4px; } 
-#tileStatsWindow section { border:1px solid #000; display:none; height:200px; padding:5px; }
-#tileStatsWindow .section-active { display:block; }
-#tileStatsWindow label { clear: both; float: left; width: 60px; } 
-#tileStatsWindow .label-small { clear: none; width: 25px; } 
-#tileStatsWindow input { float:left; } 
-#tileStatsWindow .input-small { margin-right:10px; width:30px } 
-#tileStatsWindow textarea { float:left; } 
-#tileStatsWindow select { float:left; } 
-#tileStatsWindow #saveTile { clear:both; } 
-
-#tileStatsWindow h3 { clear:both; padding-top:25px; }
-.dont-clear { clear:none !important; }
+body { margin:1px; }
+#mapEditor { height:1000px; width:1000px; }
+#if_cubeEditor { position:absolute; right:0; top:0; }

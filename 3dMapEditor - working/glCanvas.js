@@ -3,9 +3,16 @@
     
     this.gl = null;
 
+    this.canvasName = args.canvasName || null;
+    
     this.x = args.x || 0.0;
     this.y = args.y || 0.0;
     this.z = args.z || -5.0;
+    
+    this.maxX = args.maxX || 1;
+    this.maxY = args.maxY || 1;
+    this.maxZ = args.maxZ || 1;
+    
         
     this.xRot = args.xRot || 0;
     this.xSpeed = args.xSpeed || 0;
@@ -178,22 +185,33 @@
         handleKeys();
         this.drawScene();
         this.animate();
-        tick = this.tick;
-        var self = this;
-        requestAnimFrame(function(){tick();});
+        self = this;
+        requestAnimFrame(function(){self.tick();});
     }
     
     
     
-    this.webGLStart = function() {
-        var canvas = document.getElementById("cubeEditor");
+    this.init = function() {
+        var canvas = document.getElementById(this.canvasName);
         this.initGL(canvas);
         this.initShaders();
         
-        this.cubes.push(new glCube({"canvas":this}));
-        this.cubes[0].initBuffers();
-        this.cubes[0].initTextures();
+        // Create grid of cubes
+        for(var ix = 0; ix < this.maxX; ix++) {
+          
+          for(var iy = 0; iy < this.maxY; iy++) {
+            
+            for(var iz = 0; iz < this.maxZ; iz++) {
+              
+              this.cubes.push(new glCube({"canvas":this, "x":ix, "y":iy, "z":iz}));        
+              this.cubes[this.cubes.length - 1].initBuffers();
+              this.cubes[this.cubes.length - 1].initTextures();
     
+            }
+          }
+        }
+        
+        
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.enable(this.gl.DEPTH_TEST);
     
@@ -202,13 +220,19 @@
     
         this.tick();
     }
-  
+    
+    this.init();
   }
   
   
   function glCube(args) {
     
     var canvas = args.canvas || null;
+    
+    this.x = isFinite(args.x) ? args.x : 1.0;
+    this.y = isFinite(args.y) ? args.y : 1.0;
+    this.z = isFinite(args.z) ? args.z : 1.0;
+    
     this.cubeVertexPositionBuffer = null;
     this.cubeVertexTextureCoordBuffer = null;
     this.uCubeVertexIndexBuffer = null;
@@ -228,11 +252,7 @@
         wCubeTexture: null
     };
 
-    this.initBuffers = function() {
-        
-        this.cubeVertexPositionBuffer = canvas.gl.createBuffer();
-        canvas.gl.bindBuffer(canvas.gl.ARRAY_BUFFER, this.cubeVertexPositionBuffer);
-        var vertices = [
+    var cubeVertices = [
             // Up face
             -1.0, -1.0,  1.0,
              1.0, -1.0,  1.0,
@@ -269,6 +289,28 @@
             -1.0,  1.0,  1.0,
             -1.0,  1.0, -1.0
         ];
+
+    this.initBuffers = function() {
+        this.cubeVertexPositionBuffer = canvas.gl.createBuffer();
+        canvas.gl.bindBuffer(canvas.gl.ARRAY_BUFFER, this.cubeVertexPositionBuffer);
+        
+        var vertices = [];
+        var vScalar = 0;
+        // Apply the offset to the vertices
+        for(var i in cubeVertices) {
+          
+          // Apply the offset from x/y/z based on i mod 3
+          switch(i % 3) {
+            // x
+            case 1: scalar = this.x; break;
+            // y
+            case 2: scalar = this.y; break;
+            // z
+            case 0: scalar = this.z; break;
+          }
+          
+          vertices.push(cubeVertices[i] + scalar);
+        }
         canvas.gl.bufferData(canvas.gl.ARRAY_BUFFER, new Float32Array(vertices), canvas.gl.STATIC_DRAW);
         this.cubeVertexPositionBuffer.itemSize = 3;
         this.cubeVertexPositionBuffer.numItems = 24;
@@ -390,7 +432,7 @@
      
       var newImage = new Image(); 
       var faceName = "";
-      var texture = this.canvas.gl.createTexture();
+      var texture = canvas.gl.createTexture();
       texture.image = newImage;
       
      
@@ -424,7 +466,7 @@
       cubeTextures[faceName] = texture;
       
       newImage.onload = function () {
-        this.handleLoadedTexture(cubeTextures[faceName]);
+        canvas.handleLoadedTexture(cubeTextures[faceName]);
       }
       
       newImage.src = _fileName;

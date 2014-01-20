@@ -18,8 +18,10 @@
 #include "Vector.h"
 #include "Entity.h"
 #include "Sprite.h"
+#include "Bullet.h"
 #include "Player.h"
 #include "Enemy.h"
+
 
 
 enum GAMESTATES {
@@ -101,10 +103,13 @@ public:
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h);
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y);
     void RenderTexture(SDL_Texture *tex, int x, int y);
+    void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h);
+    void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h, SDL_Rect clip);
     bool LoadScreen();
     bool loadStateResources(int screenId);
     int totalEnemyCnt = 0;
     std::map<int, Enemy*> enemies;
+    std::map<int, Bullet*> bullets;
 
     void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 

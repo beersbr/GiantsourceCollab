@@ -22,6 +22,7 @@
 		F5F5AA9CF4FA6BB44CE61B42 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B9D187737C100A02E35 /* SDL2.framework */; };
 		F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */; };
 		F5F5AE4E1CCAA577121D5F31 /* gameEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A305BF2395F554285D0F /* gameEngine.cpp */; };
+		F5F5AEFB56DEE44C0B804E7E /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A31BF2CD6CD483527B54 /* Bullet.cpp */; };
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
 		FB1B0B98187736E600A02E35 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1B0B97187736E600A02E35 /* Main.cpp */; };
 		FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
@@ -68,9 +69,11 @@
 		EA3B1B3B188741E9008DD3C9 /* welcome.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = welcome.jpg; sourceTree = "<group>"; };
 		F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = welcome.jpg; sourceTree = "<group>"; };
 		F5F5A305BF2395F554285D0F /* gameEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gameEngine.cpp; sourceTree = "<group>"; };
+		F5F5A31BF2CD6CD483527B54 /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
 		F5F5A42FF46CF05D5EAB5A16 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		F5F5A5229579ECEFFED76C5B /* GameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameState.h; sourceTree = "<group>"; };
 		F5F5A59011CD6EA9291FA5DD /* Enemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy.cpp; sourceTree = "<group>"; };
+		F5F5A803058019CF4823324F /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bullet.h; sourceTree = "<group>"; };
 		F5F5A998052535AA9980691E /* Enemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy.h; sourceTree = "<group>"; };
 		F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		F5F5A9DF5F125D394E080E5F /* GameState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameState.cpp; sourceTree = "<group>"; };
@@ -208,6 +211,8 @@
 				4A46EA7A55C520757267AF8A /* InputHandler.h */,
 				F5F5AE9033696E6BD4364A06 /* Sprite.cpp */,
 				F5F5AEBF42237537385C50E2 /* Sprite.h */,
+				F5F5A803058019CF4823324F /* Bullet.h */,
+				F5F5A31BF2CD6CD483527B54 /* Bullet.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -292,6 +297,7 @@
 				F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */,
 				4A46E0B89C98161E20EAB96B /* InputHandler.cpp in Sources */,
 				F5F5A0A24BB0A6ECF76DBCDC /* Sprite.cpp in Sources */,
+				F5F5AEFB56DEE44C0B804E7E /* Bullet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

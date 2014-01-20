@@ -1,0 +1,140 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title></title>
+    <link href="cubeEditor.css" rel="stylesheet" />
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">  
+    <style>
+      /* canvas{ background-color:black; position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; } */
+    </style>
+    
+    
+  </head>
+    
+    
+  <body>
+    
+     <div id="tileStatsWindow">
+       <canvas id="cubeEditor" style="border: none;" width="500" height="500"></canvas>
+       <h3>Positioning</h3>
+       <label class='label-small' for="tile-x">x: </label><input class="input-small" type="text" id="tile-x" disabled="disabled"/ value="0">
+       <label class='label-small' for="tile-y">y: </label><input class="input-small" type="text" id="tile-y" disabled="disabled"  value="0"/>
+       <label class='label-small' for="tile-z">z: </label><input class="input-small" type="text" id="tile-z" value="0"/>
+       <div id="section-tabs">
+         <span id="tab-up" data-face="up" class="span-active">Up Face</span>
+         <span id="tab-down" data-face="down">Down Face</span>
+         <span id="tab-north" data-face="north">North Face</span>
+         <span id="tab-south" data-face="south">South Face</span>
+         <span id="tab-east" data-face="east">East Face</span>
+         <span id="tab-west" data-face="west">West Face</span>
+       </div>
+       <section id="section-up" class="section-active">
+         <label for="tile-up-hp">hp: </label><input class="input-small" type="text" id="tile-up-hp" />
+         <label for="tile-up-image">image: </label><select class="tile-image" id="tile-up-image" onchange="cubeEditCanvas.cubes[0].changeTexture('u',$(this).val())"></select>
+         <label for="tile-up-damage">damage: </label><input type="text" id="tile-up-damage" />
+         <label for="tile-up-type">type: </label><select class="tile-type" id="tile-up-type"></select>
+         <label for="tile-up-onStep">onStep: </label><textarea id="tile-up-onStep"></textarea>
+         <label for="tile-up-onDeath">onDeath: </label><textarea id="tile-up-onDeath"></textarea>
+       </section>
+       <section id="section-down">
+         <label for="tile-down-hp">hp: </label><input class="input-small" type="text" id="tile-down-hp" />
+         <label for="tile-down-image">image: </label><select class="tile-image" id="tile-down-image" onchange="cubeEditCanvas.changeTexture('d',$(this).val())"></select>
+         <label for="tile-down-damage">damage: </label><input type="text" id="tile-down-damage" />
+         <label for="tile-down-type">type: </label><select class="tile-type" id="tile-down-type"></select>
+         <label for="tile-down-onStep">onStep: </label><textarea id="tile-down-onStep"></textarea>
+         <label for="tile-down-onDeath">onDeath: </label><textarea id="tile-down-onDeath"></textarea>
+       </section>
+       <section id="section-north">
+         <label for="tile-north-hp">hp: </label><input class="input-small" type="text" id="tile-north-hp" />
+         <label for="tile-north-image">image: </label><select class="tile-image" id="tile-north-image" onchange="cubeEditCanvas.changeTexture('n',$(this).val())"></select>
+         <label for="tile-north-damage">damage: </label><input type="text" id="tile-north-damage" />
+         <label for="tile-north-type">type: </label><select class="tile-type" id="tile-north-type"></select>
+         <label for="tile-north-onStep">onStep: </label><textarea id="tile-north-onStep"></textarea>
+         <label for="tile-north-onDeath">onDeath: </label><textarea id="tile-north-onDeath"></textarea>
+       </section>
+       <section id="section-south">
+         <label for="tile-south-hp">hp: </label><input class="input-small" type="text" id="tile-south-hp" />
+         <label for="tile-south-image">image: </label><select class="tile-image" id="tile-south-image" onchange="cubeEditCanvas.changeTexture('s',$(this).val())"></select>
+         <label for="tile-south-damage">damage: </label><input type="text" id="tile-south-damage" />
+         <label for="tile-south-type">type: </label><select class="tile-type" id="tile-south-type"></select>
+         <label for="tile-south-onStep">onStep: </label><textarea id="tile-south-onStep"></textarea>
+         <label for="tile-south-onDeath">onDeath: </label><textarea id="tile-south-onDeath"></textarea>
+       </section>
+       <section id="section-east">
+         <label for="tile-east-hp">hp: </label><input class="input-small" type="text" id="tile-east-hp" />
+         <label for="tile-east-image">image: </label><select class="tile-image" id="tile-east-image" onchange="cubeEditCanvas.changeTexture('e',$(this).val())"></select>
+         <label for="tile-east-damage">damage: </label><input type="text" id="tile-east-damage" />
+         <label for="tile-east-type">type: </label><select class="tile-type" id="tile-east-type"></select>
+         <label for="tile-east-onStep">onStep: </label><textarea id="tile-east-onStep"></textarea>
+         <label for="tile-east-onDeath">onDeath: </label><textarea id="tile-east-onDeath"></textarea>
+       </section>
+       <section id="section-west">
+         <label for="tile-west-hp">hp: </label><input class="input-small" type="text" id="tile-west-hp" />
+         <label for="tile-west-image">image: </label><select class="tile-image" id="tile-west-image" onchange="cubeEditCanvas.changeTexture('w',$(this).val())"></select>
+         <label for="tile-west-damage">damage: </label><input type="text" id="tile-west-damage" />
+         <label for="tile-west-type">type: </label><select class="tile-type" id="tile-west-type"></select>
+         <label for="tile-west-onStep">onStep: </label><textarea id="tile-west-onStep"></textarea>
+         <label for="tile-west-onDeath">onDeath: </label><textarea id="tile-west-onDeath"></textarea>
+       </section>
+       <input id="saveTile" type="button" value="save" onclick="saveTile()" />
+  
+     </div> 
+
+    
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+    <script type="text/javascript" src="webgl-utils.js"></script>
+
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+    
+        varying vec2 vTextureCoord;
+    
+        uniform sampler2D uSampler;
+    
+        void main(void) {
+            gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        }
+    </script>
+    
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec2 aTextureCoord;
+    
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+    
+        varying vec2 vTextureCoord;
+    
+    
+        void main(void) {
+            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+            vTextureCoord = aTextureCoord;
+        }
+    </script>
+    
+    <script type="text/javascript" src="glCanvas.js"></script>
+    <script type="text/javascript" src="cubeEditor.js"></script>
+    
+    <script>
+      
+      var cubeEditCanvas;
+      
+      window.onload = function() {
+        
+        var glArgs = {};
+        glArgs.canvasName = "cubeEditor";
+        glArgs.x = 0.0;
+        glArgs.y = 0.0;
+        glArgs.z = 0.0;
+        glArgs.xRot = -45;
+        glArgs.yRot = -5;
+        glArgs.zRot = -15;
+        
+        cubeEditCanvas = new glCanvas(glArgs);
+      }
+      
+    </script>
+  </body>
+
+</html>
