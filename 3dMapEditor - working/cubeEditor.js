@@ -8,7 +8,7 @@ var facePositions = {
   "west" : {"x": 360, "y": 90}
 };
 var imageList = ["tile-dirt-1","tile-grass-1","tile-water-1","tile-wood-1"];
-var faceObject = {x:0,y:0,z:0,faces:{up:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},down:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},north:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},south:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},east:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""},west:{hp:0,image:"",damage:0,type:0,onStep:"",onDeath:""}}};
+
 var tileTypes = {};
     tileTypes.grass = 1;
     tileTypes.wood = 2;
@@ -20,7 +20,7 @@ var tileTypes = {};
 
 mapGrid = [[]];
 
-mapGrid[0].push(faceObject);
+mapGrid[0].push(cubeObject);
 
 function loadTileImages() {
   // Store the html in a string

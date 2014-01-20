@@ -21,11 +21,16 @@
     this.zRot = args.zRot || 0;
     this.zSpeed = args.zSpeed || 0;
 
+    this.eachCube = args.eachCube || null;
+
     this.shaderProgram = null;
+    
+    this.defaultTexture = args.defaultTexture || "";
     
     this.mvMatrix = mat4.create();
     this.pMatrix = mat4.create();
     this.mvMatrixStack = [];
+    
     
     this.cubes = [];
     
@@ -204,6 +209,10 @@
             for(var iz = 0; iz < this.maxZ; iz++) {
               
               var cArgs = {"canvas":this, "x":ix, "y":iy, "z":iz};
+              if(this.eachCube) {
+                console.log(this.eachCube);
+                cArgs.eachCube = this.eachCube(cArgs);
+              }
         
               this.cubes.push(new glCube(cArgs));        
               this.cubes[this.cubes.length - 1].initBuffers();
@@ -254,6 +263,7 @@
         wCubeTexture: null
     };
 
+    // ********** TURN THIS INTO VECTORS ***********
     var cubeVertices = [
             // Up face
             -1.0, -1.0,  1.0,
@@ -289,7 +299,7 @@
             -1.0, -1.0, -1.0,
             -1.0, -1.0,  1.0,
             -1.0,  1.0,  1.0,
-            -1.0,  1.0, -1.0
+            -1.0,  1.0, -1.0,
         ];
 
     this.initBuffers = function() {
@@ -354,7 +364,7 @@
             0.0, 0.0,
             1.0, 0.0,
             1.0, 1.0,
-            0.0, 1.0
+            0.0, 1.0,
         ];
         canvas.gl.bufferData(canvas.gl.ARRAY_BUFFER, new Float32Array(textureCoords), canvas.gl.STATIC_DRAW);
         this.cubeVertexTextureCoordBuffer.itemSize = 2;
@@ -427,7 +437,7 @@
       }
       
       // Set the image with the default transparent texture
-      newImage.src = "tile-transparent.png";
+      newImage.src = canvas.defaultTexture;
     };
 
     this.changeTexture = function(face,_fileName) {
