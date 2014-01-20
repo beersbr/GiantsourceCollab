@@ -8,8 +8,25 @@
 #ifndef __Camera_H_
 #define __Camera_H_
 
+#include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include "KeyboardHandler.h"
+#include "Entity.h"
 
-class Camera {
+class Camera : public Entity{
+public:
+    Camera();
+    Camera(const glm::vec3 position, const glm::vec3 lookatVector);
+    Camera(Camera &c);
+    virtual ~Camera();
+
+    virtual void draw() const;
+    virtual int update();
+
+    glm::mat4 getViewMatrix() const;
+
+public:
+    glm::vec3 dir;
 
 };
 

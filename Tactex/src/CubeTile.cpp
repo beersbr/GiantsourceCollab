@@ -62,3 +62,7 @@ const GLfloat CubeTile::cubeCoords[] = {
         -1.0f,  1.0f,  1.0f
 };
 
+const GLfloat CubeTile::cubeFaceNormals[] = {
+
+};
+

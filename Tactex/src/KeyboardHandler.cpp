@@ -33,6 +33,12 @@ void KeyboardHandler::update(SDL_Event& e)
     }
 }
 
+void KeyboardHandler::updateMouse()
+{
+    SDL_GetRelativeMouseState(&mousePos.x,&mousePos.y);
+}
+
+
 bool KeyboardHandler::keyDown(const SDL_Scancode key)
 {
     return keyStates[key];

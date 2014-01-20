@@ -14,6 +14,9 @@ public:
     Entity(Entity& entity);
     virtual ~Entity();
 
+    virtual void draw() const = 0;
+    virtual int update() = 0;
+
     glm::vec3 pos;
     glm::vec3 size;
 };

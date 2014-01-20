@@ -20,6 +20,7 @@
 #include "GLCommon.h"
 #include "KeyboardHandler.h"
 #include "Configurator.h"
+#include "Camera.h"
 
 
 class Game {

@@ -92,7 +92,6 @@ int Game::run(){
     glm::mat4 MVP = Projection * View * Model;
 
     static const GLfloat g_vertex_buffer_data[] = {
-
             // west
             -1.0f, -1.0f, -1.0f,
             -1.0f, -1.0f,  1.0f,
@@ -168,7 +167,9 @@ int Game::run(){
 
     SDL_SetRelativeMouseMode((SDL_bool)true);
 
-    SDL_GetRelativeMouseState(&mousePos.x,&mousePos.y);
+    Camera camera = Camera((glm::vec3(0, 0, 50)), (glm::vec3(0, 0, 0)));
+
+
     while(gameRunning)
     {
         SDL_Event event;
@@ -176,74 +177,17 @@ int Game::run(){
         {
             keyboard->update(event);
         }
-        SDL_GetRelativeMouseState(&mousePos.x,&mousePos.y);
+        keyboard->updateMouse();
+
+
 
         if(keyboard->keyDown(SDL_SCANCODE_Q))
             gameRunning = false;
 
-        if(mousePos.x != 0 and mousePos.y != 0)
-        {
-            if(mousePos.x != 0)
-            {
-                glm::vec3 base = cameraLookAt - cameraPos;
-                base = glm::rotateY(base, -1*(mousePos.x/10.0f));
-                cameraLookAt = cameraPos + base;
-            }
-            if(mousePos.y != 0)
-            {
-                glm::vec3 base = cameraLookAt - cameraPos;
-                glm::vec3 axis = glm::rotateY(base, 90.0f);
+        // ---------- UPDATE ------------
 
-                axis = glm::normalize(axis);
-                glm::vec3 offset = glm::rotate(base, (float)mousePos.y/10, axis);
-                glm::vec3 adder = offset - base;
-                cameraLookAt += adder;
-            }
-        }
-
-        if(keyboard->keyDown(SDL_SCANCODE_A))
-        {
-            glm::vec3 rot90 = (cameraLookAt - cameraPos);
-            rot90[1] = 0.0f;
-            rot90 = glm::rotateY(rot90, 90.0f);
-
-            rot90 = glm::normalize(rot90);
-            cameraLookAt += rot90;
-            cameraPos += rot90;
-        }
-        if(keyboard->keyDown(SDL_SCANCODE_D))
-        {
-            glm::vec3 rot90 = (cameraLookAt - cameraPos);
-            rot90[1] = 0.0f;
-            rot90 = glm::rotateY(rot90, 90.0f);
-
-            rot90 = glm::normalize(rot90);
-            cameraLookAt -= rot90;
-            cameraPos -= rot90;
-        }
-        if(keyboard->keyDown(SDL_SCANCODE_W))
-        {
-            glm::vec3 offset = cameraLookAt - cameraPos;
-            offset = glm::normalize(offset);
-
-            cameraLookAt += offset;
-            cameraPos += offset;
-        }
-        if(keyboard->keyDown(SDL_SCANCODE_S))
-        {
-            glm::vec3 offset = cameraLookAt - cameraPos;
-            offset = glm::normalize(offset);
-
-            cameraLookAt -= offset;
-            cameraPos -= offset;
-        }
-
-
-        glm::mat4 View = glm::lookAt(
-                cameraPos, // Camera is at (4,3,3), in World Space
-                cameraLookAt, // and looks at the origin
-                glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
-        );
+        camera.update();
+        glm::mat4 View = camera.getViewMatrix();
 
         // Model matrix : an identity matrix (model will be at the origin)
         glm::mat4 Model = glm::mat4(1.0f);

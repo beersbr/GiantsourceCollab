@@ -15,6 +15,7 @@ class CubeTile : public Entity{
 public:
 
     static const GLfloat cubeCoords[];
+    static const GLfloat cubeFaceNormals[];
 
     
 };

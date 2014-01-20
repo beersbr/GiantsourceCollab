@@ -14,8 +14,16 @@ public:
     static KeyboardHandler * getInstance();
 
     void update(SDL_Event& e);
+    void updateMouse();
 
     bool keyDown(const SDL_Scancode key);
+
+public:
+    struct{
+        int x, y;
+    } typedef MousePos;
+
+    MousePos mousePos;
 
 private:
     KeyboardHandler();
