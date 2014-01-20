@@ -385,14 +385,13 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(inherited)\"",
 					"/Users/Frameworks/**",
-					"\"$(HOME)/Frameworks\"",
 					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "ZombieDodge/ZombieDodge-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
-				OBJROOT = "$(P";
+				OBJROOT = "$(PROJECT_DIR)/build/debug";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = "$(PROJECT_DIR)/build/debug";
@@ -407,7 +406,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(HOME)/Frameworks",
 					"/Users/Frameworks/**",
 					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
 				);
@@ -415,7 +413,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "ZombieDodge/ZombieDodge-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
-				OBJROOT = "$(P";
+				OBJROOT = "$(PROJECT_DIR)/build/debug";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = "$(PROJECT_DIR)/build/release";
