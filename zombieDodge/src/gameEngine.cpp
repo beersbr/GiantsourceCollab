@@ -444,6 +444,87 @@ void gameEngine::Update() {
                 enemyCnt++;
                // }
 
+                //typedef std::map<int, Enemy*>::iterator eIter;
+                //typedef std::map<int, Bullet*>::iterator bIter;
+
+                for(std::map<int, Enemy*>::const_iterator e = enemies.begin(); e != enemies.end(); ++e)
+
+               // for( eIter e = enemies.begin(); e != enemies.end(); )
+                {
+
+                    if ( e->second->isFollow) {
+
+                        Vector moveEnemy = ((*currentPlayer->pos) - (*e->second->pos));
+
+                        (*e->second->vel) =   ((moveEnemy.toUnit()) * (e->second->moveSpeed));
+
+                    }
+
+                    e->second->Update();
+
+
+                    if((CheckCollision(e->second->GetHitBox(), currentPlayer->GetHitBox() ) ))
+                    {
+                        printf("GAMEOVER\n");
+                        std::cout << "PLAYER AND ENEMY COLLISION = " <<  e->first << std::endl;
+
+                        gameState = GAME_OVER;
+                    }
+
+
+                }
+
+
+                for(std::map<int, Bullet*>::const_iterator b = bullets.begin(); b != bullets.end();)
+                {
+
+                    for(std::map<int, Enemy*>::const_iterator e = enemies.begin(); e != enemies.end();) {
+
+                        if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox()) ))
+                        {
+
+                             printf("COLLISION");
+
+                            enemies.erase( e );
+                            ++e;
+                           // bullets.erase( b );
+                           // ++b;
+                            b->second->deleteBullet = true;
+                            e = enemies.end();
+
+                        }  else {
+                            //++b;
+                            ++e;
+                        }
+                    }
+
+                    if (b->second->deleteBullet) {
+                        bullets.erase( b );
+                        ++b;
+                    } else {
+                        ++b;
+
+                    }
+                    /*
+                    if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox()) ))
+                    {
+
+
+                            ++e;
+                            enemies.erase( e );
+
+
+                            ++b;
+                            bullets.erase( b );
+                    } else  {
+                        ++e;
+                        ++b;
+                    }
+                   */
+                }
+
+
+                /*
                 for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
 
 
@@ -490,6 +571,7 @@ void gameEngine::Update() {
 
                     }
                 }
+                */
 
                 //currentEnemy->Update();
             }

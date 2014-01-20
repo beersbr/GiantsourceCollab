@@ -35,6 +35,7 @@ public:
     float originX;
     int animationDelay;
     float originY;
+    bool deleteBullet = false;
     int currentRow;
     int imgWidth;
     int imgHeight;
