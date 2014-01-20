@@ -229,9 +229,9 @@
     
     var canvas = args.canvas || null;
     
-    var x = args.x || 1;
-    var y = args.y || 1;
-    var z = args.z || 1;
+    this.x = isFinite(args.x) ? args.x : 1.0;
+    this.y = isFinite(args.y) ? args.y : 1.0;
+    this.z = isFinite(args.z) ? args.z : 1.0;
     
     this.cubeVertexPositionBuffer = null;
     this.cubeVertexTextureCoordBuffer = null;
@@ -252,11 +252,7 @@
         wCubeTexture: null
     };
 
-    this.initBuffers = function() {
-        
-        this.cubeVertexPositionBuffer = canvas.gl.createBuffer();
-        canvas.gl.bindBuffer(canvas.gl.ARRAY_BUFFER, this.cubeVertexPositionBuffer);
-        var vertices = [
+    var cubeVertices = [
             // Up face
             -1.0, -1.0,  1.0,
              1.0, -1.0,  1.0,
@@ -293,6 +289,28 @@
             -1.0,  1.0,  1.0,
             -1.0,  1.0, -1.0,
         ];
+
+    this.initBuffers = function() {
+        this.cubeVertexPositionBuffer = canvas.gl.createBuffer();
+        canvas.gl.bindBuffer(canvas.gl.ARRAY_BUFFER, this.cubeVertexPositionBuffer);
+        
+        var vertices = [];
+        var vScalar = 0;
+        // Apply the offset to the vertices
+        for(var i in cubeVertices) {
+          
+          // Apply the offset from x/y/z based on i mod 3
+          switch(i % 3) {
+            // x
+            case 1: scalar = this.x; break;
+            // y
+            case 2: scalar = this.y; break;
+            // z
+            case 0: scalar = this.z; break;
+          }
+          
+          vertices.push(cubeVertices[i] + scalar);
+        }
         canvas.gl.bufferData(canvas.gl.ARRAY_BUFFER, new Float32Array(vertices), canvas.gl.STATIC_DRAW);
         this.cubeVertexPositionBuffer.itemSize = 3;
         this.cubeVertexPositionBuffer.numItems = 24;
