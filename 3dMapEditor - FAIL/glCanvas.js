@@ -175,11 +175,12 @@
     
     
     this.tick = function() {
-        //tick = this.tick;
-        //requestAnimFrame(function(){tick();});
         handleKeys();
         this.drawScene();
         this.animate();
+        tick = this.tick;
+        var self = this;
+        requestAnimFrame(function(){tick();});
     }
     
     
@@ -266,7 +267,7 @@
             -1.0, -1.0, -1.0,
             -1.0, -1.0,  1.0,
             -1.0,  1.0,  1.0,
-            -1.0,  1.0, -1.0,
+            -1.0,  1.0, -1.0
         ];
         canvas.gl.bufferData(canvas.gl.ARRAY_BUFFER, new Float32Array(vertices), canvas.gl.STATIC_DRAW);
         this.cubeVertexPositionBuffer.itemSize = 3;
@@ -309,7 +310,7 @@
             0.0, 0.0,
             1.0, 0.0,
             1.0, 1.0,
-            0.0, 1.0,
+            0.0, 1.0
         ];
         canvas.gl.bufferData(canvas.gl.ARRAY_BUFFER, new Float32Array(textureCoords), canvas.gl.STATIC_DRAW);
         this.cubeVertexTextureCoordBuffer.itemSize = 2;

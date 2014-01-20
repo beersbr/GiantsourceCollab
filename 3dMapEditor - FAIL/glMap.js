@@ -218,10 +218,10 @@
     
     
     this.tick = function() {
-        requestAnimFrame(tick);
         handleKeys();
         drawScene();
         animate();
+        requestAnimFrame(tick);
     }
     
     

@@ -3,8 +3,6 @@
 // Copyright (c) 2014 Brett Beers. All rights reserved.
 //
 
-
-
 #ifndef __Entity_H_
 #define __Entity_H_
 
