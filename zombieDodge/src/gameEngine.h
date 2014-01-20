@@ -18,8 +18,10 @@
 #include "Vector.h"
 #include "Entity.h"
 #include "Sprite.h"
+#include "Bullet.h"
 #include "Player.h"
 #include "Enemy.h"
+
 
 
 enum GAMESTATES {
@@ -107,6 +109,7 @@ public:
     bool loadStateResources(int screenId);
     int totalEnemyCnt = 0;
     std::map<int, Enemy*> enemies;
+    std::map<int, Bullet*> bullets;
 
     void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 

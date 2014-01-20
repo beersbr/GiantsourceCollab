@@ -70,10 +70,10 @@ bool Enemy::Spawn()
     currentRow = 1;
 
     //Set the square's dimentions
-    hitBox.w = imgWidth;
-    hitBox.h = imgHeight;
+    hitBox.w = clip.w;
+    hitBox.h =clip.h;
 
-    std::cout << "SPAWN THE ENEMY  with image height is " << imgHeight<<  std::endl;
+    //std::cout << "SPAWN THE ENEMY  with image height is " << imgHeight<<  std::endl;
 
     if(image == NULL)  {
         std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
@@ -82,7 +82,7 @@ bool Enemy::Spawn()
     //moveSpeed = 12.0;
     vel = new Vector();
     int start = rand() % 4 +1;
-    std::cout << "-------------------------START ENEMY POSISIOTN = " << start << std::endl;
+   // std::cout << "-------------------------START ENEMY POSISIOTN = " << start << std::endl;
     switch(start) {
 
         case 1:
@@ -126,17 +126,17 @@ bool Enemy::Spawn()
 void Enemy::Update()
 {
     //float frameMoveSpeed = moveSpeed;
-    printf( "UPDATE ENEMY--------------------\n" );
+   // printf( "UPDATE ENEMY--------------------\n" );
 
 
 
     Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
     // std::cout << "timer -> " << gEngine->getTimer() << std::endl;
-    std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
+   // std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
     (*this->pos) += updatePos;
 
 
-    std::cout << "------------ ENEMY animationDelay" <<animationDelay << std::endl;
+    //std::cout << "------------ ENEMY animationDelay" <<animationDelay << std::endl;
 
     if ( animationDelay==-1) {
 
@@ -157,7 +157,7 @@ void Enemy::Update()
         animationDelay = SDL_GetTicks();
     }
 
-    std::cout << "DONE ENEMY  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
+    //std::cout << "DONE ENEMY  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
 
       /*
     Vector moveOffset = Vector(vel->x,vel->y,vel->z);

@@ -106,7 +106,7 @@ void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y,int w,int h){
 
 void gameEngine::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h, SDL_Rect clip){
     //Setup the destination rectangle to be at the position we want
-    printf("RENDER TEXTURE------\n");
+   // printf("RENDER TEXTURE------\n");
 
     SDL_Rect dst;
     dst.x = x;
@@ -127,13 +127,13 @@ void gameEngine::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h,
     crop.y = clip.y;
     crop.w = clip.w;
     crop.h= clip.h;
-    std::cout << "---------"<< std::endl;
-    std::cout << "CROP THE IMAGE" << std::endl;
-    std::cout << "---------"<< std::endl;
-    std::cout << "x  = " <<  crop.x << std::endl;
-    std::cout << "y  = " <<  crop.y << std::endl;
-    std::cout << "w  = " <<  crop.w << std::endl;
-    std::cout << "h  = " <<  crop.h << std::endl;
+   // std::cout << "---------"<< std::endl;
+   // std::cout << "CROP THE IMAGE" << std::endl;
+    //std::cout << "---------"<< std::endl;
+    //std::cout << "x  = " <<  crop.x << std::endl;
+    //std::cout << "y  = " <<  crop.y << std::endl;
+   // std::cout << "w  = " <<  crop.w << std::endl;
+   // std::cout << "h  = " <<  crop.h << std::endl;
 
     SDL_RenderCopy(gameRender, texture, &clip, &dst);
 }
@@ -389,15 +389,10 @@ void gameEngine::Run() {
         }
 
     }
-
-
-
 }
 
 
 void gameEngine::Update() {
-
-
 
     switch(gameState) {
 
@@ -418,14 +413,16 @@ void gameEngine::Update() {
             if (gameReady){
                 //Update the Player
                 if (currentPlayer->spawned == true) {
-                 currentPlayer->Update();
+                    currentPlayer->Update();
                 }
-                std::cout << "------------------------------enemyCnt  " <<   enemyCnt << std::endl;
-                //if (static_cast<float>(rand() % static_cast<int>(gameTimer + 1))< gameTimer * 0.05) {
 
+                for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
+
+                    b->second->Update();
+
+                }
 
                    if (enemyCnt> 30) {
-                       std::cout << "------------------------------SPAWN ANOTHER ENEMY  " <<   std::endl;
 
                         totalEnemyCnt++;
                         std::string enemyType;
@@ -435,14 +432,12 @@ void gameEngine::Update() {
                         if (followEnemyCnt == 7) {
 
                            enemy->isFollow = true;
-                            //printf("FOLLOW THE PLAYER-----!!!!_!_!_!_!_!_!_!_!_!_!_!_!_!_");
-                            followEnemyCnt = 0;
+                           followEnemyCnt = 0;
                         }
+
                         followEnemyCnt++;
                         enemies[totalEnemyCnt] = enemy;
-
-
-                       enemyCnt = 0;
+                        enemyCnt = 0;
                    }
 
 
@@ -453,7 +448,6 @@ void gameEngine::Update() {
 
 
                     if ( e->second->isFollow) {
-                        //Vector* playerVector = new Vector (currentPlayer->pos->x,currentPlayer->pos->y,currentPlayer->pos->z);
 
                        Vector moveEnemy = ((*currentPlayer->pos) - (*e->second->pos));
 
@@ -465,13 +459,37 @@ void gameEngine::Update() {
 
                     if((CheckCollision(e->second->GetHitBox(), currentPlayer->GetHitBox() ) ))
                     {
-                        printf("GAMEOVER");
+                        printf("GAMEOVER\n");
+                        std::cout << "PLAYER AND ENEMY COLLISION = " <<  e->first << std::endl;
+
                         gameState = GAME_OVER;
+                    } else {
+
+                        for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
+
+                            if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox() ) ))
+                            {
+                                printf("BULLET COLLISION!\n");
+                                enemies.erase (e->first);
+
+                                //bullets.erase(b->first);
+
+                            } else {
+
+
+                                if (b->second->pos->x > WINDOW_WIDTH) {
+                                    bullets.erase (b->first);
+
+                                } else if (b->second->pos->y > WINDOW_HEIGHT) {
+                                    bullets.erase (b->first);
+                                }
+
+                            }
+
+                        }
+
                     }
-
-
                 }
-
 
                 //currentEnemy->Update();
             }
@@ -523,6 +541,12 @@ void gameEngine::Draw() {
         if (gameReady) {
            // currentPlayer->sprite->Draw(gameRender,currentPlayer->pos->x, currentPlayer->pos->y);
             currentPlayer->Draw(gameRender);
+
+            for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
+
+                b->second->Draw(gameRender);
+
+            }
 
             for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
 
