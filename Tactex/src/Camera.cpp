@@ -12,15 +12,16 @@ Camera::Camera()
     dir = glm::vec3(0, 0, 0);
 }
 
-Camera::Camera(const glm::vec3 position, const glm::vec3 lookatVector)
+Camera::Camera(const glm::vec3 position, const glm::vec3 lookAtVector)
 {
     pos = position;
-    dir = lookatVector;
+    dir = lookAtVector;
 }
 
-Camera::Camera(Camera& camera)
+Camera::Camera(const Camera& camera)
 {
-
+    pos = camera.pos;
+    dir = camera.dir;
 }
 
 Camera::~Camera()

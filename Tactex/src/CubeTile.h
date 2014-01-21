@@ -13,11 +13,12 @@
 
 class CubeTile : public Entity{
 public:
-
     static const GLfloat cubeCoords[];
     static const GLfloat cubeFaceNormals[];
 
-    
+public:
+    virtual void draw() const;
+    virtual int update();
 };
 
 

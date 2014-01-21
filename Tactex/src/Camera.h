@@ -16,8 +16,8 @@
 class Camera : public Entity{
 public:
     Camera();
-    Camera(const glm::vec3 position, const glm::vec3 lookatVector);
-    Camera(Camera &c);
+    Camera(const Camera &c);
+    Camera(const glm::vec3 position, const glm::vec3 lookAtVector);
     virtual ~Camera();
 
     virtual void draw() const;

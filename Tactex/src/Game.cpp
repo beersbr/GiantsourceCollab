@@ -50,8 +50,8 @@ int Game::setup(){
     SDL_RendererInfo displayRendererInfo;
     SDL_GetRendererInfo(renderer, &displayRendererInfo);
 
-    if(displayRendererInfo.flags & SDL_RENDERER_ACCELERATED == 0 &&
-            displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE == 0)
+    if((displayRendererInfo.flags & SDL_RENDERER_ACCELERATED) == 0 &&
+            (displayRendererInfo.flags & SDL_RENDERER_TARGETTEXTURE) == 0)
     {
         // TODO: Display error regarding no accelerated surface
         std::cout << "BROKEN!" << std::endl;
@@ -69,7 +69,15 @@ int Game::run(){
 
     KeyboardHandler* keyboard = KeyboardHandler::getInstance();
 
+
+    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(0, 0, 0));
+    SDL_SetRelativeMouseMode((SDL_bool)true);
+
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+
+    GLuint PointsArrayID;
+    glGenVertexArrays(1, &PointsArrayID);
+//    glBindVertexArray(PointsArrayID);
 
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
@@ -79,96 +87,16 @@ int Game::run(){
 
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     GLuint OffsetID = glGetUniformLocation(programID, "offset");
+
     glm::mat4 Projection = glm::perspective(45.0f, (static_cast<float>(windowWidth)) / (static_cast<float>(windowHeight)), 0.1f, 1000.0f);
-
-    glm::mat4 View = glm::lookAt(
-            glm::vec3(0,0,10), // Camera is at (4,3,3), in World Space
-            glm::vec3(0,0,0), // and looks at the origin
-            glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
-    );
-
-    // Model matrix : an identity matrix (model will be at the origin)
-    glm::mat4 Model = glm::mat4(1.0f);
-    glm::mat4 MVP = Projection * View * Model;
-
-    static const GLfloat g_vertex_buffer_data[] = {
-            // west
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-
-            -1.0f, -1.0f, -1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            // bottom
-             1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f, -1.0f,
-
-             1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-
-            // back
-             1.0f,  1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-             1.0f,  1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-
-            // front
-            -1.0f,  1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f,
-
-             1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f,
-
-            // right
-             1.0f,  1.0f,  1.0f,
-             1.0f, -1.0f, -1.0f,
-             1.0f,  1.0f, -1.0f,
-
-             1.0f, -1.0f, -1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f,
-
-            // top
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-             1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f,  1.0f,
-
-
-    };
-    static const GLushort g_element_buffer_data[] = { 0, 1, 2 };
 
     GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*36*3, CubeTile::cubeCoords, GL_STATIC_DRAW);
 
-    glm::vec3 cameraPos = glm::vec3(0, 0, 10);
-    glm::vec3 cameraLookAt = glm::vec3(0, 0, 0);
-
-    // cuz I can
-    struct{
-        int x, y;
-    } typedef MousePos;
-
-    MousePos mousePos;
-
-    SDL_SetRelativeMouseMode((SDL_bool)true);
-
-    Camera camera = Camera((glm::vec3(0, 0, 50)), (glm::vec3(0, 0, 0)));
-
+    // let the mouse be moved to the center.
+    keyboard->updateMouse();
 
     while(gameRunning)
     {
@@ -179,19 +107,18 @@ int Game::run(){
         }
         keyboard->updateMouse();
 
-
-
         if(keyboard->keyDown(SDL_SCANCODE_Q))
             gameRunning = false;
 
         // ---------- UPDATE ------------
 
         camera.update();
-        glm::mat4 View = camera.getViewMatrix();
+
 
         // Model matrix : an identity matrix (model will be at the origin)
         glm::mat4 Model = glm::mat4(1.0f);
 
+        glm::mat4 View = camera.getViewMatrix();
 
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -219,7 +146,7 @@ int Game::run(){
             // Draw the triangle !
             glDrawArrays(GL_TRIANGLES, 0, 12*3); // 3 indices starting at 0 -> 1 triangle
 
-            glDisableVertexAttribArray(0);
+//            glDisableVertexAttribArray(0);
         }
 
 

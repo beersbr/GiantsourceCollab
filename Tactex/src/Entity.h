@@ -17,6 +17,7 @@ public:
     virtual void draw() const = 0;
     virtual int update() = 0;
 
+public:
     glm::vec3 pos;
     glm::vec3 size;
 };
