@@ -1,3 +1,5 @@
+// **** STUFF IN HERE IS GETTING MIGRATED ****
+
 var faces = ["up","down","north","south","east","west"];
 var facePositions = {
   "up" : {"x": 0, "y": 0},
@@ -27,7 +29,7 @@ function loadTileImages() {
   var h = "";
   
   // Start with an option for a new image
-  h += "<option value='0'>Add...</option>";
+  h += "<option value=\"\">Add...</option>";
   
   for(var i in imageList) {
      h += "<option value='"+imageList[i]+".jpg'>"+imageList[i]+".jpg</option>";

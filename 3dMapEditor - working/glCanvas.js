@@ -21,7 +21,7 @@
     this.zRot = args.zRot || 0;
     this.zSpeed = args.zSpeed || 0;
 
-    this.eachCube = args.eachCube || null;
+    this.initCube = args.initCube || null;
 
     this.shaderProgram = null;
     
@@ -31,8 +31,11 @@
     this.pMatrix = mat4.create();
     this.mvMatrixStack = [];
     
-    
+    // Single array of cubes
     this.cubes = [];
+    
+    // Array to get index of cubes array via x,y,z
+    this.cubesIndex = [[[]]];
     
     var lastTime = 0;
   
@@ -111,8 +114,8 @@
 
     this.handleLoadedTexture = function(texture) {
         
-        //this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-        //this.gl.enable(this.gl.BLEND);
+        this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+        this.gl.enable(this.gl.BLEND);
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
         
         // Set the parameters so we can render any size image.
@@ -208,15 +211,21 @@
             
             for(var iz = 0; iz < this.maxZ; iz++) {
               
-              var cArgs = {"canvas":this, "x":ix, "y":iy, "z":iz};
-              if(this.eachCube) {
-                console.log(this.eachCube);
-                cArgs.eachCube = this.eachCube(cArgs);
+              var cArgs = {"canvas":this, "x":ix*2, "y":iy*2, "z":iz*2};
+              if(this.initCube) {
+                cArgs.initCube = this.initCube(cArgs);
               }
         
               this.cubes.push(new glCube(cArgs));        
               this.cubes[this.cubes.length - 1].initBuffers();
               this.cubes[this.cubes.length - 1].initTextures();
+              
+              
+              // Make sure the x,y and z arrays exists, then set the value
+              if(!this.cubesIndex[ix]) this.cubesIndex[ix] = [[[this.cubes.length - 1]]];
+              if(!this.cubesIndex[ix][iy]) this.cubesIndex[ix][iy] = [[this.cubes.length - 1]];
+              if(!this.cubesIndex[ix][iy][iz]) this.cubesIndex[ix][iy][iz] = [this.cubes.length - 1];
+    
     
             }
           }

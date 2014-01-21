@@ -17,9 +17,9 @@
      <div id="tileStatsWindow">
        <canvas id="cubeEditor" style="border: none;" width="500" height="500"></canvas>
        <h3>Positioning</h3>
-       <label class='label-small' for="tile-x">x: </label><input class="input-small" type="text" id="tile-x" disabled="disabled"/ value="0">
-       <label class='label-small' for="tile-y">y: </label><input class="input-small" type="text" id="tile-y" disabled="disabled"  value="0"/>
-       <label class='label-small' for="tile-z">z: </label><input class="input-small" type="text" id="tile-z" value="0"/>
+       <label class='label-small' for="tile-x">x: </label><input class="input-small" type="text" id="tile-x" disabled="disabled" value="0"/>
+       <label class='label-small' for="tile-y">y: </label><input class="input-small" type="text" id="tile-y" disabled="disabled" value="0"/>
+       <label class='label-small' for="tile-z">z: </label><input class="input-small" type="text" id="tile-z" disabled="disabled" value="0"/>
        <div id="section-tabs">
          <span id="tab-up" data-face="up" class="span-active">Up Face</span>
          <span id="tab-down" data-face="down">Down Face</span>
@@ -38,7 +38,7 @@
        </section>
        <section id="section-down">
          <label for="tile-down-hp">hp: </label><input class="input-small" type="text" id="tile-down-hp" />
-         <label for="tile-down-image">image: </label><select class="tile-image" id="tile-down-image" onchange="cubeEditCanvas.changeTexture('d',$(this).val())"></select>
+         <label for="tile-down-image">image: </label><select class="tile-image" id="tile-down-image" onchange="cubeEditCanvas.cubes[0].changeTexture('d',$(this).val())"></select>
          <label for="tile-down-damage">damage: </label><input type="text" id="tile-down-damage" />
          <label for="tile-down-type">type: </label><select class="tile-type" id="tile-down-type"></select>
          <label for="tile-down-onStep">onStep: </label><textarea id="tile-down-onStep"></textarea>
@@ -46,7 +46,7 @@
        </section>
        <section id="section-north">
          <label for="tile-north-hp">hp: </label><input class="input-small" type="text" id="tile-north-hp" />
-         <label for="tile-north-image">image: </label><select class="tile-image" id="tile-north-image" onchange="cubeEditCanvas.changeTexture('n',$(this).val())"></select>
+         <label for="tile-north-image">image: </label><select class="tile-image" id="tile-north-image" onchange="cubeEditCanvas.cubes[0].changeTexture('n',$(this).val())"></select>
          <label for="tile-north-damage">damage: </label><input type="text" id="tile-north-damage" />
          <label for="tile-north-type">type: </label><select class="tile-type" id="tile-north-type"></select>
          <label for="tile-north-onStep">onStep: </label><textarea id="tile-north-onStep"></textarea>
@@ -54,7 +54,7 @@
        </section>
        <section id="section-south">
          <label for="tile-south-hp">hp: </label><input class="input-small" type="text" id="tile-south-hp" />
-         <label for="tile-south-image">image: </label><select class="tile-image" id="tile-south-image" onchange="cubeEditCanvas.changeTexture('s',$(this).val())"></select>
+         <label for="tile-south-image">image: </label><select class="tile-image" id="tile-south-image" onchange="cubeEditCanvas.cubes[0].changeTexture('s',$(this).val())"></select>
          <label for="tile-south-damage">damage: </label><input type="text" id="tile-south-damage" />
          <label for="tile-south-type">type: </label><select class="tile-type" id="tile-south-type"></select>
          <label for="tile-south-onStep">onStep: </label><textarea id="tile-south-onStep"></textarea>
@@ -62,7 +62,7 @@
        </section>
        <section id="section-east">
          <label for="tile-east-hp">hp: </label><input class="input-small" type="text" id="tile-east-hp" />
-         <label for="tile-east-image">image: </label><select class="tile-image" id="tile-east-image" onchange="cubeEditCanvas.changeTexture('e',$(this).val())"></select>
+         <label for="tile-east-image">image: </label><select class="tile-image" id="tile-east-image" onchange="cubeEditCanvas.cubes[0].changeTexture('e',$(this).val())"></select>
          <label for="tile-east-damage">damage: </label><input type="text" id="tile-east-damage" />
          <label for="tile-east-type">type: </label><select class="tile-type" id="tile-east-type"></select>
          <label for="tile-east-onStep">onStep: </label><textarea id="tile-east-onStep"></textarea>
@@ -70,13 +70,13 @@
        </section>
        <section id="section-west">
          <label for="tile-west-hp">hp: </label><input class="input-small" type="text" id="tile-west-hp" />
-         <label for="tile-west-image">image: </label><select class="tile-image" id="tile-west-image" onchange="cubeEditCanvas.changeTexture('w',$(this).val())"></select>
+         <label for="tile-west-image">image: </label><select class="tile-image" id="tile-west-image" onchange="cubeEditCanvas.cubes[0].changeTexture('w',$(this).val())"></select>
          <label for="tile-west-damage">damage: </label><input type="text" id="tile-west-damage" />
          <label for="tile-west-type">type: </label><select class="tile-type" id="tile-west-type"></select>
          <label for="tile-west-onStep">onStep: </label><textarea id="tile-west-onStep"></textarea>
          <label for="tile-west-onDeath">onDeath: </label><textarea id="tile-west-onDeath"></textarea>
        </section>
-       <input id="saveTile" type="button" value="save" onclick="saveTile()" />
+       <input id="saveTile" type="button" value="save" onclick="top._tactex.saveCube()" />
   
      </div> 
 
@@ -131,7 +131,7 @@
         glArgs.xRot = -45;
         glArgs.yRot = -5;
         glArgs.zRot = -15;
-        glArgs.defaultTexture = "tile-transparent.png";
+        glArgs.defaultTexture = "tile-transparent-X.png";
         
         cubeEditCanvas = new glCanvas(glArgs);
       }
