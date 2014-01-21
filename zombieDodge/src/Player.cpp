@@ -245,12 +245,13 @@ void Player::Move()
 */
 void Player::Shoot(int _x, int _y)
 {
+    /*
     Bullet* bullet = new Bullet(static_cast<float>(_x),static_cast<float>(_y),0.0);
     bullet->Spawn((*pos));
-    gameEngine::getInstance()->bullets[bulletCnt] = bullet;
+    gameEngine::getInstance()->bullets.push_back(bullet);
     //bullets[bulletCnt] = bullet;
     bulletCnt++;
-
+      */
 }
 
 void Player::Draw(SDL_Renderer *renderer){

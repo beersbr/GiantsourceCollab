@@ -237,11 +237,12 @@ bool gameEngine::GameInit () {
         //currentPlayer->clip.x = 101;
         //currentPlayer->pos->y = 100;
         currentPlayer->Spawn();
+        Enemy *enemy = new Enemy();
 
-        currentEnemy = new Enemy();
-        currentEnemy->Spawn();
-        enemies[0] = currentEnemy;
-
+        //currentEnemy = new Enemy();
+        enemy->Spawn();
+        enemies.push_back(enemy);// = currentEnemy;
+        delete(enemy);
 
     }
 
@@ -416,9 +417,9 @@ void gameEngine::Update() {
                     currentPlayer->Update();
                 }
 
-                for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
+                for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-                    b->second->Update();
+                    (*bt)->Update();
 
                 }
 
@@ -435,8 +436,12 @@ void gameEngine::Update() {
                            followEnemyCnt = 0;
                         }
 
-                        followEnemyCnt++;
-                        enemies[totalEnemyCnt] = enemy;
+                         followEnemyCnt++;
+
+                         enemies.push_back(enemy);
+                         delete enemy;
+
+                       //enemies[totalEnemyCnt] = enemy;
                         enemyCnt = 0;
                    }
 
@@ -447,6 +452,61 @@ void gameEngine::Update() {
                 //typedef std::map<int, Enemy*>::iterator eIter;
                 //typedef std::map<int, Bullet*>::iterator bIter;
 
+                for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
+
+                    if ( (*et)->isFollow) {
+
+                        Enemy* em = *et;
+
+                        Vector moveEnemy = ((*currentPlayer->pos) - (*em->pos));
+
+                        (*em->vel) =   ((moveEnemy.toUnit()) * ((*et)->moveSpeed));
+
+                    }
+
+                    (*et)->Update();
+
+
+                    /*
+                    for(std::vector<Bullet>::iterator bt = bullets.begin(); bt != bullets.end();) {
+
+                        if((CheckCollision(et->GetHitBox(), bt->GetHitBox()) ))
+                        {
+
+                              et->deleteItem = true;
+                              //et = enemies.erase(et);
+                              bt = bullets.erase(bt);
+                              bt = bullets.end();
+
+                        }  else {
+                            //++b;
+                            ++bt;
+                        }
+
+                    }
+                    */
+
+                    if ((*et)->deleteItem) {
+                        et = enemies.erase(et);
+
+                    }   else {
+                        if((CheckCollision((*et)->GetHitBox(), currentPlayer->GetHitBox() ) ))
+                        {
+                            printf("GAMEOVER\n");
+                            gameState = GAME_OVER;
+                        } else {
+
+                            ++et;
+
+                        }
+
+
+
+                    }
+
+
+                }
+                /*
                 for(std::map<int, Enemy*>::const_iterator e = enemies.begin(); e != enemies.end(); ++e)
 
                // for( eIter e = enemies.begin(); e != enemies.end(); )
@@ -469,6 +529,23 @@ void gameEngine::Update() {
                         std::cout << "PLAYER AND ENEMY COLLISION = " <<  e->first << std::endl;
 
                         gameState = GAME_OVER;
+                    }
+
+                    if((CheckCollision(et->GetHitBox(), bt->GetHitBox()) ))
+                    {
+
+                        printf("COLLISION");
+
+                        enemies.erase( e );
+                        ++e;
+                        // bullets.erase( b );
+                        // ++b;
+                        b->second->deleteBullet = true;
+                        e = enemies.end();
+
+                    }  else {
+                        //++b;
+                        ++e;
                     }
 
 
@@ -505,6 +582,7 @@ void gameEngine::Update() {
                         ++b;
 
                     }
+                    */
                     /*
                     if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox()) ))
                     {
@@ -521,7 +599,7 @@ void gameEngine::Update() {
                         ++b;
                     }
                    */
-                }
+                //}
 
 
                 /*
@@ -624,24 +702,43 @@ void gameEngine::Draw() {
            // currentPlayer->sprite->Draw(gameRender,currentPlayer->pos->x, currentPlayer->pos->y);
             currentPlayer->Draw(gameRender);
 
-            for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
+            /*
+            for(std::vector<Bullet>::iterator bt = bullets.begin(); bt != bullets.end();++bt) {
 
-                b->second->Draw(gameRender);
+               bt->Draw(gameRender);
 
-            }
+                if (bt->pos->x > WINDOW_WIDTH) {
+                    bt = bullets.erase(bt);
 
-            for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
+                } else if (bt->pos->y > WINDOW_HEIGHT) {
+                    bt = bullets.erase(bt);
 
-                e->second->Draw(gameRender);
+                } else {
+                    ++bt;
 
-                if (e->second->pos->x > WINDOW_WIDTH) {
-                    enemies.erase (e->first);
-
-                } else if (e->second->pos->y > WINDOW_HEIGHT) {
-                    enemies.erase (e->first);
                 }
 
             }
+              */
+            for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
+
+                (*et)->Draw(gameRender);
+
+                if ((*et)->pos->x > WINDOW_WIDTH) {
+                    et = enemies.erase(et);
+
+                } else if ((*et)->pos->y > WINDOW_HEIGHT) {
+                    et = enemies.erase(et);
+
+                } else {
+                    ++et;
+
+                }
+
+            }
+
+
+
 
 
             //currentEnemy->Draw(gameRender);

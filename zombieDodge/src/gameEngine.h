@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stack>
 #include <string>
+#include <vector>
 #include <stdio.h>
 #include <iosfwd>
 #include <assert.h>
@@ -108,9 +109,10 @@ public:
     bool LoadScreen();
     bool loadStateResources(int screenId);
     int totalEnemyCnt = 0;
-    std::map<int, Enemy*> enemies;
-    std::map<int, Bullet*> bullets;
-
+    //std::map<int, Enemy*> enemies;
+    //std::map<int, Bullet*> bullets;
+    std::vector<Bullet*> bullets;
+    std::vector<Enemy*> enemies;
     void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 
     bool CheckCollision( SDL_Rect A, SDL_Rect B )

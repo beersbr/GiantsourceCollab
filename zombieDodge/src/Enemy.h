@@ -50,6 +50,7 @@ public:
     int frameBegin;
     int frameX;
     int frameY;
+    bool deleteItem = false;
     SDL_Rect clip;
   
 
