@@ -31,6 +31,7 @@ int Entity::GetId()
 	return _id;
 }
 
+
 void Entity::Update() {
 
 

@@ -3,74 +3,62 @@
 Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w, int h, float _cameraX, float _cameraY)
 {
 
-    //camera = new Vector(_cameraX,_cameraY,0);
-    printf( "CREATE POSITION\n" );
-    currentFrame = 1;
-   // this->position = new Vector();
-    //this->position->x = _x;
-    //this->position->y = _y;
-    posX = _x;
-    posY = _y;
-
-    //renderer = render;
     image = NULL;
-    printf( "LOAD TEXTURE\n" );
+
     image =  gameEngine::getInstance()->LoadTexture(path.c_str());
+    renderer = render;
 
     if ( image == NULL)
     {
         std::cout << "Couldn't Load " << path.c_str() << std::endl;
     }
 
-
-    printf( "QUERY TEXTURE\n" );
-
-     //SDL_Rect rect;
-    rect.x = static_cast<int>(_x);
-    rect.y = static_cast<int>(_y);
-    rect.w = w;
-    rect.h = h;
-
     SDL_QueryTexture(image,NULL,NULL, &imgWidth, &imgHeight);
-
     crop.x = 0;
     crop.y = 0;
     crop.w = w;
     crop.h = h;
-    std::cout << "RENDER IMAGE CROP x" <<  crop.x << std::endl;
-    std::cout << "RENDER IMAGE CROP y" <<  crop.y << std::endl;
-    std::cout << "RENDER IMAGE CROP w" <<  crop.w << std::endl;
-    std::cout << "RENDER IMAGE CROP h" <<  crop.h << std::endl;
-   // printf( "SET POSITION\n" );
-    //position = new Vector(pos->x,pos->y,pos->z);
-    //position->x = pos.x;
-    //position->y = pos.y;
 
-
-    //Vector* tempVector = new Vector();
-
-    std::cout << "SET POSITION xPosi -> x=" << posX << std::endl;
-
-    printf( "SET ORIGIN\n" );
+    posX = _x;
+    posY = _y;
     originX = 0;
     originY = 0;
-    printf( "SET CURRENT FRAME\n" );
     currentFrame = 0;
     frameX = 0;
     frameY = 0;
 
-    printf( "GO SET UP ANIMATION\n" );
+
+}
+
+void Sprite::Rotate(double _a) {
+
+       angle = _a;
+
+
+}
+
+void Sprite::Flip(char _a) {
+
+    switch(_a) {
+
+        case 'h':
+            flipImage = SDL_FLIP_HORIZONTAL;
+            break;
+        case 'v':
+            flipImage = SDL_FLIP_VERTICAL;
+
+        default:
+            flipImage = SDL_FLIP_NONE;
+
+
+    }
 
 }
 
 Sprite::Sprite(std::string path,float _x, float _y, int w, int h)
 {
 
-    printf( "SET RENDER \n" );
-    renderer = gameEngine::getInstance()->gameRender;
-    printf( "CREATE SPRITE AGAIN \n" );
-
-    Sprite(renderer, path, _x, _y, w, h, 0,0);
+    Sprite(gameEngine::getInstance()->gameRender, path, _x, _y, w, h, 0,0);
 }
 
 void Sprite::SetUpAnimation(int _frameX, int _frameY)
@@ -79,76 +67,44 @@ void Sprite::SetUpAnimation(int _frameX, int _frameY)
     frameY = _frameY;
 }
 
-void Sprite::PlayAnimation(int begin, int end, int row, float speed,SDL_Rect clip,int imgWidth, int imgHeight)
+void Sprite::PlayAnimation(int begin, int end, int row, float speed)
 {
 
-    std::cout << "animationDelay" << animationDelay << std::endl;
-    std::cout << "ticks" << SDL_GetTicks() << std::endl;
-   // if (animationDelay+speed < SDL_GetTicks())
-    //{
-
+   if (animationDelay+speed < SDL_GetTicks())
+    {
         if (end <= this->currentFrame)
             this->currentFrame = begin;
         else
             this->currentFrame++;
-        /*
-        std::cout << "CURRENT FRAME X -==" << this->frameX << std::endl;
-        std::cout << "CURRENT IMAGE WIDTH  -==" << imgWidth << std::endl;
-        std::cout << "PLAY ANIMATION WITH PRERENDER IMAGE clip x" << clip.x << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE clip y" << clip.y << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE clip w" << clip.w << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE clip h" << clip.h << std::endl;
 
-        std::cout << "------------"  << std::endl;
-        std::cout << "------------" << std::endl;
-        */
         crop.x = currentFrame * (imgWidth/frameX);
         crop.y = (row-1) * (imgHeight/frameY);
         crop.w = imgWidth/frameX;
         crop.h = imgHeight/frameY;
-        std::cout << "PLAY ANIMATION WITH RENDER IMAGE CROP x" << crop.x << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP y" << crop.y << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP w" << crop.w << std::endl;
-        std::cout << "PLAY ANIMATION WITHRENDER IMAGE CROP h" << crop.h << std::endl;
 
-        //animationDelay = SDL_GetTicks();
-    //}
+
+        animationDelay = SDL_GetTicks();
+    }
 }
 
-void Sprite::Draw(float _x, float _y)
+void Sprite::Render(float _x, float _y)
 {
 
-    //Vector* posi = this->position;
-     /*
-    std::cout << "xPosi at draw sprite -> x=" << _x << std::endl;
-    SDL_Rect box;
-    box.x = static_cast<int>(_x);
-    box.y = static_cast<int>(_y);
-    box.w = crop.w;
-    box.h = crop.h;
-     */
 
-    gameEngine::getInstance()->RenderTexture(image, _x, _y,crop.w,crop.h,crop);
-      /*
 
-    //crop.x = 0;
-    //crop.y = 0;
-    SDL_Rect clip;
+        SDL_Rect box;
+        box.x = posX;
+        box.y = posY;
+        box.w = crop.w;
+        box.h = crop.h;
 
-    clip.x = crop.x;
-    clip.y = crop.y;
-    clip.h = crop.h;
-    clip.w = crop.w;
+        //Render to screen
+        SDL_RenderCopyEx(renderer,image, &crop, &box, angle, NULL, flipImage );
 
-    std::cout << "RENDER IMAGE TO SCREEN --- " << std::endl;
-    std::cout << "RENDER IMAGE CROP x" << crop.x << std::endl;
-    std::cout << "RENDER IMAGE CROP y" << crop.y << std::endl;
-    std::cout << "RENDER IMAGE CROP w" << crop.w << std::endl;
-    std::cout << "RENDER IMAGE CROP h" << crop.h << std::endl;
-    gameEngine::getInstance()->RenderTexture(image, _x, _y,crop.w,crop.h,clip);
 
-    //SDL_RenderCopy(renderer,image, &clip, &box);
-    */
+
+    //SDL_RenderCopy(renderer,image, &crop, &box);
+
 }
 
 void Sprite::SetX(float _x)
@@ -178,10 +134,10 @@ void Sprite::SetPosition(float _x, float _y)
 void Sprite::SetOrigin(float _x, float _y)
 {
 
-    std::cout << "SET ORIGIN -> VEL = x=" << _x << "Y = " << _y << std::endl;
+    //std::cout << "SET ORIGIN -> VEL = x=" << _x << "Y = " << _y << std::endl;
     originX = _x;
     originY = _y;
-    std::cout << "SET POSITION NOW -> VEL = x=" << _x << "Y = " << _y << std::endl;
+    //std::cout << "SET POSITION NOW -> VEL = x=" << _x << "Y = " << _y << std::endl;
     //std::cout << "SET POSITION SET with X = " << position->x << std::endl;
     //Vector* pos = GetPosition();
     //float xPosi = GetX();
@@ -189,7 +145,15 @@ void Sprite::SetOrigin(float _x, float _y)
     //SetPosition(position->x, position->y);
     //position->x -= originX;
     //position->y -= originY;
-    std::cout << "SET POSITION SET" << std::endl;
+    //std::cout << "SET POSITION SET" << std::endl;
+}
+
+
+void Sprite::SetPosition(float _x, float _y) {
+
+    posX = _x;
+    posY = _y;
+
 }
 
 void Sprite::SetWidth(int W)

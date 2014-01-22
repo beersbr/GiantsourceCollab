@@ -39,69 +39,20 @@ Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
 bool Player::Spawn()
     {
 
-    bool spriteCreated = false;
-    gameEngine* gEngine = gameEngine::getInstance();
-    //sprite = new Sprite("player1Sprite.png", pos->x, pos->y, 41,101);
+    bool spriteCreated = true;
 
-    //sprite->SetUpAnimation(2,1);
-    //sprite->SetOrigin(41/2.0f, 101);
+    spawned = true;
+    //Create Sprite
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"player1Sprite.png", pos->x, pos->y, 41,101,0,0);
+    //Set Sprite Rows / Cols
+    sprite->SetUpAnimation(2,1);
+    //Set Origin to Sprite
+    sprite->SetOrigin(41/2.0f, 101);
 
-
-        /*
-    printf( "CREATE SPRITE\n" );
-
-
-    printf( "SET ANIMATION of PLAYER\n" );
-
-    printf( "SET ORIGIN OF PLAYER\n" );
-
-
-     */
-
-
-    image = gEngine->LoadTexture("player1Sprite.png");
-
-
-     SDL_QueryTexture(image,NULL,NULL, &imgWidth, &imgHeight);
-
-     clip.x = 0;
-     clip.y = 0;
-     clip.w = 41;
-     clip.h = 101;
-
-     originX = 0;
-     originY = 0;
-
-     currentFrame = 0;
-     frameX = 2;
-     frameY = 1;
-     frameEnd =1;
-     frameBegin = 0;
-     currentRow = 1;
-        animationDelay=0;
-
-    //int w, h;
-        //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    //SDL_QueryTexture(image, NULL, NULL, &w, &h);
-
-        //Set the square's dimentions
+    //Set the square's dimentions
     hitBox.w = clip.w;
     hitBox.h = clip.h;
 
-    //std::cout << "SPAWN THE PLAYER  " <<   std::endl;
-
-    //SDL_DestroyTexture(tempSurface);
-
-
-    if(image == NULL)  {
-        //spawned = false;
-        std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
-        spriteCreated = false;
-    }  else {
-
-        spawned = true;
-        spriteCreated = true;
-    }
 
         return spriteCreated;
 
@@ -114,10 +65,10 @@ SDL_Rect Player::GetHitBox() {
     return hitBox;
 }
 void Player::Update()
-{     // std::cout << "UPDATE PLAYER  -> " << std::endl;
+{    std::cout << "UPDATE PLAYER  -> " << std::endl;
     float frameMoveSpeed = this->moveSpeed;
     Vector moveOffset = Vector();
-    frameCount++;
+    //frameCount++;
 
     //sprite->PlayAnimation(0,1,1,200, clip,82,101);
     if(InputHandler::getInstance()->keyIsDown( SDL_SCANCODE_LSHIFT)) {
@@ -156,15 +107,8 @@ void Player::Update()
         nonSprintElapsedTime += gameEngine::getInstance()->getTimer();
         if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
 
-        /*
-         case SDLK_UP: Shoot(0,-1);; break;
-         case SDLK_DOWN:Shoot(0,1);
-         case SDLK_LEFT: Shoot(-1,0);
-         case SDLK_RIGHT: Shoot(1,0); break;
-         default: break;
-         */
     }
-
+    std::cout << "KEYDOWN IN PLAYER  -> " << InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W) << std::endl;
 
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W)){
         moveOffset.y -= frameMoveSpeed;
@@ -194,26 +138,15 @@ void Player::Update()
         Shoot(0, 1);
     }
 
-   // std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
+    //Update Position
     (*this->pos) += moveOffset;
 
-    //std::cout << "animationDelay" << animationDelay << std::endl;
-    if (animationDelay+200 < SDL_GetTicks())
-    {
+    //Play Sprite Animation
+    sprite->PlayAnimation(0, 1, 1, 200);
 
-        //std::cout << "CHANGE THE FRAME=" << currentFrame << std::endl;
-        if (frameEnd <= currentFrame)
-            currentFrame = frameBegin;
-        else
-            currentFrame++;
+    //Update Sprite Position
+    sprite->SetPosition(pos->x, pos->y);
 
-        clip.x = currentFrame * (imgWidth/frameX);
-        clip.y = (currentRow-1) * (imgHeight/frameY);
-        clip.w = imgWidth/frameX;
-        clip.h = imgHeight/frameY;
-
-        animationDelay = SDL_GetTicks();
-    }
      /*
     for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
 
@@ -221,54 +154,56 @@ void Player::Update()
 
     }
     */
-    //sprite->SetPosition(pos->x, pos->y);
-
-
-
-    //std::cout << "---------DONE PLAYER  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
 
 
 }
 
-/*
-void Player::Move()
-{
-   // std::cout << "IN PLAYER MOVE FUNCTION TYPE = " << event.type << std::endl;
-
-        gameEngine* gEngine = gameEngine::getInstance();
-        Vector updatePos = (*pos) * (gEngine->getTimer() / FRAME_RATE);
-       // std::cout << "timer -> " << gEngine->getTimer() << std::endl;
-        std::cout << "DONE PLAYER  MOVE -> " << std::endl;
-        (*pos) = updatePos + (*pos);
-
-}
-*/
 void Player::Shoot(int _x, int _y)
 {
-    /*
-    Bullet* bullet = new Bullet(static_cast<float>(_x),static_cast<float>(_y),0.0);
-    bullet->Spawn((*pos));
-    gameEngine::getInstance()->bullets.push_back(bullet);
-    //bullets[bulletCnt] = bullet;
-    bulletCnt++;
-      */
+
+    if(!isShooting){
+
+        isShooting = true;
+        // spawn a bullet with the direction
+        Bullet *bullet = new Bullet(static_cast<float>(_x),static_cast<float>(_y),0.0);
+        bullet->Spawn((*pos));
+        //gameEngine::getInstance()->addBullet(bullet);
+        gameEngine::getInstance()->bullets.push_back(bullet);
+        bullet = nullptr;
+        shotsFired++;
+        lastShotTime = SDL_GetTicks();
+
+    } else {
+
+        if (lastShotTime+shootInterval < SDL_GetTicks())
+        {
+            isShooting = false;
+            lastShotTime = 0.0;
+        }
+
+
+
+    }
+
+    if (lastShotTime+shootInterval < SDL_GetTicks())
+    {
+        if(!isShooting){
+
+
+
+        } else {
+            isShooting = false;
+
+        }
+
+    }
+
+
 }
 
 void Player::Draw(SDL_Renderer *renderer){
 
-    //clipx = 0;
-    /*
-
-    */
-    //sprite->Draw(pos->x, pos->y);
-
-    //SDL_Texture* pImage = sprite->image;
-
-
-    //clip.x=41;
-    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,clip.w,clip.h,clip);
-
-
+    sprite->Render(pos->x, pos->y);
 
 }
 

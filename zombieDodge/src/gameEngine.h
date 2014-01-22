@@ -113,6 +113,7 @@ public:
     //std::map<int, Bullet*> bullets;
     std::vector<Bullet*> bullets;
     std::vector<Enemy*> enemies;
+    void addBullet(Bullet* b);
     void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 
     bool CheckCollision( SDL_Rect A, SDL_Rect B )

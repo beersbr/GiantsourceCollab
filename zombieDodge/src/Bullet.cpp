@@ -21,51 +21,36 @@ bool Bullet::Spawn(Vector &v)
 {
     bool spawned = true;
 
-    image = gameEngine::getInstance()->LoadTexture("bullet.png");
+    //Create Sprite
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"bullet.png", v.x, v.y, 5,19,0,0);
+    //Set Sprite Rows / Cols
+    sprite->SetUpAnimation(1,1);
+    //Set Origin to Sprite
+    sprite->SetOrigin(5/2.0f, 19);
+
     spawnFX = Mix_LoadWAV( "shotgun.ogg" );
-    // int w, h;
-    //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    SDL_QueryTexture(image, NULL, NULL, &imgWidth, &imgHeight);
+    Mix_VolumeChunk(spawnFX, 10);
 
-
-
-    // SDL_QueryTexture(image,NULL,NULL, &imgWidth, &imgHeight);
-
-    clip.x = 0;
-    clip.y = 0;
-    clip.w = 5;
-    clip.h = 19;
-
-
-    originX = 0;
-    originY = 0;
-
-    currentFrame = 0;
-    animationDelay=0;
-    frameX = 1;
-    frameY = 1;
-    frameEnd =0;
-    frameBegin = 0;
-    currentRow = 1;
-
-    //Set the square's dimentions
-    hitBox.w = clip.w;
-    hitBox.h =clip.h;
-
-    //std::cout << "SPAWN THE BULLET  with image height is " << imgHeight<<  std::endl;
-
-    if(image == NULL)  {
-        std::cout << "COULD NOT SPAWN BULLET SPRITE " << std::endl;
-        spawned = false;
-    }
-    //moveSpeed = 12.0;
     pos->x =  v.x;
     pos->y = v.y;
 
+    switch(static_cast<int>(vel->x)) {
+
+        case 1:
+            sprite->Rotate(90);
+            break;
+
+        case -1:
+            sprite->Rotate(-90);
+            break;
+
+
+    }
     vel->x = vel->x * moveSpeed;
     vel->y = vel->y * moveSpeed;
 
     Mix_PlayChannel( -1, spawnFX, 0 );
+
     //std::cout << "BULLET SPAWNED =  " << spawned<<  std::endl;
     return spawned;
 
@@ -82,7 +67,11 @@ void Bullet::Update()
     Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
 
     (*this->pos) += updatePos;
+    //Play Sprite Animation
+    sprite->PlayAnimation(0, 0, 1, 200);
 
+    //Update Sprite Position
+    sprite->SetPosition(pos->x, pos->y);
 
 
     /*
@@ -98,7 +87,10 @@ void Bullet::Update()
 
 void Bullet::Draw(SDL_Renderer *renderer)
 {
-    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,clip.w,clip.h,clip);
+
+    sprite->Render(pos->x, pos->y);
+
+    //gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,clip.w,clip.h,clip);
     // gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
 
 }
