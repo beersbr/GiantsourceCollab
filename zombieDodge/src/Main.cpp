@@ -6,26 +6,17 @@
 //  Copyright (c) 2014 Matt Jacobs. All rights reserved.
 //
 
-
-
 //ENGINE FILES
-
+#include <iostream>
 #include "gameEngine.h"
-
-
-struct StateStruct
-{
-    void (*StatePointer)();
-};
-
-// Global data //
-std::stack<StateStruct> gameStates;
-
+#include "Configurator.h"
 
 int main( int argc, char* args[] )
 {
 
-    gameEngine* gEngine = gameEngine::getInstance();
+        gameEngine* gEngine = gameEngine::getInstance();
+        Configurator::open("config/game.config");
+
 
         if (gEngine->Setup()) {
 

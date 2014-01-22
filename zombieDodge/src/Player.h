@@ -12,6 +12,7 @@
 #include <iosfwd>
 #include <stack>
 #include <string>
+#include <map>
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
@@ -33,9 +34,10 @@ public:
     SDL_Rect hitBox;
 	Vector* vel;
 	Size<int> size;
-
-	SDL_Texture* image;
+    std::string spritePath;
     Sprite* sprite;
+    int spriteFrames;
+    int spriteRows;
     float hitPoints;
     float exp;
     bool spawned = false;
@@ -55,7 +57,7 @@ public:
     float kdRatio = 0.0;
     float lastShotTime= 0.0;
     float shootInterval = 250;
-
+    std::map<std::string, std::string>* config;
     SDL_Rect clip;
 
 

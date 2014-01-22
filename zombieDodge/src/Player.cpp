@@ -3,35 +3,53 @@
 
 Player::Player()
 {
+    std::string _playerTarget = "player1";
 
-    hitPoints = exp = 0;
-    playerId = "player1";
+    std::string configUrl = "config/" + _playerTarget + ".config";
+
+    config = Configurator::open(configUrl);
+
     pos = new Vector(300,300,0);
    // SDL_Rect clip;
     clip.x = 0;
     clip.y = 0;
-    clip.w = 41;
-    clip.h = 101;
+    spritePath =_playerTarget+ "Sprite.png";
+    hitPoints =  atoi((*config)[_playerTarget+"HitPoints"].c_str());
+    spriteFrames =  atoi((*config)[_playerTarget+"SpriteFrames"].c_str());
+    spriteRows =  atoi((*config)[_playerTarget+"SpriteRows"].c_str());
+    exp = 0;
+    clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
+    clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
     spawned =false;
+    playerId = _playerTarget;
 
-
+    config = nullptr;
 }
 
 Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
 {
 
-    hitPoints = _hp;
-    int exp = 0;
-    playerId = _playerTarget;
-    pos->x = _x;
-    pos->y = _y;
-    pos->z = _z;
+    std::string configUrl = "config/" + _playerTarget + ".config";
+
+    config = Configurator::open(configUrl);
+
+    pos = new Vector(_x,_y,_z);
     // SDL_Rect clip;
     clip.x = 0;
     clip.y = 0;
-    clip.w = 41;
-    clip.h = 101;
+
+    spritePath =((*config)[_playerTarget+"Image"]).c_str();
+    std::replace(spritePath.begin(), spritePath.end(), '"', ' ');
+    hitPoints =  atoi((*config)[_playerTarget+"HitPoints"].c_str());
+    spriteFrames =  atoi((*config)[_playerTarget+"SpriteFrames"].c_str());
+    spriteRows =  atoi((*config)[_playerTarget+"SpriteRows"].c_str());
+    exp = 0;
+    clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
+    clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
     spawned =false;
+    playerId = _playerTarget;
+    std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
+    config = nullptr;
 
 }
 
@@ -42,8 +60,9 @@ bool Player::Spawn()
     bool spriteCreated = true;
 
     spawned = true;
+
     //Create Sprite
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,"player1Sprite.png", pos->x, pos->y, 41,101,0,0);
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,spritePath, pos->x, pos->y, clip.w,clip.h,0,0);
     //Set Sprite Rows / Cols
     sprite->SetUpAnimation(2,1);
     //Set Origin to Sprite
@@ -65,12 +84,10 @@ SDL_Rect Player::GetHitBox() {
     return hitBox;
 }
 void Player::Update()
-{    std::cout << "UPDATE PLAYER  -> " << std::endl;
+{    //std::cout << "UPDATE PLAYER  -> " << std::endl;
     float frameMoveSpeed = this->moveSpeed;
     Vector moveOffset = Vector();
-    //frameCount++;
 
-    //sprite->PlayAnimation(0,1,1,200, clip,82,101);
     if(InputHandler::getInstance()->keyIsDown( SDL_SCANCODE_LSHIFT)) {
         if(! isSprinting){
 
@@ -79,7 +96,7 @@ void Player::Update()
             if(nonSprintElapsedTime > sprintInterval || lastSprintTime == -1){
                 frameMoveSpeed = sprintSpeed;
                 isSprinting = true;
-                // lastSprintTime = +(new Date());
+                lastSprintTime = SDL_GetTicks();
                 nonSprintElapsedTime = 0;
                 sprintLength +=  gameEngine::getInstance()->getTimer();
             }
@@ -108,7 +125,7 @@ void Player::Update()
         if(nonSprintElapsedTime > sprintInterval) sprintLength = 0;
 
     }
-    std::cout << "KEYDOWN IN PLAYER  -> " << InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W) << std::endl;
+    //std::cout << "KEYDOWN IN PLAYER  -> " << InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W) << std::endl;
 
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_W)){
         moveOffset.y -= frameMoveSpeed;

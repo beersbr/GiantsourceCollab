@@ -51,25 +51,6 @@ SDL_Surface* gameEngine::LoadImage( const std::string path )
     return optimizedSurface;
 }
 
-void gameEngine::logSDLError(std::ostream &os, const std::string &msg){
-    os << msg << " error: " << SDL_GetError() << std::endl;
-}
-
-void gameEngine::ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination)
-{
-    SDL_Rect pos;
-    pos.x = x;
-    pos.y = y;
-    SDL_QueryTexture(source, NULL, NULL, &pos.w, &pos.h);
-    SDL_RenderCopy(destination, source, NULL, &pos);
-
-}
-SDL_Texture* gameEngine::LoadTexture(const std::string &file, SDL_Renderer *ren){
-    SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
-    if (texture == nullptr)
-        printf( "Failed to load  texture!\n %s:", file.c_str() );
-    return texture;
-}
 SDL_Texture* gameEngine::LoadTexture(const std::string &file){
 
     //printf( "Loading Texture %s:", file.c_str());
@@ -98,52 +79,6 @@ void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
     RenderTexture(tex, ren, x, y, w, h);
 }
 
-void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y,int w,int h){
-
-    RenderTexture(tex, gameRender, x, y, w, h);
-}
-
-
-void gameEngine::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h, SDL_Rect clip){
-    //Setup the destination rectangle to be at the position we want
-   // printf("RENDER TEXTURE------\n");
-
-    SDL_Rect dst;
-    dst.x = x;
-    dst.y = y;
-    dst.w = w;
-    dst.h = h;
-    /*
-    SDL_Rect clipper;
-    clipper.x = cropX;
-    clipper.y = cropY;
-    clipper.w = cropW;
-    clipper.h = cropH;
-      */
-
-    SDL_Rect crop;
-
-    crop.x = clip.x;
-    crop.y = clip.y;
-    crop.w = clip.w;
-    crop.h= clip.h;
-   // std::cout << "---------"<< std::endl;
-   // std::cout << "CROP THE IMAGE" << std::endl;
-    //std::cout << "---------"<< std::endl;
-    //std::cout << "x  = " <<  crop.x << std::endl;
-    //std::cout << "y  = " <<  crop.y << std::endl;
-   // std::cout << "w  = " <<  crop.w << std::endl;
-   // std::cout << "h  = " <<  crop.h << std::endl;
-
-    SDL_RenderCopy(gameRender, texture, &clip, &dst);
-}
-
-void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y){
-    int w, h;
-    //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-    RenderTexture(tex, gameRender, x, y, w, h);
-}
 
 bool gameEngine::LoadScreen()
 {
@@ -227,21 +162,19 @@ bool gameEngine::GameInit () {
 
     //Load the sound effects
 
-
     //Once a config is in place, grab all the user data from the config and create the new player that way,
     //Config playerConfig = getConfig(_playerTarget);
+
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
-        //currentPlayer->clip.x = 41;
-        //currentPlayer->clip.x = 101;
-        //currentPlayer->pos->y = 100;
+
         currentPlayer->Spawn();
         Enemy *enemy = new Enemy();
 
-        //currentEnemy = new Enemy();
+
         enemy->Spawn();
-        enemies.push_back(enemy);// = currentEnemy;
+        enemies.push_back(enemy);
         enemy = nullptr;
 
     }
@@ -252,6 +185,8 @@ bool gameEngine::GameInit () {
 
 }
 bool gameEngine::Setup(){
+
+    config = Configurator::open("config/game.config");
 
     gameState = SETUP;
     //Initialization flag
@@ -269,7 +204,7 @@ bool gameEngine::Setup(){
     {
         //Create window
         gameWindow = SDL_CreateWindow(
-                WINDOW_CAPTION.c_str(),             // window title
+                ((*config)["window_title"]).c_str(),             // window title
                 SDL_WINDOWPOS_CENTERED,     // x position, centered
                 SDL_WINDOWPOS_CENTERED,     // y position, centered
                 WINDOW_WIDTH,                        // width, in pixels

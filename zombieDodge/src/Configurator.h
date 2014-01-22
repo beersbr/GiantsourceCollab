@@ -1,36 +1,52 @@
 //
-// Created by Brett Beers on 1/6/14.
+// Created by Brett Beers on 1/12/14.
 // Copyright (c) 2014 Brett Beers. All rights reserved.
 //
 
 #ifndef __Configurator_H_
 #define __Configurator_H_
 
-#include "common.h"
-
-#include <map>
 #include <iostream>
 #include <fstream>
+#include <map>
+#include <exception>
+#include <vector>
 
-enum CONFIGURATOR_ERROR {
-    COULD_NOT_OPEN_FILE = -100,
+namespace ConfiguratorException
+{
+    class FileNotFoundException : public std::exception {
+        virtual const char* what() const throw(){
+            return "Configurator :: Could not find specified file.\n";
+        }
+    };
 
-    RETURN_OK = 1
-};
+    class EOFExcpetion : public std::exception {
+        virtual const char* what() const throw(){
+            return "Configurator :: Unexpectedly reached the end of the stream.\n";
+        }
+    };
+
+    class ParseFileException : public std::exception {
+        virtual const char* what() const throw(){
+            return "Configurator :: Could not parse file.\n";
+        }
+    };
+
+    class BadStreamException : public std::exception {
+        virtual const char* what() const throw(){
+            return "Configurator :: The stream went bad in the middle of reading.\n";
+        }
+    };
+}
+
 
 class Configurator {
 public:
-    Configurator();
-
-    int LoadConfigFile(const std::string filename, const int bufferSize);
-    std::string operator[](const std::string key) const;
-
-private:
-
-    std::string filename;
-    std::map<std::string, std::string> proxy;
+    static std::map<std::string, std::string> * open(const std::string filepath);
+    static std::string readline(std::fstream& );
+    static std::vector<std::string> split(std::string& str, const char t);
+    static std::string strip(std::string& str);
 
 };
-
 
 #endif //__Configurator_H_
