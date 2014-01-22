@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stack>
 #include <string>
+#include <vector>
 #include <stdio.h>
 #include <iosfwd>
 #include <assert.h>
@@ -11,6 +12,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
+#include "Configurator.h"
 #include "InputHandler.h"
 #include "config.h"
 #include "common.h"
@@ -42,15 +44,14 @@ public:
     static gameEngine* getInstance();
 
     bool gameReady = false;
-
-
     float gameTimer;
     Player* currentPlayer = nullptr;
-    Enemy* currentEnemy = nullptr;
     int gameState=0;
     int playerCnt =0;
     int enemyCnt = 0;
     int followEnemyCnt = 0;
+
+    std::map<std::string, std::string>* config;
 
     //-----------Main Functions
     bool Setup();
@@ -108,9 +109,9 @@ public:
     bool LoadScreen();
     bool loadStateResources(int screenId);
     int totalEnemyCnt = 0;
-    std::map<int, Enemy*> enemies;
-    std::map<int, Bullet*> bullets;
-
+    std::vector<Bullet*> bullets;
+    std::vector<Enemy*> enemies;
+    void addBullet(Bullet* b);
     void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 
     bool CheckCollision( SDL_Rect A, SDL_Rect B )

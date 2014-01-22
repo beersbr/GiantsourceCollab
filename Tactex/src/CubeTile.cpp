@@ -66,3 +66,12 @@ const GLfloat CubeTile::cubeFaceNormals[] = {
 
 };
 
+void CubeTile::draw() const
+{
+
+}
+
+int CubeTile::update()
+{
+    return 0;
+}

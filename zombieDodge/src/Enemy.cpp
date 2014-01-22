@@ -12,10 +12,6 @@ Enemy::Enemy()
     //Initialize the offsets
     hitBox.x = 0;
     hitBox.y = 0;
-    clip.x = 0;
-    clip.y = 0;
-    clip.w = 70;
-    clip.h = 70;
 
 
 
@@ -40,55 +36,37 @@ SDL_Rect Enemy::GetHitBox() {
 
 bool Enemy::Spawn()
 {
-    bool spawned = true;
+    bool spawned = false;
 
-    image = gameEngine::getInstance()->LoadTexture("zombieSprite.png");
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombieSprite.png", pos->x, pos->y, 70,70,0,0);
+
+    sprite->SetUpAnimation(4,1);
+    sprite->SetOrigin(70/2.0f, 70);
+
     spawnFX = Mix_LoadWAV( "zombieRising.wav" );
-   // int w, h;
-    //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    SDL_QueryTexture(image, NULL, NULL, &imgWidth, &imgHeight);
+    if ( spawnFX == NULL)
+    {
+        std::cout << "Couldn't Load SPAWN FX : zombieRising.wav" << std::endl;
+    }  else {
+        Mix_VolumeChunk(spawnFX, 50);
 
-
-
-   // SDL_QueryTexture(image,NULL,NULL, &imgWidth, &imgHeight);
-
-    clip.x = 0;
-    clip.y = 0;
-    clip.w = 70;
-    clip.h = 70;
-
-
-    originX = 0;
-    originY = 0;
-
-    currentFrame = 0;
-    animationDelay=0;
-    frameX = 4;
-    frameY = 1;
-    frameEnd =3;
-    frameBegin = 0;
-    currentRow = 1;
-
-    //Set the square's dimentions
-    hitBox.w = clip.w;
-    hitBox.h =clip.h;
-
-    //std::cout << "SPAWN THE ENEMY  with image height is " << imgHeight<<  std::endl;
-
-    if(image == NULL)  {
-        std::cout << "COULD NOT SPAWN PLAYER SPRITE " << std::endl;
-        spawned = false;
     }
-    //moveSpeed = 12.0;
+
+
+
+    hitBox.w = 70;
+    hitBox.h = 70;
+
+
     vel = new Vector();
     int start = rand() % 4 +1;
-   // std::cout << "-------------------------START ENEMY POSISIOTN = " << start << std::endl;
     switch(start) {
 
         case 1:
 
             pos->x = static_cast<float>(rand() % WINDOW_WIDTH + 1);
             pos->y =0.0;
+            sprite->Rotate(-90);
             vel->y = static_cast<float>(rand() % moveSpeed + 1);
 
             break;
@@ -97,18 +75,22 @@ bool Enemy::Spawn()
 
             pos->x =static_cast<float>(rand() % WINDOW_WIDTH + 1);
             pos->y =static_cast<float>(WINDOW_HEIGHT);
+            sprite->Rotate(90);
             vel->y = -static_cast<float>(rand() % moveSpeed + 1);
 
             break;
 
         case 3:
             pos->x =static_cast<float>(WINDOW_WIDTH);
+
             pos->y =static_cast<float>(rand() % WINDOW_HEIGHT + 1);
             vel->x = -static_cast<float>(rand() % moveSpeed + 1);
+
             break;
 
         case 4:
             pos->x =0.0;
+            sprite->Flip('h');
             pos->y =static_cast<float>(rand() % WINDOW_HEIGHT + 1);
             vel->x = static_cast<float>(rand() % moveSpeed + 1);
             break;
@@ -116,7 +98,6 @@ bool Enemy::Spawn()
 
     }
 
-   // vel->z = 0.0;
     Mix_PlayChannel( -1, spawnFX, 0 );
     return spawned;
 
@@ -125,55 +106,20 @@ bool Enemy::Spawn()
 
 void Enemy::Update()
 {
-    //float frameMoveSpeed = moveSpeed;
-   // printf( "UPDATE ENEMY--------------------\n" );
-
-
+    sprite->PlayAnimation(0, 3, 1, 200);
 
     Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
-    // std::cout << "timer -> " << gEngine->getTimer() << std::endl;
-   // std::cout << "DONE ENEMY  MOVE -> VEL = x=" << vel->x << "Y = " << vel->y << std::endl;
+
     (*this->pos) += updatePos;
 
+    sprite->SetPosition(pos->x, pos->y);
 
-    //std::cout << "------------ ENEMY animationDelay" <<animationDelay << std::endl;
-
-    if ( animationDelay==-1) {
-
-        animationDelay = 0;
-    }
-    if (animationDelay+200 < SDL_GetTicks())
-    {
-        if (frameEnd <= currentFrame)
-            currentFrame = frameBegin;
-        else
-            currentFrame++;
-
-        clip.x = currentFrame * (imgWidth/frameX);
-        clip.y = (currentRow-1) * (imgHeight/frameY);
-        clip.w = imgWidth/frameX;
-        clip.h = imgHeight/frameY;
-
-        animationDelay = SDL_GetTicks();
-    }
-
-    //std::cout << "DONE ENEMY  MOVE -> POS = x=" << pos->x << "Y = " << pos->y << std::endl;
-
-      /*
-    Vector moveOffset = Vector(vel->x,vel->y,vel->z);
-    moveOffset*(gameEngine::getInstance()->gameTimer / 1000);
-
-    //vel *= (gameEngine::getInstance()->gameTimer / 1000);
-
-    (*this->pos) += moveOffset;
-
-    */
 }
 
 void Enemy::Draw(SDL_Renderer *renderer)
 {
-    gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,clip.w,clip.h,clip);
-   // gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
+    sprite->Render(pos->x, pos->y);
+
 
 }
 

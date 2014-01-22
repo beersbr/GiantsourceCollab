@@ -51,25 +51,6 @@ SDL_Surface* gameEngine::LoadImage( const std::string path )
     return optimizedSurface;
 }
 
-void gameEngine::logSDLError(std::ostream &os, const std::string &msg){
-    os << msg << " error: " << SDL_GetError() << std::endl;
-}
-
-void gameEngine::ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination)
-{
-    SDL_Rect pos;
-    pos.x = x;
-    pos.y = y;
-    SDL_QueryTexture(source, NULL, NULL, &pos.w, &pos.h);
-    SDL_RenderCopy(destination, source, NULL, &pos);
-
-}
-SDL_Texture* gameEngine::LoadTexture(const std::string &file, SDL_Renderer *ren){
-    SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
-    if (texture == nullptr)
-        printf( "Failed to load  texture!\n %s:", file.c_str() );
-    return texture;
-}
 SDL_Texture* gameEngine::LoadTexture(const std::string &file){
 
     //printf( "Loading Texture %s:", file.c_str());
@@ -98,52 +79,6 @@ void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
     RenderTexture(tex, ren, x, y, w, h);
 }
 
-void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y,int w,int h){
-
-    RenderTexture(tex, gameRender, x, y, w, h);
-}
-
-
-void gameEngine::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h, SDL_Rect clip){
-    //Setup the destination rectangle to be at the position we want
-   // printf("RENDER TEXTURE------\n");
-
-    SDL_Rect dst;
-    dst.x = x;
-    dst.y = y;
-    dst.w = w;
-    dst.h = h;
-    /*
-    SDL_Rect clipper;
-    clipper.x = cropX;
-    clipper.y = cropY;
-    clipper.w = cropW;
-    clipper.h = cropH;
-      */
-
-    SDL_Rect crop;
-
-    crop.x = clip.x;
-    crop.y = clip.y;
-    crop.w = clip.w;
-    crop.h= clip.h;
-   // std::cout << "---------"<< std::endl;
-   // std::cout << "CROP THE IMAGE" << std::endl;
-    //std::cout << "---------"<< std::endl;
-    //std::cout << "x  = " <<  crop.x << std::endl;
-    //std::cout << "y  = " <<  crop.y << std::endl;
-   // std::cout << "w  = " <<  crop.w << std::endl;
-   // std::cout << "h  = " <<  crop.h << std::endl;
-
-    SDL_RenderCopy(gameRender, texture, &clip, &dst);
-}
-
-void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y){
-    int w, h;
-    //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-    RenderTexture(tex, gameRender, x, y, w, h);
-}
 
 bool gameEngine::LoadScreen()
 {
@@ -227,21 +162,20 @@ bool gameEngine::GameInit () {
 
     //Load the sound effects
 
-
     //Once a config is in place, grab all the user data from the config and create the new player that way,
     //Config playerConfig = getConfig(_playerTarget);
+
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
-        //currentPlayer->clip.x = 41;
-        //currentPlayer->clip.x = 101;
-        //currentPlayer->pos->y = 100;
+
         currentPlayer->Spawn();
+        Enemy *enemy = new Enemy();
 
-        currentEnemy = new Enemy();
-        currentEnemy->Spawn();
-        enemies[0] = currentEnemy;
 
+        enemy->Spawn();
+        enemies.push_back(enemy);
+        enemy = nullptr;
 
     }
 
@@ -251,6 +185,8 @@ bool gameEngine::GameInit () {
 
 }
 bool gameEngine::Setup(){
+
+    config = Configurator::open("config/game.config");
 
     gameState = SETUP;
     //Initialization flag
@@ -268,7 +204,7 @@ bool gameEngine::Setup(){
     {
         //Create window
         gameWindow = SDL_CreateWindow(
-                WINDOW_CAPTION.c_str(),             // window title
+                ((*config)["window_title"]).c_str(),             // window title
                 SDL_WINDOWPOS_CENTERED,     // x position, centered
                 SDL_WINDOWPOS_CENTERED,     // y position, centered
                 WINDOW_WIDTH,                        // width, in pixels
@@ -416,164 +352,95 @@ void gameEngine::Update() {
                     currentPlayer->Update();
                 }
 
-                for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
+                for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-                    b->second->Update();
+                    (*bt)->Update();
+                    ++bt;
 
                 }
 
-                   if (enemyCnt> 30) {
+                   if (enemyCnt> 15) {
 
                         totalEnemyCnt++;
                         std::string enemyType;
 
-                        Enemy *enemy = new Enemy();
-                        enemy->Spawn();
+                        Enemy *e = new Enemy();
+                        e->Spawn();
                         if (followEnemyCnt == 7) {
 
-                           enemy->isFollow = true;
+                           e->isFollow = true;
                            followEnemyCnt = 0;
                         }
 
-                        followEnemyCnt++;
-                        enemies[totalEnemyCnt] = enemy;
-                        enemyCnt = 0;
+                         followEnemyCnt++;
+
+                         enemies.push_back(e);
+                         //delete enemy;
+                          e= nullptr;
+
+                         enemyCnt = 0;
                    }
 
 
                 enemyCnt++;
                // }
 
-                //typedef std::map<int, Enemy*>::iterator eIter;
-                //typedef std::map<int, Bullet*>::iterator bIter;
 
-                for(std::map<int, Enemy*>::const_iterator e = enemies.begin(); e != enemies.end(); ++e)
+                for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
 
-               // for( eIter e = enemies.begin(); e != enemies.end(); )
-                {
+                    if ( (*et)->isFollow) {
 
-                    if ( e->second->isFollow) {
+                        Enemy* em = *et;
 
-                        Vector moveEnemy = ((*currentPlayer->pos) - (*e->second->pos));
+                        Vector moveEnemy = ((*currentPlayer->pos) - (*em->pos));
 
-                        (*e->second->vel) =   ((moveEnemy.toUnit()) * (e->second->moveSpeed));
+                        (*em->vel) =   ((moveEnemy.toUnit()) * ((*et)->moveSpeed));
 
                     }
 
-                    e->second->Update();
+                    (*et)->Update();
 
 
-                    if((CheckCollision(e->second->GetHitBox(), currentPlayer->GetHitBox() ) ))
-                    {
-                        printf("GAMEOVER\n");
-                        std::cout << "PLAYER AND ENEMY COLLISION = " <<  e->first << std::endl;
 
-                        gameState = GAME_OVER;
-                    }
+                    for(std::vector<Bullet* >::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-
-                }
-
-
-                for(std::map<int, Bullet*>::const_iterator b = bullets.begin(); b != bullets.end();)
-                {
-
-                    for(std::map<int, Enemy*>::const_iterator e = enemies.begin(); e != enemies.end();) {
-
-                        if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox()) ))
+                        if((CheckCollision((*et)->GetHitBox(), (*bt)->GetHitBox()) ))
                         {
 
-                             printf("COLLISION");
-
-                            enemies.erase( e );
-                            ++e;
-                           // bullets.erase( b );
-                           // ++b;
-                            b->second->deleteBullet = true;
-                            e = enemies.end();
+                            (*et)->deleteItem = true;
+                              //et = enemies.erase(et);
+                              bt = bullets.erase(bt);
+                              bt = bullets.end();
 
                         }  else {
                             //++b;
-                            ++e;
-                        }
-                    }
-
-                    if (b->second->deleteBullet) {
-                        bullets.erase( b );
-                        ++b;
-                    } else {
-                        ++b;
-
-                    }
-                    /*
-                    if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox()) ))
-                    {
-
-
-                            ++e;
-                            enemies.erase( e );
-
-
-                            ++b;
-                            bullets.erase( b );
-                    } else  {
-                        ++e;
-                        ++b;
-                    }
-                   */
-                }
-
-
-                /*
-                for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
-
-
-                    if ( e->second->isFollow) {
-
-                       Vector moveEnemy = ((*currentPlayer->pos) - (*e->second->pos));
-
-                        (*e->second->vel) =   ((moveEnemy.toUnit()) * (e->second->moveSpeed));
-
-                    }
-
-                    e->second->Update();
-
-                    if((CheckCollision(e->second->GetHitBox(), currentPlayer->GetHitBox() ) ))
-                    {
-                        printf("GAMEOVER\n");
-                        std::cout << "PLAYER AND ENEMY COLLISION = " <<  e->first << std::endl;
-
-                        gameState = GAME_OVER;
-                    } else {
-
-                        for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
-
-                            if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox() ) ))
-                            {
-                                printf("BULLET COLLISION!\n");
-                                enemies.erase (e->first);
-
-                                //bullets.erase(b->first);
-
-                            } else {
-
-
-                                if (b->second->pos->x > WINDOW_WIDTH) {
-                                    bullets.erase (b->first);
-
-                                } else if (b->second->pos->y > WINDOW_HEIGHT) {
-                                    bullets.erase (b->first);
-                                }
-
-                            }
-
+                            ++bt;
                         }
 
                     }
-                }
-                */
 
-                //currentEnemy->Update();
+                    if ((*et)->deleteItem) {
+                        et = enemies.erase(et);
+
+                    }   else {
+                        if((CheckCollision((*et)->GetHitBox(), currentPlayer->GetHitBox() ) ))
+                        {
+                            printf("GAMEOVER\n");
+                            et = enemies.end();
+                            gameState = GAME_OVER;
+                        } else {
+
+                            ++et;
+
+                        }
+
+
+
+                    }
+
+
+                }
+
             }
             //Update the Monsters
 
@@ -601,6 +468,12 @@ void gameEngine::Update() {
 
 }
 
+void gameEngine::addBullet(Bullet* b) {
+    //printf("ADD A BULLET\n");
+    bullets.push_back(b);
+    //printf("BULLET ADDED\n");
+
+}
 
 void gameEngine::Draw() {
 
@@ -624,24 +497,43 @@ void gameEngine::Draw() {
            // currentPlayer->sprite->Draw(gameRender,currentPlayer->pos->x, currentPlayer->pos->y);
             currentPlayer->Draw(gameRender);
 
-            for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
 
-                b->second->Draw(gameRender);
+            for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-            }
+                (*bt)->Draw(gameRender);
 
-            for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
+                if ((*bt)->pos->x > WINDOW_WIDTH) {
+                    bt = bullets.erase(bt);
 
-                e->second->Draw(gameRender);
+                } else if ((*bt)->pos->y > WINDOW_HEIGHT) {
+                    bt = bullets.erase(bt);
 
-                if (e->second->pos->x > WINDOW_WIDTH) {
-                    enemies.erase (e->first);
+                } else {
+                    ++bt;
 
-                } else if (e->second->pos->y > WINDOW_HEIGHT) {
-                    enemies.erase (e->first);
                 }
 
             }
+
+            for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
+
+                (*et)->Draw(gameRender);
+
+                if ((*et)->pos->x > WINDOW_WIDTH) {
+                    et = enemies.erase(et);
+
+                } else if ((*et)->pos->y > WINDOW_HEIGHT) {
+                    et = enemies.erase(et);
+
+                } else {
+                    ++et;
+
+                }
+
+            }
+
+
+
 
 
             //currentEnemy->Draw(gameRender);
