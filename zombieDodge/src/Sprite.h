@@ -11,7 +11,7 @@ public:
     Sprite(std::string FilePath, float _x, float _y, int w, int h);
     ~Sprite();
 
-    void Render(float _x, float _y);
+    void Render(float _x, float _y,SDL_Rect *camera = NULL);
 
     void SetX(float _x);
     void SetPosition(float _x,float _y);

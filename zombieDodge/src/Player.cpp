@@ -21,6 +21,7 @@ Player::Player()
     clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
     clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
     spawned =false;
+    std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
     playerId = _playerTarget;
 
     config = nullptr;
@@ -48,7 +49,7 @@ Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
     clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
     spawned =false;
     playerId = _playerTarget;
-    std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
+    //std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
     config = nullptr;
 
 }
@@ -89,7 +90,9 @@ void Player::Update()
     Vector moveOffset = Vector();
 
     if(InputHandler::getInstance()->keyIsDown( SDL_SCANCODE_LSHIFT)) {
-        if(! isSprinting){
+
+
+        if(!isSprinting){
 
             nonSprintElapsedTime += gameEngine::getInstance()->getTimer();
 
@@ -115,6 +118,8 @@ void Player::Update()
             }
 
         }
+
+        //frameMoveSpeed = sprintSpeed;
     }
     else {
 
@@ -218,9 +223,9 @@ void Player::Shoot(int _x, int _y)
 
 }
 
-void Player::Draw(SDL_Renderer *renderer){
+void Player::Draw(SDL_Renderer *renderer, SDL_Rect camera){
 
-    sprite->Render(pos->x, pos->y);
+    sprite->Render((pos->x-camera.x), (pos->y-camera.y));
 
 }
 

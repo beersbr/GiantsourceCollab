@@ -79,6 +79,22 @@ void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
     RenderTexture(tex, ren, x, y, w, h);
 }
 
+void gameEngine::Render(SDL_Texture *texture, int x, int y, int h, int w, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+{
+    //Set rendering space and render to screen
+    SDL_Rect renderQuad = { x, y, h, w };
+
+    //Set clip rendering dimensions
+    if( clip != NULL )
+    {
+        renderQuad.w = clip->w;
+        renderQuad.h = clip->h;
+    }
+
+    //Render to screen
+    SDL_RenderCopyEx(gameRender, texture, clip, &renderQuad, angle, center, flip );
+}
+
 
 bool gameEngine::LoadScreen()
 {
@@ -107,6 +123,7 @@ bool gameEngine::LoadScreen()
 
         case PLAYING:
             gameBackground = LoadTexture("swamp.jpg");
+            gameHUD = LoadTexture("HUD.png");
             break;
 
         case GAME_OVER:
@@ -187,6 +204,11 @@ bool gameEngine::GameInit () {
 bool gameEngine::Setup(){
 
     config = Configurator::open("config/game.config");
+
+    camera->x=0;
+    camera->y=0;
+    camera->w = WINDOW_WIDTH;
+    camera->h = WINDOW_HEIGHT;
 
     gameState = SETUP;
     //Initialization flag
@@ -351,6 +373,26 @@ void gameEngine::Update() {
                 if (currentPlayer->spawned == true) {
                     currentPlayer->Update();
                 }
+                camera->x = ( currentPlayer->pos->x + currentPlayer->clip.w / 2 ) - WINDOW_WIDTH / 2;
+                camera->y = ( currentPlayer->pos->y + currentPlayer->clip.h / 2 ) - WINDOW_HEIGHT / 2;
+
+                //Keep the camera in bounds
+                if( camera->x < 0 )
+                {
+                    camera->x = 0;
+                }
+                if( camera->y < 0 )
+                {
+                    camera->y = 0;
+                }
+                if( camera->x > levelWidth - camera->w )
+                {
+                    camera->x = levelWidth - camera->w;
+                }
+                if( camera->y > levelHeight - camera->h )
+                {
+                    camera->y = levelHeight - camera->h;
+                }
 
                 for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
@@ -359,32 +401,28 @@ void gameEngine::Update() {
 
                 }
 
-                   if (enemyCnt> 15) {
+                if (enemyCnt> 15) {
 
                         totalEnemyCnt++;
                         std::string enemyType;
 
                         Enemy *e = new Enemy();
                         e->Spawn();
-                        if (followEnemyCnt == 7) {
 
+                        if (followEnemyCnt == 7) {
                            e->isFollow = true;
                            followEnemyCnt = 0;
                         }
 
-                         followEnemyCnt++;
+                        followEnemyCnt++;
 
-                         enemies.push_back(e);
-                         //delete enemy;
-                          e= nullptr;
+                        enemies.push_back(e);
+                        //delete enemy;
+                        e= nullptr;
 
-                         enemyCnt = 0;
-                   }
-
-
+                        enemyCnt = 0;
+                }
                 enemyCnt++;
-               // }
-
 
                 for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
 
@@ -400,20 +438,16 @@ void gameEngine::Update() {
 
                     (*et)->Update();
 
-
-
                     for(std::vector<Bullet* >::iterator bt = bullets.begin(); bt != bullets.end();) {
 
                         if((CheckCollision((*et)->GetHitBox(), (*bt)->GetHitBox()) ))
                         {
 
                             (*et)->deleteItem = true;
-                              //et = enemies.erase(et);
                               bt = bullets.erase(bt);
                               bt = bullets.end();
 
                         }  else {
-                            //++b;
                             ++bt;
                         }
 
@@ -434,20 +468,11 @@ void gameEngine::Update() {
 
                         }
 
-
-
                     }
-
 
                 }
 
             }
-            //Update the Monsters
-
-            //Update the Bullets
-
-            //General Game input handler
-
             break;
 
         case GAME_OVER:
@@ -458,25 +483,19 @@ void gameEngine::Update() {
         default:
             break;
 
-
-
     }
 
     Draw();
 
-
-
 }
 
 void gameEngine::addBullet(Bullet* b) {
-    //printf("ADD A BULLET\n");
+
     bullets.push_back(b);
-    //printf("BULLET ADDED\n");
 
 }
 
 void gameEngine::Draw() {
-
 
     //Clear the Screen
     SDL_RenderClear(gameRender);
@@ -494,9 +513,8 @@ void gameEngine::Draw() {
     if ( this->gameState == PLAYING) {
 
         if (gameReady) {
-           // currentPlayer->sprite->Draw(gameRender,currentPlayer->pos->x, currentPlayer->pos->y);
-            currentPlayer->Draw(gameRender);
 
+            currentPlayer->Draw(gameRender,&camera);
 
             for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
@@ -532,12 +550,12 @@ void gameEngine::Draw() {
 
             }
 
+            SDL_QueryTexture(gameHUD, NULL, NULL, &iW, &iH);
+            x = WINDOW_WIDTH / 2 - iW / 2;
+            y = WINDOW_HEIGHT / 2 - iH / 2;
 
-
-
-
-            //currentEnemy->Draw(gameRender);
-            //Draw Enemies
+            //Draw the HUD SCREEN
+            RenderTexture(gameHUD, gameRender, x, y);
 
        }   else {
             std::cout << "GAME NOT READY-> " << std::endl;
@@ -552,25 +570,23 @@ void gameEngine::Draw() {
 }
 void gameEngine::Cleanup(){
 
-    this->gameState = EXIT;
-
     SDL_DestroyTexture(gameBackground);
+
+    SDL_DestroyTexture(gameHUD);
 
     SDL_DestroyRenderer(gameRender);
 
-    //SDL_FreeSurface(  this->gameBackground );
-    this->gameBackground = NULL;
-
     //Destroy window
     SDL_DestroyWindow( gameWindow );
-    this->gameWindow = NULL;
 
+    this->gameWindow = NULL;
 
     Mix_CloseAudio();
     // Tell SDL to shutdown and free any resources it was using. //
     IMG_Quit();
     SDL_Quit();
 
+    gameState = EXIT;
 
 }
 

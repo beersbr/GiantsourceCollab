@@ -87,23 +87,28 @@ void Sprite::PlayAnimation(int begin, int end, int row, float speed)
     }
 }
 
-void Sprite::Render(float _x, float _y)
+void Sprite::Render(float _x, float _y,SDL_Rect *camera)
 {
 
+    SDL_Rect box;
+    box.x = posX;
+    box.y = posY;
+    box.w = crop.w;
+    box.h = crop.h;
 
+    if (camera != NULL) {
 
-        SDL_Rect box;
-        box.x = posX;
-        box.y = posY;
-        box.w = crop.w;
-        box.h = crop.h;
+        box.x -=camera->x;
+        box.y -=camera->y;
+    }
+
 
         //Render to screen
         SDL_RenderCopyEx(renderer,image, &crop, &box, angle, NULL, flipImage );
-
-
-
     //SDL_RenderCopy(renderer,image, &crop, &box);
+
+
+
 
 }
 
@@ -120,32 +125,16 @@ void Sprite::SetY(float _y)
 
     rect.y = static_cast<int>(posY - originY);
 }
- /*
-void Sprite::SetPosition(float _x, float _y)
-{    std::cout << "SET POSITION -> = x=" << _x << "Y = " << _y << std::endl;
-    position->x = _x - originX;
-    position->y = _y - originY;
-
-    //rect.x =static_cast<int>(position->x - originX);
-    //rect.y = static_cast<int>(position->y - originY);
-}
-*/
 
 void Sprite::SetOrigin(float _x, float _y)
 {
 
-    //std::cout << "SET ORIGIN -> VEL = x=" << _x << "Y = " << _y << std::endl;
+
     originX = _x;
     originY = _y;
-    //std::cout << "SET POSITION NOW -> VEL = x=" << _x << "Y = " << _y << std::endl;
-    //std::cout << "SET POSITION SET with X = " << position->x << std::endl;
-    //Vector* pos = GetPosition();
-    //float xPosi = GetX();
-    //std::cout << "SET POSITION xPosi -> x=" << pos->x << std::endl;
-    //SetPosition(position->x, position->y);
-    //position->x -= originX;
-    //position->y -= originY;
-    //std::cout << "SET POSITION SET" << std::endl;
+    posY-= originX;
+    posY-=originY;
+
 }
 
 

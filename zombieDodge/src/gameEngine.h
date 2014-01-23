@@ -50,7 +50,7 @@ public:
     int playerCnt =0;
     int enemyCnt = 0;
     int followEnemyCnt = 0;
-
+    SDL_Rect *camera;
     std::map<std::string, std::string>* config;
 
     //-----------Main Functions
@@ -88,6 +88,10 @@ public:
     //The image we will load and show on the screen
     SDL_Texture* gameBackground;
 
+    SDL_Texture* gameHUD;
+
+    int levelWidth = 1600;
+    int levelHeight = 1131;
     //SDL_Surface* gameBackground;
 
     SDL_Renderer* gameRender;
@@ -106,6 +110,7 @@ public:
     void RenderTexture(SDL_Texture *tex, int x, int y);
     void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h);
     void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h, SDL_Rect clip);
+    void Render(SDL_Texture *texture, int x, int y, int h, int w, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip );
     bool LoadScreen();
     bool loadStateResources(int screenId);
     int totalEnemyCnt = 0;
