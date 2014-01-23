@@ -22,7 +22,7 @@ public:
     bool Spawn();
     //void Move();
     void Update(); // because it has to be there
-    void Draw(SDL_Renderer *renderer);
+    void Draw(SDL_Renderer *renderer,SDL_Rect *camera);
     void TakeDamage(int dmg);
     SDL_Rect GetHitBox();
 

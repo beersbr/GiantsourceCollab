@@ -122,7 +122,7 @@ bool gameEngine::LoadScreen()
             break;
 
         case PLAYING:
-            gameBackground = LoadTexture("swamp.jpg");
+            gameBackground = LoadTexture("citybg.jpg");
             gameHUD = LoadTexture("HUD.png");
             break;
 
@@ -202,14 +202,14 @@ bool gameEngine::GameInit () {
 
 }
 bool gameEngine::Setup(){
-
-    config = Configurator::open("config/game.config");
-
-    camera->x=0;
-    camera->y=0;
-    camera->w = WINDOW_WIDTH;
-    camera->h = WINDOW_HEIGHT;
-
+    printf("GET CONFIG");
+   // config = Configurator::open("config/game.config");
+    std::cout << "QINDO QWIDTH  -> " << WINDOW_HEIGHT << std::endl;
+    printf("CAMERA SET");
+    camera.x =0;
+    camera.y=0;
+    camera.w = WINDOW_WIDTH;
+    camera.h = WINDOW_HEIGHT;
     gameState = SETUP;
     //Initialization flag
     bool success = true;
@@ -226,7 +226,7 @@ bool gameEngine::Setup(){
     {
         //Create window
         gameWindow = SDL_CreateWindow(
-                ((*config)["window_title"]).c_str(),             // window title
+                WINDOW_CAPTION.c_str(),             // window title
                 SDL_WINDOWPOS_CENTERED,     // x position, centered
                 SDL_WINDOWPOS_CENTERED,     // y position, centered
                 WINDOW_WIDTH,                        // width, in pixels
@@ -280,7 +280,7 @@ bool gameEngine::Setup(){
 
 void gameEngine::Run() {
 
-
+    printf("GO SET UP");
     while ( this->gameState != EXIT) {
 
         if (getTimer() >= FRAME_RATE )
@@ -319,7 +319,10 @@ void gameEngine::Run() {
                      }
 
                 case GAME_OVER:
-
+                    camera.x =0;
+                    camera.y=0;
+                    camera.w = WINDOW_WIDTH;
+                    camera.h = WINDOW_HEIGHT;
 
 
 
@@ -370,28 +373,28 @@ void gameEngine::Update() {
             this->GameInput();
             if (gameReady){
                 //Update the Player
-                if (currentPlayer->spawned == true) {
+                if (currentPlayer->spawned) {
                     currentPlayer->Update();
                 }
-                camera->x = ( currentPlayer->pos->x + currentPlayer->clip.w / 2 ) - WINDOW_WIDTH / 2;
-                camera->y = ( currentPlayer->pos->y + currentPlayer->clip.h / 2 ) - WINDOW_HEIGHT / 2;
+                camera.x = ( currentPlayer->pos->x + currentPlayer->clip.w / 2 ) - WINDOW_WIDTH / 2;
+                camera.y = ( currentPlayer->pos->y + currentPlayer->clip.h / 2 ) - WINDOW_HEIGHT / 2;
 
                 //Keep the camera in bounds
-                if( camera->x < 0 )
+                if( camera.x < 0 )
                 {
-                    camera->x = 0;
+                    camera.x = 0;
                 }
-                if( camera->y < 0 )
+                if( camera.y < 0 )
                 {
-                    camera->y = 0;
+                    camera.y = 0;
                 }
-                if( camera->x > levelWidth - camera->w )
+                if( camera.x > levelWidth - camera.w )
                 {
-                    camera->x = levelWidth - camera->w;
+                    camera.x = levelWidth - camera.w;
                 }
-                if( camera->y > levelHeight - camera->h )
+                if( camera.y > levelHeight - camera.h )
                 {
-                    camera->y = levelHeight - camera->h;
+                    camera.y = levelHeight - camera.h;
                 }
 
                 for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
@@ -501,14 +504,14 @@ void gameEngine::Draw() {
     SDL_RenderClear(gameRender);
 
     //Load the Background image to the render Window last
-    int iW, iH;
-    SDL_QueryTexture(gameBackground, NULL, NULL, &iW, &iH);
-    int x = WINDOW_WIDTH / 2 - iW / 2;
-    int y = WINDOW_HEIGHT / 2 - iH / 2;
+    //int iW, iH;
+    //SDL_QueryTexture(gameBackground, NULL, NULL, &iW, &iH);
+    //int x = WINDOW_WIDTH / 2 - iW / 2;
+    //int y = WINDOW_HEIGHT / 2 - iH / 2;
 
     //Draw the image
-    RenderTexture(gameBackground, gameRender, x, y);
-
+   // RenderTexture(gameBackground, gameRender, x, y);
+    Render(gameBackground, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, &camera, NULL, NULL, SDL_FLIP_NONE);
 
     if ( this->gameState == PLAYING) {
 
@@ -518,12 +521,12 @@ void gameEngine::Draw() {
 
             for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-                (*bt)->Draw(gameRender);
+                (*bt)->Draw(gameRender, &camera);
 
-                if ((*bt)->pos->x > WINDOW_WIDTH) {
+                if ((*bt)->pos->x > levelWidth) {
                     bt = bullets.erase(bt);
 
-                } else if ((*bt)->pos->y > WINDOW_HEIGHT) {
+                } else if ((*bt)->pos->y > levelHeight) {
                     bt = bullets.erase(bt);
 
                 } else {
@@ -535,12 +538,12 @@ void gameEngine::Draw() {
 
             for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
 
-                (*et)->Draw(gameRender);
+                (*et)->Draw(gameRender,&camera);
 
-                if ((*et)->pos->x > WINDOW_WIDTH) {
+                if ((*et)->pos->x > levelWidth) {
                     et = enemies.erase(et);
 
-                } else if ((*et)->pos->y > WINDOW_HEIGHT) {
+                } else if ((*et)->pos->y > levelHeight) {
                     et = enemies.erase(et);
 
                 } else {
@@ -550,12 +553,12 @@ void gameEngine::Draw() {
 
             }
 
-            SDL_QueryTexture(gameHUD, NULL, NULL, &iW, &iH);
-            x = WINDOW_WIDTH / 2 - iW / 2;
-            y = WINDOW_HEIGHT / 2 - iH / 2;
+            //SDL_QueryTexture(gameHUD, NULL, NULL, &iW, &iH);
+            //x = WINDOW_WIDTH / 2 - iW / 2;
+            //y = WINDOW_HEIGHT / 2 - iH / 2;
 
             //Draw the HUD SCREEN
-            RenderTexture(gameHUD, gameRender, x, y);
+            RenderTexture(gameHUD, gameRender, 0, 0);
 
        }   else {
             std::cout << "GAME NOT READY-> " << std::endl;

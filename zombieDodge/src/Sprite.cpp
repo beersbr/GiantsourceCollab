@@ -87,24 +87,18 @@ void Sprite::PlayAnimation(int begin, int end, int row, float speed)
     }
 }
 
-void Sprite::Render(float _x, float _y,SDL_Rect *camera)
+void Sprite::Render(float _x, float _y)
 {
 
     SDL_Rect box;
-    box.x = posX;
-    box.y = posY;
+    box.x = _x;
+    box.y = _y;
     box.w = crop.w;
     box.h = crop.h;
 
-    if (camera != NULL) {
 
-        box.x -=camera->x;
-        box.y -=camera->y;
-    }
-
-
-        //Render to screen
-        SDL_RenderCopyEx(renderer,image, &crop, &box, angle, NULL, flipImage );
+    //Render to screen
+    SDL_RenderCopyEx(renderer,image, &crop, &box, angle, NULL, flipImage );
     //SDL_RenderCopy(renderer,image, &crop, &box);
 
 

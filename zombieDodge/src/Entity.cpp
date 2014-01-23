@@ -38,7 +38,7 @@ void Entity::Update() {
 
 }
 
-void Entity::Draw(SDL_Renderer *renderer) {
+void Entity::Draw(SDL_Renderer *renderer, SDL_Rect *camera) {
 
 
 

@@ -28,7 +28,7 @@ public:
     bool Spawn();
     //void Move();
     void Update(); // because it has to be there
-    void Player::Draw(SDL_Renderer *renderer, SDL_Rect camera);
+    void Draw(SDL_Renderer *renderer, SDL_Rect *camera);
     void TakeDamage(int dmg);
     void Shoot(int dx, int dy);
     SDL_Rect GetHitBox();

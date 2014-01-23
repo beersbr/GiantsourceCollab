@@ -21,7 +21,7 @@ public:
     bool Spawn(Vector &v);
     //void Move();
     void Update(); // because it has to be there
-    void Draw(SDL_Renderer *renderer);
+    void Draw(SDL_Renderer *renderer, SDL_Rect *camera);
     SDL_Rect GetHitBox();
     SDL_Rect hitBox;
     Mix_Chunk *spawnFX = NULL;

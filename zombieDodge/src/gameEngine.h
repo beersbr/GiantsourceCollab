@@ -50,7 +50,7 @@ public:
     int playerCnt =0;
     int enemyCnt = 0;
     int followEnemyCnt = 0;
-    SDL_Rect *camera;
+    SDL_Rect camera;
     std::map<std::string, std::string>* config;
 
     //-----------Main Functions
@@ -96,20 +96,10 @@ public:
 
     SDL_Renderer* gameRender;
 
-
-    float CameraX;
-    float CameraY;
-
     SDL_Surface* LoadImage(const std::string path);
-    static SDL_Texture* LoadTexture(const std::string &file, SDL_Renderer *ren);
     SDL_Texture* LoadTexture(const std::string &file);
-    static Vector getPlayerPos();
-    void logSDLError(std::ostream &os, const std::string &msg);
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h);
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y);
-    void RenderTexture(SDL_Texture *tex, int x, int y);
-    void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h);
-    void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h, SDL_Rect clip);
     void Render(SDL_Texture *texture, int x, int y, int h, int w, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip );
     bool LoadScreen();
     bool loadStateResources(int screenId);
@@ -117,7 +107,7 @@ public:
     std::vector<Bullet*> bullets;
     std::vector<Enemy*> enemies;
     void addBullet(Bullet* b);
-    void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
+
 
     bool CheckCollision( SDL_Rect A, SDL_Rect B )
     {

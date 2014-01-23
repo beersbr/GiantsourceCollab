@@ -28,8 +28,8 @@ Enemy::Enemy(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 
 SDL_Rect Enemy::GetHitBox() {
 
-       hitBox.x = pos->x;
-       hitBox.y = pos->y;
+    hitBox.x = (pos->x- cameraOffset.x);
+    hitBox.y = (pos->y- cameraOffset.y);
 
     return hitBox;
 }
@@ -64,8 +64,8 @@ bool Enemy::Spawn()
 
         case 1:
 
-            pos->x = static_cast<float>(rand() % WINDOW_WIDTH + 1);
-            pos->y =0.0;
+            pos->x = static_cast<float>(rand() % (WINDOW_WIDTH+gameEngine::getInstance()->camera.x) + 1);
+            pos->y =0.0+gameEngine::getInstance()->camera.y;
             sprite->Rotate(-90);
             vel->y = static_cast<float>(rand() % moveSpeed + 1);
 
@@ -73,25 +73,25 @@ bool Enemy::Spawn()
 
         case 2:
 
-            pos->x =static_cast<float>(rand() % WINDOW_WIDTH + 1);
-            pos->y =static_cast<float>(WINDOW_HEIGHT);
+            pos->x =static_cast<float>(rand() % (WINDOW_WIDTH+gameEngine::getInstance()->camera.x) + 1);
+            pos->y =static_cast<float>(WINDOW_HEIGHT+gameEngine::getInstance()->camera.y);
             sprite->Rotate(90);
             vel->y = -static_cast<float>(rand() % moveSpeed + 1);
 
             break;
 
         case 3:
-            pos->x =static_cast<float>(WINDOW_WIDTH);
+            pos->x =static_cast<float>(WINDOW_WIDTH+gameEngine::getInstance()->camera.x);
 
-            pos->y =static_cast<float>(rand() % WINDOW_HEIGHT + 1);
+            pos->y =static_cast<float>(rand() % (WINDOW_HEIGHT+gameEngine::getInstance()->camera.y) + 1);
             vel->x = -static_cast<float>(rand() % moveSpeed + 1);
 
             break;
 
         case 4:
-            pos->x =0.0;
+            pos->x =0.0+gameEngine::getInstance()->camera.x;
             sprite->Flip('h');
-            pos->y =static_cast<float>(rand() % WINDOW_HEIGHT + 1);
+            pos->y =static_cast<float>(rand() % (WINDOW_HEIGHT+gameEngine::getInstance()->camera.y) + 1);
             vel->x = static_cast<float>(rand() % moveSpeed + 1);
             break;
 
@@ -116,9 +116,13 @@ void Enemy::Update()
 
 }
 
-void Enemy::Draw(SDL_Renderer *renderer)
+void Enemy::Draw(SDL_Renderer *renderer, SDL_Rect *camera)
 {
-    sprite->Render(pos->x, pos->y);
+
+    cameraOffset.x = camera->x;
+    cameraOffset.y = camera->y;
+
+    sprite->Render((pos->x-camera->x), (pos->y-camera->y));
 
 
 }

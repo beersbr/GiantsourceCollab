@@ -18,8 +18,11 @@ Player::Player()
     spriteFrames =  atoi((*config)[_playerTarget+"SpriteFrames"].c_str());
     spriteRows =  atoi((*config)[_playerTarget+"SpriteRows"].c_str());
     exp = 0;
-    clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
-    clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
+    //clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
+    //clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
+    clip.w = 41;
+    clip.h = 101;
+
     spawned =false;
     std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
     playerId = _playerTarget;
@@ -79,8 +82,8 @@ bool Player::Spawn()
 }
 SDL_Rect Player::GetHitBox() {
 
-    hitBox.x = pos->x;
-    hitBox.y = pos->y;
+    hitBox.x = pos->x - cameraOffset.x;
+    hitBox.y = pos->y - cameraOffset.y;
 
     return hitBox;
 }
@@ -160,8 +163,31 @@ void Player::Update()
         Shoot(0, 1);
     }
 
+
+    std::cout << "--------pos PRE x / y  -> " << pos->x << " / " << pos->y << std::endl;
     //Update Position
     (*this->pos) += moveOffset;
+
+
+    if (pos->x > (gameEngine::getInstance()->levelWidth-clip.w)) {
+
+        pos->x = (gameEngine::getInstance()->levelWidth-clip.w);
+
+    } else if (pos->x < 0) {
+
+        pos->x = 0;
+    }
+
+    if (pos->y > (gameEngine::getInstance()->levelHeight-clip.h)) {
+
+        pos->y = (gameEngine::getInstance()->levelHeight-clip.h);
+    } else if (pos->y < clip.h) {
+
+        pos->y = clip.h;
+    }
+
+    std::cout << "pos x / y  -> " << pos->x << " / " << pos->y << std::endl;
+
 
     //Play Sprite Animation
     sprite->PlayAnimation(0, 1, 1, 200);
@@ -223,9 +249,13 @@ void Player::Shoot(int _x, int _y)
 
 }
 
-void Player::Draw(SDL_Renderer *renderer, SDL_Rect camera){
+void Player::Draw(SDL_Renderer *renderer, SDL_Rect *camera){
 
-    sprite->Render((pos->x-camera.x), (pos->y-camera.y));
+    cameraOffset.x = camera->x;
+    cameraOffset.y = camera->y;
+
+   // std::cout << "CAMERA x/y =   " <<  camera->x << " / " << camera->y << std::endl;
+    sprite->Render((pos->x-camera->x), (pos->y-camera->y));
 
 }
 

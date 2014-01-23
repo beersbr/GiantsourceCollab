@@ -11,8 +11,8 @@ Bullet::Bullet(float _x, float _y, float _z)
 
 SDL_Rect Bullet::GetHitBox() {
 
-    hitBox.x = pos->x;
-    hitBox.y = pos->y;
+    hitBox.x = pos->x-cameraOffset.x;
+    hitBox.y = pos->y-cameraOffset.y;
 
     return hitBox;
 }
@@ -85,10 +85,12 @@ void Bullet::Update()
   */
 }
 
-void Bullet::Draw(SDL_Renderer *renderer)
+void Bullet::Draw(SDL_Renderer *renderer, SDL_Rect *camera)
 {
+    cameraOffset.x = camera->x;
+    cameraOffset.y = camera->y;
 
-    sprite->Render(pos->x, pos->y);
+    sprite->Render(pos->x-camera->x, pos->y-camera->y);
 
     //gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,clip.w,clip.h,clip);
     // gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);

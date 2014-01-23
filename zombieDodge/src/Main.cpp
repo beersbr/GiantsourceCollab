@@ -11,16 +11,20 @@
 #include "gameEngine.h"
 #include "Configurator.h"
 
+
 int main( int argc, char* args[] )
 {
 
         gameEngine* gEngine = gameEngine::getInstance();
-        Configurator::open("config/game.config");
+        //Configurator::open("config/game.config");
 
 
         if (gEngine->Setup()) {
 
             gEngine->Run();
+
+        } else {
+            printf("FAILed setup");
 
         }
         return 0;
