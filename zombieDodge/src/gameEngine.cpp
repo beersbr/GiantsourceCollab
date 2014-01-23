@@ -171,6 +171,67 @@ bool gameEngine::loadStateResources(int screenId)
 };
 
 
+void gameEngine::SetColor(SDL_Texture *texture, Uint8 red, Uint8 green, Uint8 blue )
+{
+    //Modulate texture rgb
+    SDL_SetTextureColorMod( texture, red, green, blue );
+}
+
+void gameEngine::SetBlendMode(SDL_Texture *texture, SDL_BlendMode blending )
+{
+    //Set blending function
+    SDL_SetTextureBlendMode( texture, blending );
+}
+
+void gameEngine::SetAlpha(SDL_Texture *texture, Uint8 alpha )
+{
+    //Modulate texture alpha
+    SDL_SetTextureAlphaMod( texture, alpha );
+}
+
+
+bool gameEngine::LoadText( std::string textureText, SDL_Color textColor )
+{
+    //Get rid of preexisting texture
+   if (gameText != NULL) {
+       SDL_DestroyTexture( gameText );
+       gameText = NULL;
+       textWidth = 0;
+       textHeight = 0;
+
+
+   }
+
+    //Render text surface
+    SDL_Surface* textSurface = TTF_RenderText_Solid( gameFont, textureText.c_str(), textColor );
+    if( textSurface == NULL )
+    {
+        printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+    }
+    else
+    {
+        //Create texture from surface pixels
+        gameText = SDL_CreateTextureFromSurface(gameRender, textSurface );
+        if( gameText == NULL )
+        {
+            printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+        }
+        else
+        {
+            //Get image dimensions
+            textWidth = textSurface->w;
+            textHeight = textSurface->h;
+        }
+
+        //Get rid of old surface
+        SDL_FreeSurface( textSurface );
+    }
+
+    //Return success
+    return gameText != NULL;
+}
+
+
 bool gameEngine::GameInit () {
 
     bool gameInit = true;
@@ -240,6 +301,19 @@ bool gameEngine::Setup(){
         }
         else
         {
+
+            //Enable VSync
+            if( !SDL_SetHint( SDL_HINT_RENDER_VSYNC, "1" ) )
+            {
+                printf( "Warning: VSync not enabled!" );
+            }
+
+            //Set texture filtering to linear
+            if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+            {
+                printf( "Warning: Linear texture filtering not enabled!" );
+            }
+
             //Initialize JPG loading
             int imgFlags = IMG_INIT_JPG;
             if( !( IMG_Init( imgFlags ) & imgFlags ) )
@@ -254,11 +328,21 @@ bool gameEngine::Setup(){
                 //Get window surface
                 //gameSurface = SDL_GetWindowSurface( gameWindow);
             }
+            //Initialize SDL_ttf
+            if( TTF_Init() == -1 )
+            {
+                printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+                success = false;
+            }   else {
+
+               gameFont = TTF_OpenFont( "Arial.ttf", 28 );
+
+            }
 
             //Initialize SDL_mixer
             if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
             {
-                return false;
+                success = false;
             }
         }
     }
@@ -336,14 +420,16 @@ void gameEngine::Run() {
                         }
 
                      }
-
+                 break;
                 case GAME_OVER:
                     camera.x =0;
                     camera.y=0;
                     camera.w = WINDOW_WIDTH;
                     camera.h = WINDOW_HEIGHT;
+                    textColor = { 255, 255, 255 };
+                    LoadText("You Have Lost", textColor);
 
-
+                  break;
 
                  default:
 
@@ -583,6 +669,10 @@ void gameEngine::Draw() {
             std::cout << "GAME NOT READY-> " << std::endl;
 
         }
+
+    } else if (gameState == GAME_OVER){
+
+        Render(gameText, 300, 200, 400, 50, NULL, NULL, NULL, SDL_FLIP_NONE);
 
     }
 

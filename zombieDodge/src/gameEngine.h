@@ -12,6 +12,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #include "Configurator.h"
 #include "InputHandler.h"
 #include "config.h"
@@ -52,6 +53,8 @@ public:
     int followEnemyCnt = 0;
     SDL_Rect camera;
     std::map<std::string, std::string>* config;
+    //Globally used font
+
 
     //-----------Main Functions
     bool Setup();
@@ -65,7 +68,12 @@ public:
     void SetPlayer(std::string playerId);
     float getTimer();
     void SetGameState(int state);
+    bool LoadText( std::string textureText, SDL_Color textColor );
+    void SetColor(SDL_Texture *texture, Uint8 red, Uint8 green, Uint8 blue );
 
+    void SetBlendMode(SDL_Texture *texture, SDL_BlendMode blending );
+
+    void SetAlpha(SDL_Texture *texture, Uint8 alpha );
     //-----------Input Functions
     void MenuInput();
     void GameInput();
@@ -76,11 +84,12 @@ public:
     SDL_Surface* getGameSurface();
     SDL_Texture* getBackground();
     //SDL_Renderer* getRender();
-
+    SDL_Color textColor;
     //The window we'll be rendering to
     SDL_Window* gameWindow;
-
-    SDL_Texture* PlayerImage;
+     int textWidth;
+    int textHeight;
+    SDL_Texture* gameText;
 
     //The surface contained by the window
     SDL_Surface* gameSurface;
@@ -89,6 +98,8 @@ public:
     SDL_Texture* gameBackground;
 
     SDL_Texture* gameHUD;
+
+    TTF_Font *gameFont = NULL;
 
     int levelWidth = 1600;
     int levelHeight = 1131;
