@@ -14,7 +14,7 @@
 
 class Bullet : public Entity {
 public:
-    Bullet(float _x, float _y, float _z);
+    Bullet(Vector *origin, Vector *target, float _x, float _y, float _z);
     ~Bullet();
 
 
@@ -29,6 +29,7 @@ public:
     int moveSpeed = 50;
     SDL_Texture* image;
     Sprite* sprite;
+    Vector* target = nullptr;
 
     bool spawned = false;
     std::string bulletId;

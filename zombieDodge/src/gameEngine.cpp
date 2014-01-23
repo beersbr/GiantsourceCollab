@@ -280,13 +280,15 @@ bool gameEngine::Setup(){
 
 void gameEngine::Run() {
 
-    printf("GO SET UP");
+   // printf("GO SET UP");
     while ( this->gameState != EXIT) {
 
         if (getTimer() >= FRAME_RATE )
         {
             SDL_Event event;
             while( SDL_PollEvent( &event ) != 0 ){
+                SDL_GetMouseState( &mouseX, &mouseY);
+
                 switch(event.type)
                 {
                     case SDL_KEYDOWN:
@@ -295,6 +297,23 @@ void gameEngine::Run() {
                     case SDL_KEYUP:
                         InputHandler::getInstance()->keyUp(event.key.keysym.scancode);
                         break;
+                    case SDL_MOUSEMOTION:
+                       // InputHandler::getInstance()->mouseButtonUp(event.button);
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        if (event.button.button == SDL_BUTTON_LEFT) {
+                            //std::cout << "LEFT DOWN  -> " << event.button.x << std::endl;
+                            InputHandler::getInstance()->mouseButtonDown();
+                        }
+
+                        //InputHandler::getInstance()->setMouseXY(mouseX, mouseY);
+                        //InputHandler::getInstance()->mouseButtonDown(1);
+                       break;
+                    case SDL_MOUSEBUTTONUP:
+                        InputHandler::getInstance()->mouseButtonUp();
+
+                        break;
+
                     case SDL_QUIT:
                         this->gameState = CLEANUP;
                         break;

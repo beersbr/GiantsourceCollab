@@ -164,7 +164,16 @@ void Player::Update()
     }
 
 
-    std::cout << "--------pos PRE x / y  -> " << pos->x << " / " << pos->y << std::endl;
+
+    if(InputHandler::getInstance()->mouseButtonIsDown()){
+
+            MouseShoot();
+
+    }
+
+
+
+    //std::cout << "--------pos PRE x / y  -> " << pos->x << " / " << pos->y << std::endl;
     //Update Position
     (*this->pos) += moveOffset;
 
@@ -186,7 +195,7 @@ void Player::Update()
         pos->y = clip.h;
     }
 
-    std::cout << "pos x / y  -> " << pos->x << " / " << pos->y << std::endl;
+    //std::cout << "pos x / y  -> " << pos->x << " / " << pos->y << std::endl;
 
 
     //Play Sprite Animation
@@ -206,6 +215,57 @@ void Player::Update()
 
 }
 
+void Player::MouseShoot() {
+
+
+
+     int _x; int _y;
+
+    if(!isShooting){
+
+        isShooting = true;
+        // spawn a bullet with the direction
+
+        Vector* mVector = new Vector(gameEngine::getInstance()->mouseX+gameEngine::getInstance()->camera.x,gameEngine::getInstance()->mouseY+gameEngine::getInstance()->camera.y,0);
+
+        Bullet *bullet = new Bullet(pos,mVector,NULL, NULL, NULL);
+
+        bullet->Spawn((*pos));
+
+        gameEngine::getInstance()->bullets.push_back(bullet);
+        bullet = nullptr;
+        shotsFired++;
+        lastShotTime = SDL_GetTicks();
+
+    } else {
+
+        if (lastShotTime+shootInterval < SDL_GetTicks())
+        {
+            isShooting = false;
+            lastShotTime = 0.0;
+        }
+
+
+
+    }
+
+    if (lastShotTime+shootInterval < SDL_GetTicks())
+    {
+        if(!isShooting){
+
+
+
+        } else {
+            isShooting = false;
+
+        }
+
+    }
+
+
+
+}
+
 void Player::Shoot(int _x, int _y)
 {
 
@@ -213,7 +273,7 @@ void Player::Shoot(int _x, int _y)
 
         isShooting = true;
         // spawn a bullet with the direction
-        Bullet *bullet = new Bullet(static_cast<float>(_x),static_cast<float>(_y),0.0);
+        Bullet *bullet = new Bullet(NULL, NULL, _x,_y,0.0);
         bullet->Spawn((*pos));
         //gameEngine::getInstance()->addBullet(bullet);
         gameEngine::getInstance()->bullets.push_back(bullet);

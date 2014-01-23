@@ -31,6 +31,7 @@ public:
     void Draw(SDL_Renderer *renderer, SDL_Rect *camera);
     void TakeDamage(int dmg);
     void Shoot(int dx, int dy);
+    void MouseShoot();
     SDL_Rect GetHitBox();
     SDL_Rect hitBox;
 	Vector* vel;

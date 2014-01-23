@@ -93,7 +93,8 @@ public:
     int levelWidth = 1600;
     int levelHeight = 1131;
     //SDL_Surface* gameBackground;
-
+    int mouseX;
+    int mouseY;
     SDL_Renderer* gameRender;
 
     SDL_Surface* LoadImage(const std::string path);
