@@ -51,25 +51,6 @@ SDL_Surface* gameEngine::LoadImage( const std::string path )
     return optimizedSurface;
 }
 
-void gameEngine::logSDLError(std::ostream &os, const std::string &msg){
-    os << msg << " error: " << SDL_GetError() << std::endl;
-}
-
-void gameEngine::ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination)
-{
-    SDL_Rect pos;
-    pos.x = x;
-    pos.y = y;
-    SDL_QueryTexture(source, NULL, NULL, &pos.w, &pos.h);
-    SDL_RenderCopy(destination, source, NULL, &pos);
-
-}
-SDL_Texture* gameEngine::LoadTexture(const std::string &file, SDL_Renderer *ren){
-    SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
-    if (texture == nullptr)
-        printf( "Failed to load  texture!\n %s:", file.c_str() );
-    return texture;
-}
 SDL_Texture* gameEngine::LoadTexture(const std::string &file){
 
     //printf( "Loading Texture %s:", file.c_str());
@@ -98,52 +79,22 @@ void gameEngine::RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
     RenderTexture(tex, ren, x, y, w, h);
 }
 
-void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y,int w,int h){
+void gameEngine::Render(SDL_Texture *texture, int x, int y, int h, int w, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+{
+    //Set rendering space and render to screen
+    SDL_Rect renderQuad = { x, y, h, w };
 
-    RenderTexture(tex, gameRender, x, y, w, h);
+    //Set clip rendering dimensions
+    if( clip != NULL )
+    {
+        renderQuad.w = clip->w;
+        renderQuad.h = clip->h;
+    }
+
+    //Render to screen
+    SDL_RenderCopyEx(gameRender, texture, clip, &renderQuad, angle, center, flip );
 }
 
-
-void gameEngine::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h, SDL_Rect clip){
-    //Setup the destination rectangle to be at the position we want
-   // printf("RENDER TEXTURE------\n");
-
-    SDL_Rect dst;
-    dst.x = x;
-    dst.y = y;
-    dst.w = w;
-    dst.h = h;
-    /*
-    SDL_Rect clipper;
-    clipper.x = cropX;
-    clipper.y = cropY;
-    clipper.w = cropW;
-    clipper.h = cropH;
-      */
-
-    SDL_Rect crop;
-
-    crop.x = clip.x;
-    crop.y = clip.y;
-    crop.w = clip.w;
-    crop.h= clip.h;
-   // std::cout << "---------"<< std::endl;
-   // std::cout << "CROP THE IMAGE" << std::endl;
-    //std::cout << "---------"<< std::endl;
-    //std::cout << "x  = " <<  crop.x << std::endl;
-    //std::cout << "y  = " <<  crop.y << std::endl;
-   // std::cout << "w  = " <<  crop.w << std::endl;
-   // std::cout << "h  = " <<  crop.h << std::endl;
-
-    SDL_RenderCopy(gameRender, texture, &clip, &dst);
-}
-
-void gameEngine::RenderTexture(SDL_Texture *tex, int x, int y){
-    int w, h;
-    //printf( "RENDER THE PLAYER TEXTURE!\n" );
-    SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-    RenderTexture(tex, gameRender, x, y, w, h);
-}
 
 bool gameEngine::LoadScreen()
 {
@@ -171,7 +122,8 @@ bool gameEngine::LoadScreen()
             break;
 
         case PLAYING:
-            gameBackground = LoadTexture("swamp.jpg");
+            gameBackground = LoadTexture("citybg.jpg");
+            gameHUD = LoadTexture("HUD.png");
             break;
 
         case GAME_OVER:
@@ -219,6 +171,67 @@ bool gameEngine::loadStateResources(int screenId)
 };
 
 
+void gameEngine::SetColor(SDL_Texture *texture, Uint8 red, Uint8 green, Uint8 blue )
+{
+    //Modulate texture rgb
+    SDL_SetTextureColorMod( texture, red, green, blue );
+}
+
+void gameEngine::SetBlendMode(SDL_Texture *texture, SDL_BlendMode blending )
+{
+    //Set blending function
+    SDL_SetTextureBlendMode( texture, blending );
+}
+
+void gameEngine::SetAlpha(SDL_Texture *texture, Uint8 alpha )
+{
+    //Modulate texture alpha
+    SDL_SetTextureAlphaMod( texture, alpha );
+}
+
+
+bool gameEngine::LoadText( std::string textureText, SDL_Color textColor )
+{
+    //Get rid of preexisting texture
+   if (gameText != NULL) {
+       SDL_DestroyTexture( gameText );
+       gameText = NULL;
+       textWidth = 0;
+       textHeight = 0;
+
+
+   }
+
+    //Render text surface
+    SDL_Surface* textSurface = TTF_RenderText_Solid( gameFont, textureText.c_str(), textColor );
+    if( textSurface == NULL )
+    {
+        printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+    }
+    else
+    {
+        //Create texture from surface pixels
+        gameText = SDL_CreateTextureFromSurface(gameRender, textSurface );
+        if( gameText == NULL )
+        {
+            printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+        }
+        else
+        {
+            //Get image dimensions
+            textWidth = textSurface->w;
+            textHeight = textSurface->h;
+        }
+
+        //Get rid of old surface
+        SDL_FreeSurface( textSurface );
+    }
+
+    //Return success
+    return gameText != NULL;
+}
+
+
 bool gameEngine::GameInit () {
 
     bool gameInit = true;
@@ -227,22 +240,20 @@ bool gameEngine::GameInit () {
 
     //Load the sound effects
 
-
     //Once a config is in place, grab all the user data from the config and create the new player that way,
     //Config playerConfig = getConfig(_playerTarget);
+
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
-        //currentPlayer->clip.x = 41;
-        //currentPlayer->clip.x = 101;
-        //currentPlayer->pos->y = 100;
+
         currentPlayer->Spawn();
         Enemy *enemy = new Enemy();
 
-        //currentEnemy = new Enemy();
+
         enemy->Spawn();
-        enemies.push_back(enemy);// = currentEnemy;
-        delete(enemy);
+        enemies.push_back(enemy);
+        enemy = nullptr;
 
     }
 
@@ -252,7 +263,14 @@ bool gameEngine::GameInit () {
 
 }
 bool gameEngine::Setup(){
-
+    printf("GET CONFIG");
+   // config = Configurator::open("config/game.config");
+    std::cout << "QINDO QWIDTH  -> " << WINDOW_HEIGHT << std::endl;
+    printf("CAMERA SET");
+    camera.x =0;
+    camera.y=0;
+    camera.w = WINDOW_WIDTH;
+    camera.h = WINDOW_HEIGHT;
     gameState = SETUP;
     //Initialization flag
     bool success = true;
@@ -283,6 +301,19 @@ bool gameEngine::Setup(){
         }
         else
         {
+
+            //Enable VSync
+            if( !SDL_SetHint( SDL_HINT_RENDER_VSYNC, "1" ) )
+            {
+                printf( "Warning: VSync not enabled!" );
+            }
+
+            //Set texture filtering to linear
+            if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+            {
+                printf( "Warning: Linear texture filtering not enabled!" );
+            }
+
             //Initialize JPG loading
             int imgFlags = IMG_INIT_JPG;
             if( !( IMG_Init( imgFlags ) & imgFlags ) )
@@ -297,11 +328,21 @@ bool gameEngine::Setup(){
                 //Get window surface
                 //gameSurface = SDL_GetWindowSurface( gameWindow);
             }
+            //Initialize SDL_ttf
+            if( TTF_Init() == -1 )
+            {
+                printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+                success = false;
+            }   else {
+
+               gameFont = TTF_OpenFont( "Arial.ttf", 28 );
+
+            }
 
             //Initialize SDL_mixer
             if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
             {
-                return false;
+                success = false;
             }
         }
     }
@@ -323,13 +364,15 @@ bool gameEngine::Setup(){
 
 void gameEngine::Run() {
 
-
+   // printf("GO SET UP");
     while ( this->gameState != EXIT) {
 
         if (getTimer() >= FRAME_RATE )
         {
             SDL_Event event;
             while( SDL_PollEvent( &event ) != 0 ){
+                SDL_GetMouseState( &mouseX, &mouseY);
+
                 switch(event.type)
                 {
                     case SDL_KEYDOWN:
@@ -338,6 +381,23 @@ void gameEngine::Run() {
                     case SDL_KEYUP:
                         InputHandler::getInstance()->keyUp(event.key.keysym.scancode);
                         break;
+                    case SDL_MOUSEMOTION:
+                       // InputHandler::getInstance()->mouseButtonUp(event.button);
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        if (event.button.button == SDL_BUTTON_LEFT) {
+                            //std::cout << "LEFT DOWN  -> " << event.button.x << std::endl;
+                            InputHandler::getInstance()->mouseButtonDown();
+                        }
+
+                        //InputHandler::getInstance()->setMouseXY(mouseX, mouseY);
+                        //InputHandler::getInstance()->mouseButtonDown(1);
+                       break;
+                    case SDL_MOUSEBUTTONUP:
+                        InputHandler::getInstance()->mouseButtonUp();
+
+                        break;
+
                     case SDL_QUIT:
                         this->gameState = CLEANUP;
                         break;
@@ -360,11 +420,16 @@ void gameEngine::Run() {
                         }
 
                      }
-
+                 break;
                 case GAME_OVER:
+                    camera.x =0;
+                    camera.y=0;
+                    camera.w = WINDOW_WIDTH;
+                    camera.h = WINDOW_HEIGHT;
+                    textColor = { 255, 255, 255 };
+                    LoadText("You Have Lost", textColor);
 
-
-
+                  break;
 
                  default:
 
@@ -413,44 +478,58 @@ void gameEngine::Update() {
             this->GameInput();
             if (gameReady){
                 //Update the Player
-                if (currentPlayer->spawned == true) {
+                if (currentPlayer->spawned) {
                     currentPlayer->Update();
+                }
+                camera.x = ( currentPlayer->pos->x + currentPlayer->clip.w / 2 ) - WINDOW_WIDTH / 2;
+                camera.y = ( currentPlayer->pos->y + currentPlayer->clip.h / 2 ) - WINDOW_HEIGHT / 2;
+
+                //Keep the camera in bounds
+                if( camera.x < 0 )
+                {
+                    camera.x = 0;
+                }
+                if( camera.y < 0 )
+                {
+                    camera.y = 0;
+                }
+                if( camera.x > levelWidth - camera.w )
+                {
+                    camera.x = levelWidth - camera.w;
+                }
+                if( camera.y > levelHeight - camera.h )
+                {
+                    camera.y = levelHeight - camera.h;
                 }
 
                 for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
                     (*bt)->Update();
+                    ++bt;
 
                 }
 
-                   if (enemyCnt> 30) {
+                if (enemyCnt> 15) {
 
                         totalEnemyCnt++;
                         std::string enemyType;
 
-                        Enemy *enemy = new Enemy();
-                        enemy->Spawn();
-                        if (followEnemyCnt == 7) {
+                        Enemy *e = new Enemy();
+                        e->Spawn();
 
-                           enemy->isFollow = true;
+                        if (followEnemyCnt == 7) {
+                           e->isFollow = true;
                            followEnemyCnt = 0;
                         }
 
-                         followEnemyCnt++;
+                        followEnemyCnt++;
 
-                         enemies.push_back(enemy);
-//                         delete enemy;
-
-                       //enemies[totalEnemyCnt] = enemy;
+                        enemies.push_back(e);
+                        //delete enemy;
+                        e = nullptr;
                         enemyCnt = 0;
-                   }
-
-
+                }
                 enemyCnt++;
-               // }
-
-                //typedef std::map<int, Enemy*>::iterator eIter;
-                //typedef std::map<int, Bullet*>::iterator bIter;
 
                 std::cout << enemies.size() << std::endl;
 
@@ -468,25 +547,20 @@ void gameEngine::Update() {
 
                     (*et)->Update();
 
+                    for(std::vector<Bullet* >::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-                    /*
-                    for(std::vector<Bullet>::iterator bt = bullets.begin(); bt != bullets.end();) {
-
-                        if((CheckCollision(et->GetHitBox(), bt->GetHitBox()) ))
+                        if((CheckCollision((*et)->GetHitBox(), (*bt)->GetHitBox()) ))
                         {
 
-                              et->deleteItem = true;
-                              //et = enemies.erase(et);
+                            (*et)->deleteItem = true;
                               bt = bullets.erase(bt);
                               bt = bullets.end();
 
                         }  else {
-                            //++b;
                             ++bt;
                         }
 
                     }
-                    */
 
                     if ((*et)->deleteItem) {
                         et = enemies.erase(et);
@@ -495,6 +569,7 @@ void gameEngine::Update() {
                         if((CheckCollision((*et)->GetHitBox(), currentPlayer->GetHitBox() ) ))
                         {
                             printf("GAMEOVER\n");
+                            et = enemies.end();
                             gameState = GAME_OVER;
                         } else {
 
@@ -502,165 +577,11 @@ void gameEngine::Update() {
 
                         }
 
-
-
                     }
-
-
-                }
-                /*
-                for(std::map<int, Enemy*>::const_iterator e = enemies.begin(); e != enemies.end(); ++e)
-
-               // for( eIter e = enemies.begin(); e != enemies.end(); )
-                {
-
-                    if ( e->second->isFollow) {
-
-                        Vector moveEnemy = ((*currentPlayer->pos) - (*e->second->pos));
-
-                        (*e->second->vel) =   ((moveEnemy.toUnit()) * (e->second->moveSpeed));
-
-                    }
-
-                    e->second->Update();
-
-
-                    if((CheckCollision(e->second->GetHitBox(), currentPlayer->GetHitBox() ) ))
-                    {
-                        printf("GAMEOVER\n");
-                        std::cout << "PLAYER AND ENEMY COLLISION = " <<  e->first << std::endl;
-
-                        gameState = GAME_OVER;
-                    }
-
-                    if((CheckCollision(et->GetHitBox(), bt->GetHitBox()) ))
-                    {
-
-                        printf("COLLISION");
-
-                        enemies.erase( e );
-                        ++e;
-                        // bullets.erase( b );
-                        // ++b;
-                        b->second->deleteBullet = true;
-                        e = enemies.end();
-
-                    }  else {
-                        //++b;
-                        ++e;
-                    }
-
 
                 }
 
-
-                for(std::map<int, Bullet*>::const_iterator b = bullets.begin(); b != bullets.end();)
-                {
-
-                    for(std::map<int, Enemy*>::const_iterator e = enemies.begin(); e != enemies.end();) {
-
-                        if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox()) ))
-                        {
-
-                             printf("COLLISION");
-
-                            enemies.erase( e );
-                            ++e;
-                           // bullets.erase( b );
-                           // ++b;
-                            b->second->deleteBullet = true;
-                            e = enemies.end();
-
-                        }  else {
-                            //++b;
-                            ++e;
-                        }
-                    }
-
-                    if (b->second->deleteBullet) {
-                        bullets.erase( b );
-                        ++b;
-                    } else {
-                        ++b;
-
-                    }
-                    */
-                    /*
-                    if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox()) ))
-                    {
-
-
-                            ++e;
-                            enemies.erase( e );
-
-
-                            ++b;
-                            bullets.erase( b );
-                    } else  {
-                        ++e;
-                        ++b;
-                    }
-                   */
-                //}
-
-
-                /*
-                for (auto e=enemies.begin(); e!=enemies.end(); ++e)  {
-
-
-                    if ( e->second->isFollow) {
-
-                       Vector moveEnemy = ((*currentPlayer->pos) - (*e->second->pos));
-
-                        (*e->second->vel) =   ((moveEnemy.toUnit()) * (e->second->moveSpeed));
-
-                    }
-
-                    e->second->Update();
-
-                    if((CheckCollision(e->second->GetHitBox(), currentPlayer->GetHitBox() ) ))
-                    {
-                        printf("GAMEOVER\n");
-                        std::cout << "PLAYER AND ENEMY COLLISION = " <<  e->first << std::endl;
-
-                        gameState = GAME_OVER;
-                    } else {
-
-                        for (auto b=bullets.begin(); b!=bullets.end(); ++b)  {
-
-                            if((CheckCollision(e->second->GetHitBox(), b->second->GetHitBox() ) ))
-                            {
-                                printf("BULLET COLLISION!\n");
-                                enemies.erase (e->first);
-
-                                //bullets.erase(b->first);
-
-                            } else {
-
-
-                                if (b->second->pos->x > WINDOW_WIDTH) {
-                                    bullets.erase (b->first);
-
-                                } else if (b->second->pos->y > WINDOW_HEIGHT) {
-                                    bullets.erase (b->first);
-                                }
-
-                            }
-
-                        }
-
-                    }
-                }
-                */
-
-                //currentEnemy->Update();
             }
-            //Update the Monsters
-
-            //Update the Bullets
-
-            //General Game input handler
-
             break;
 
         case GAME_OVER:
@@ -671,48 +592,47 @@ void gameEngine::Update() {
         default:
             break;
 
-
-
     }
 
     Draw();
 
+}
 
+void gameEngine::addBullet(Bullet* b) {
+
+    bullets.push_back(b);
 
 }
 
-
 void gameEngine::Draw() {
-
 
     //Clear the Screen
     SDL_RenderClear(gameRender);
 
     //Load the Background image to the render Window last
-    int iW, iH;
-    SDL_QueryTexture(gameBackground, NULL, NULL, &iW, &iH);
-    int x = WINDOW_WIDTH / 2 - iW / 2;
-    int y = WINDOW_HEIGHT / 2 - iH / 2;
+    //int iW, iH;
+    //SDL_QueryTexture(gameBackground, NULL, NULL, &iW, &iH);
+    //int x = WINDOW_WIDTH / 2 - iW / 2;
+    //int y = WINDOW_HEIGHT / 2 - iH / 2;
 
     //Draw the image
-    RenderTexture(gameBackground, gameRender, x, y);
-
+   // RenderTexture(gameBackground, gameRender, x, y);
+    Render(gameBackground, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, &camera, NULL, NULL, SDL_FLIP_NONE);
 
     if ( this->gameState == PLAYING) {
 
         if (gameReady) {
-           // currentPlayer->sprite->Draw(gameRender,currentPlayer->pos->x, currentPlayer->pos->y);
-            currentPlayer->Draw(gameRender);
 
-            /*
-            for(std::vector<Bullet>::iterator bt = bullets.begin(); bt != bullets.end();++bt) {
+            currentPlayer->Draw(gameRender,&camera);
 
-               bt->Draw(gameRender);
+            for(std::vector<Bullet*>::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-                if (bt->pos->x > WINDOW_WIDTH) {
+                (*bt)->Draw(gameRender, &camera);
+
+                if ((*bt)->pos->x > levelWidth) {
                     bt = bullets.erase(bt);
 
-                } else if (bt->pos->y > WINDOW_HEIGHT) {
+                } else if ((*bt)->pos->y > levelHeight) {
                     bt = bullets.erase(bt);
 
                 } else {
@@ -721,15 +641,15 @@ void gameEngine::Draw() {
                 }
 
             }
-              */
+
             for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
 
-                (*et)->Draw(gameRender);
+                (*et)->Draw(gameRender,&camera);
 
-                if ((*et)->pos->x > WINDOW_WIDTH) {
+                if ((*et)->pos->x > levelWidth) {
                     et = enemies.erase(et);
 
-                } else if ((*et)->pos->y > WINDOW_HEIGHT) {
+                } else if ((*et)->pos->y > levelHeight) {
                     et = enemies.erase(et);
 
                 } else {
@@ -739,17 +659,21 @@ void gameEngine::Draw() {
 
             }
 
+            //SDL_QueryTexture(gameHUD, NULL, NULL, &iW, &iH);
+            //x = WINDOW_WIDTH / 2 - iW / 2;
+            //y = WINDOW_HEIGHT / 2 - iH / 2;
 
-
-
-
-            //currentEnemy->Draw(gameRender);
-            //Draw Enemies
+            //Draw the HUD SCREEN
+            RenderTexture(gameHUD, gameRender, 0, 0);
 
        }   else {
             std::cout << "GAME NOT READY-> " << std::endl;
 
         }
+
+    } else if (gameState == GAME_OVER){
+
+        Render(gameText, 300, 200, 400, 50, NULL, NULL, NULL, SDL_FLIP_NONE);
 
     }
 
@@ -759,25 +683,23 @@ void gameEngine::Draw() {
 }
 void gameEngine::Cleanup(){
 
-    this->gameState = EXIT;
-
     SDL_DestroyTexture(gameBackground);
+
+    SDL_DestroyTexture(gameHUD);
 
     SDL_DestroyRenderer(gameRender);
 
-    //SDL_FreeSurface(  this->gameBackground );
-    this->gameBackground = NULL;
-
     //Destroy window
     SDL_DestroyWindow( gameWindow );
-    this->gameWindow = NULL;
 
+    this->gameWindow = NULL;
 
     Mix_CloseAudio();
     // Tell SDL to shutdown and free any resources it was using. //
     IMG_Quit();
     SDL_Quit();
 
+    gameState = EXIT;
 
 }
 

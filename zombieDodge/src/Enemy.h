@@ -6,6 +6,7 @@
 #ifndef __ENEMY_H_
 #define __ENEMY_H_
 #include "Entity.h"
+#include "Sprite.h"
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
@@ -21,7 +22,7 @@ public:
     bool Spawn();
     //void Move();
     void Update(); // because it has to be there
-    void Draw(SDL_Renderer *renderer);
+    void Draw(SDL_Renderer *renderer,SDL_Rect *camera);
     void TakeDamage(int dmg);
     SDL_Rect GetHitBox();
 
@@ -29,7 +30,8 @@ public:
 	Vector* vel;
 	Size<int> size;
     SDL_Rect hitBox;
-	SDL_Texture* image;
+	//SDL_Texture* image;
+    Sprite* sprite;
     Mix_Chunk *spawnFX = NULL;
 
     float hitPoints;

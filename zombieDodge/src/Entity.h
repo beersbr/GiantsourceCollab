@@ -11,7 +11,7 @@ public:
     Entity(int x, int y, int z);
 	virtual ~Entity();
 
-    virtual void Draw(SDL_Renderer *renderer) = 0;
+    virtual void Draw(SDL_Renderer *renderer, SDL_Rect *camera) = 0;
 	virtual void Update() = 0;
 
 
@@ -20,6 +20,7 @@ public:
 public:
 	Vector* pos;
     Vector* vel;
+    SDL_Rect cameraOffset;
     SDL_Rect hitBox;
 
 private:

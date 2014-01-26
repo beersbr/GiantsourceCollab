@@ -11,38 +11,35 @@ public:
     Sprite(std::string FilePath, float _x, float _y, int w, int h);
     ~Sprite();
 
-
-    void Draw(float _x, float _y);
+    void Render(float _x, float _y);
 
     void SetX(float _x);
+    void SetPosition(float _x,float _y);
     void SetY(float _y);
-    //void SetPosition(float _x, float _y);
-     /*
-    float GetX();
-    float GetY();
-       */
+
     void SetWidth(int W);
     void SetHeight(int H);
+
     int GetWidth();
     int GetHeight();
 
     void SetOrigin(float _x, float _y);
-    void PlayAnimation(int begin, int end, int row, float speed, SDL_Rect clip,int imgWidth, int imgHeight);
+    void PlayAnimation(int begin, int end, int row, float speed);
     void SetUpAnimation(int frameX, int frameY);
+    void Rotate(double _a);
+    void Flip(char direction);
     SDL_Texture* image;
     SDL_Rect crop;
-    //Vector* position;
-    //Vector* camera;
+    SDL_Rect rect;
+
+    float cameraX;
+    float cameraY;
+    double angle = NULL;
+    SDL_RendererFlip flipImage = SDL_FLIP_NONE;
     float posX;
     float posY;
     float originX;
     float originY;
-
-
-
-    SDL_Rect rect;
-
-
 
     int imgWidth;
     int imgHeight;

@@ -17,12 +17,15 @@
 		F5F5A076A898B435614DED30 /* Enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A59011CD6EA9291FA5DD /* Enemy.cpp */; };
 		F5F5A0A24BB0A6ECF76DBCDC /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AE9033696E6BD4364A06 /* Sprite.cpp */; };
 		F5F5A31BE89F758DF209C7E9 /* GameState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9DF5F125D394E080E5F /* GameState.cpp */; };
+		F5F5A453FE99547558D165D5 /* player1.config in Resources */ = {isa = PBXBuildFile; fileRef = F5F5AF0837A9301778CF1842 /* player1.config */; };
+		F5F5A6AA16D24ED5AC1F4905 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A8351A8BD1CEEF9C7F11 /* game.config */; };
 		F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AF417D113E62A1EE738B /* Entity.cpp */; };
 		F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */; };
 		F5F5AA9CF4FA6BB44CE61B42 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B9D187737C100A02E35 /* SDL2.framework */; };
 		F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */; };
 		F5F5AE4E1CCAA577121D5F31 /* gameEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A305BF2395F554285D0F /* gameEngine.cpp */; };
 		F5F5AEFB56DEE44C0B804E7E /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A31BF2CD6CD483527B54 /* Bullet.cpp */; };
+		F5F5AFF050AA68E1DCF3B431 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F5AEF86F158BF6A5337EAE /* SDL2_ttf.framework */; };
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
 		FB1B0B98187736E600A02E35 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1B0B97187736E600A02E35 /* Main.cpp */; };
 		FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B99187737B000A02E35 /* OpenGL.framework */; };
@@ -74,6 +77,7 @@
 		F5F5A5229579ECEFFED76C5B /* GameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameState.h; sourceTree = "<group>"; };
 		F5F5A59011CD6EA9291FA5DD /* Enemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy.cpp; sourceTree = "<group>"; };
 		F5F5A803058019CF4823324F /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bullet.h; sourceTree = "<group>"; };
+		F5F5A8351A8BD1CEEF9C7F11 /* game.config */ = {isa = PBXFileReference; lastKnownFileType = file.config; path = game.config; sourceTree = "<group>"; };
 		F5F5A998052535AA9980691E /* Enemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy.h; sourceTree = "<group>"; };
 		F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		F5F5A9DF5F125D394E080E5F /* GameState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameState.cpp; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 		F5F5AE7FF7B33515326B1A99 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		F5F5AE9033696E6BD4364A06 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
 		F5F5AEBF42237537385C50E2 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
+		F5F5AEF86F158BF6A5337EAE /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = /Users/Frameworks/SDL2_ttf.framework; sourceTree = "<absolute>"; };
+		F5F5AF0837A9301778CF1842 /* player1.config */ = {isa = PBXFileReference; lastKnownFileType = file.config; path = player1.config; sourceTree = "<group>"; };
 		F5F5AF417D113E62A1EE738B /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1B0B621877369800A02E35 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -108,6 +114,7 @@
 				FB1B0B9A187737B000A02E35 /* OpenGL.framework in Frameworks */,
 				FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */,
 				F5F5AA9CF4FA6BB44CE61B42 /* SDL2.framework in Frameworks */,
+				F5F5AFF050AA68E1DCF3B431 /* SDL2_ttf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +132,23 @@
 			path = ../../images;
 			sourceTree = "<group>";
 		};
+		F5F5A6EF7FC1D4959D813B03 /* config */ = {
+			isa = PBXGroup;
+			children = (
+				F5F5A8351A8BD1CEEF9C7F11 /* game.config */,
+				F5F5AF0837A9301778CF1842 /* player1.config */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		F5F5AAB8FC4C41C9D91F7F3A /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				F5F5A6EF7FC1D4959D813B03 /* config */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
 		FB1B0B561877369800A02E35 = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +157,7 @@
 				FB1B0B681877369800A02E35 /* ZombieDodge */,
 				FB1B0B611877369800A02E35 /* Frameworks */,
 				FB1B0B601877369800A02E35 /* Products */,
+				F5F5AAB8FC4C41C9D91F7F3A /* resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -154,6 +179,7 @@
 				FB1B0B621877369800A02E35 /* Cocoa.framework */,
 				FB1B0B811877369800A02E35 /* XCTest.framework */,
 				FB1B0B641877369800A02E35 /* Other Frameworks */,
+				F5F5AEF86F158BF6A5337EAE /* SDL2_ttf.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -276,6 +302,8 @@
 				FBD09E40187B8A7000BF4554 /* ZombieDodge-Info.plist in Resources */,
 				F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */,
 				EA3B1B3C188741E9008DD3C9 /* player.png in Resources */,
+				F5F5A6AA16D24ED5AC1F4905 /* game.config in Resources */,
+				F5F5A453FE99547558D165D5 /* player1.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +414,7 @@
 					"\"$(inherited)\"",
 					"/Users/Frameworks/**",
 					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
+					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -407,6 +436,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Frameworks/**",
+					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
 					"\"${PROJECT_DIR}/../../../../../../Frameworks\"/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
