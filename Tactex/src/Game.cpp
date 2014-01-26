@@ -78,29 +78,32 @@ int Game::run(){
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
+
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
 
     GLuint programID = LoadShaders( "shaders/simpleVertexShader.vs", "shaders/simpleFragmentShader.fs" );
-
     GLuint MatrixID = glGetUniformLocation(programID, "ProjectionViewModel");
+    GLuint ColorID = glGetUniformLocation(programID, "Color");
 
+
+    // set up the projection
     glm::mat4 Projection = glm::perspective(45.0f, (static_cast<float>(windowWidth)) / (static_cast<float>(windowHeight)), 0.1f, 1000.0f);
-
-    // model space coords
-    static const GLfloat triangleVertices[] = {
-      // vert         color             diffuse
-         0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-        -1.0f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-         1.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
-    };
 
     GLuint vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*8*3, triangleVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, (36*3)*sizeof(GLfloat), CubeTile::cubeCoords, GL_STATIC_DRAW);
 
+    glVertexAttribPointer(
+            0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,  // stride
+            (void*)0            // array buffer offset
+    );
 
     // let the mouse be moved to the center.
     keyboard->updateMouse();
@@ -119,54 +122,38 @@ int Game::run(){
 
         // ---------- UPDATE ------------
 
+
         camera.update();
 
-
         // Model matrix : an identity matrix (model will be at the origin)
-        glm::mat4 Model = glm::mat4(1.0f);
+        glm::mat4 Model = glm::mat4();
         glm::mat4 View = camera.getViewMatrix();
 
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+        int ErrorCheckValue = glGetError();
+
         glUseProgram(programID);
 
+        ErrorCheckValue = glGetError();
+
         glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-//        glEnableVertexAttribArray(2);
 
-        glVertexAttribPointer(
-                0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                2,                  // size
-                GL_FLOAT,           // type
-                GL_FALSE,           // normalized?
-                (sizeof(float))*8, // stride
-                (void*)0            // array buffer offset
-        );
+        ErrorCheckValue = glGetError();
 
-        glVertexAttribPointer(
-                1,
-                3,
-                GL_FLOAT,
-                GL_FALSE,
-                (sizeof(float))*8,
-                ((void*)(sizeof(float)*3))
-        );
-
-
-
-//        for(int k = -6; k < 6; k++)
-//        for(int j = -6; j < 6; j++)
-//        for(int i = -6; i < 6; i++)
-//        {
-            glm::mat4 MVP = Projection * View * glm::mat4(); // glm::translate(Model, glm::vec3(3.0f*i, 3.0f*k, 3.0f*j));
+        for(int k = 0; k < 20; k++)
+        for(int j = 0; j < 20; j++)
+        for(int i = 0; i < 20; i++)
+        {
+            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(2.0f*i, 2.0f*k, 2.0f*j));
             glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+            glUniform3fv(ColorID, 1, glm::value_ptr(glm::vec3((i/20.0f), (j/20.0f), (k/20.0f)) ));
 
             // Draw the triangle !
-            glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
-//        }
+            glDrawArrays(GL_TRIANGLES, 0, 12*3);
+        }
+
         glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-//        glDisableVertexAttribArray(2);
 
 
         SDL_GL_SwapWindow(window);
@@ -174,7 +161,6 @@ int Game::run(){
 
     return 0;
 }
-
 int Game::cleanup(){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
