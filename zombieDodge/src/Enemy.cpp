@@ -6,6 +6,7 @@ Enemy::Enemy()
     printf( "CREATE ENEMY\n" );
     hitPoints = exp = 0;
     enemyId = "enemy1";
+    pos = new Vector();
     pos->x = 0;
     pos->y = 0;
 
@@ -23,7 +24,6 @@ Enemy::Enemy()
 
 Enemy::Enemy(int _x, int _y, int _z, std::string _playerTarget, int _hp)
 {
-
     hitPoints = _hp;
     int exp = 0;
     enemyId = _playerTarget;

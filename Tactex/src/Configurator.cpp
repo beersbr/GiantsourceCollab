@@ -31,7 +31,7 @@ std::map<std::string, std::string>* Configurator::open(const std::string filepat
         // split the line by the '='
         std::vector<std::string> strings =  Configurator::split(line, '=');
 
-        std::cout << strings[0] << " " << strings[1] << std::endl;
+//        std::cout << strings[0] << " " << strings[1] << std::endl;
 
         if(strings.size() == 2){
             std::string key = Configurator::strip(strings[0]);
@@ -84,7 +84,7 @@ std::vector<std::string> Configurator::split(std::string& str, const char t)
     std::string lastToken = str.substr(startIndex, index);
 
 
-    std::cout << "last token: " << lastToken << std::endl;
+//    std::cout << "last token: " << lastToken << std::endl;
     tokens.push_back(lastToken);
 
     return tokens;

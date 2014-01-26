@@ -38,13 +38,16 @@ int Game::setup(){
             ((*config)["window_title"]).c_str(),             // window title
             SDL_WINDOWPOS_CENTERED,     // x position, centered
             SDL_WINDOWPOS_CENTERED,     // y position, centered
-            windowWidth,                        // width, in pixels
-            windowHeight,                        // height, in pixels
+            windowWidth,                // width, in pixels
+            windowHeight,               // height, in pixels
             SDL_WINDOW_OPENGL           // flags
     );
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
     glContext = SDL_GL_CreateContext(window);
+
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
 
     // setup opengl
     SDL_RendererInfo displayRendererInfo;
@@ -75,25 +78,29 @@ int Game::run(){
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
-    GLuint PointsArrayID;
-    glGenVertexArrays(1, &PointsArrayID);
-//    glBindVertexArray(PointsArrayID);
-
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
 
     GLuint programID = LoadShaders( "shaders/simpleVertexShader.vs", "shaders/simpleFragmentShader.fs" );
 
-    GLuint MatrixID = glGetUniformLocation(programID, "MVP");
-    GLuint OffsetID = glGetUniformLocation(programID, "offset");
+    GLuint MatrixID = glGetUniformLocation(programID, "ProjectionViewModel");
 
     glm::mat4 Projection = glm::perspective(45.0f, (static_cast<float>(windowWidth)) / (static_cast<float>(windowHeight)), 0.1f, 1000.0f);
 
-    GLuint vertexbuffer;
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*36*3, CubeTile::cubeCoords, GL_STATIC_DRAW);
+    // model space coords
+    static const GLfloat triangleVertices[] = {
+      // vert         color             diffuse
+         0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        -1.0f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+         1.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
+    };
+
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*8*3, triangleVertices, GL_STATIC_DRAW);
+
 
     // let the mouse be moved to the center.
     keyboard->updateMouse();
@@ -117,38 +124,49 @@ int Game::run(){
 
         // Model matrix : an identity matrix (model will be at the origin)
         glm::mat4 Model = glm::mat4(1.0f);
-
         glm::mat4 View = camera.getViewMatrix();
 
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-        for(int k = -6; k < 6; k++)
-        for(int j = -6; j < 6; j++)
-        for(int i = -6; i < 6; i++)
-        {
-            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(3.0f*i, 3.0f*k, 3.0f*j));
+        glUseProgram(programID);
 
-            glUseProgram(programID);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+//        glEnableVertexAttribArray(2);
+
+        glVertexAttribPointer(
+                0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                2,                  // size
+                GL_FLOAT,           // type
+                GL_FALSE,           // normalized?
+                (sizeof(float))*8, // stride
+                (void*)0            // array buffer offset
+        );
+
+        glVertexAttribPointer(
+                1,
+                3,
+                GL_FLOAT,
+                GL_FALSE,
+                (sizeof(float))*8,
+                ((void*)(sizeof(float)*3))
+        );
+
+
+
+//        for(int k = -6; k < 6; k++)
+//        for(int j = -6; j < 6; j++)
+//        for(int i = -6; i < 6; i++)
+//        {
+            glm::mat4 MVP = Projection * View * glm::mat4(); // glm::translate(Model, glm::vec3(3.0f*i, 3.0f*k, 3.0f*j));
             glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-            glUniform1f(OffsetID, (float)i);
-
-            glEnableVertexAttribArray(0);
-            glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-            glVertexAttribPointer(
-                    0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                    3,                  // size
-                    GL_FLOAT,           // type
-                    GL_FALSE,           // normalized?
-                    0,                  // stride
-                    (void*)0            // array buffer offset
-            );
 
             // Draw the triangle !
-            glDrawArrays(GL_TRIANGLES, 0, 12*3); // 3 indices starting at 0 -> 1 triangle
-
-//            glDisableVertexAttribArray(0);
-        }
-
+            glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
+//        }
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+//        glDisableVertexAttribArray(2);
 
 
         SDL_GL_SwapWindow(window);

@@ -439,7 +439,7 @@ void gameEngine::Update() {
                          followEnemyCnt++;
 
                          enemies.push_back(enemy);
-                         delete enemy;
+//                         delete enemy;
 
                        //enemies[totalEnemyCnt] = enemy;
                         enemyCnt = 0;
@@ -451,6 +451,8 @@ void gameEngine::Update() {
 
                 //typedef std::map<int, Enemy*>::iterator eIter;
                 //typedef std::map<int, Bullet*>::iterator bIter;
+
+                std::cout << enemies.size() << std::endl;
 
                 for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
 
