@@ -73,7 +73,7 @@ int Game::run(){
     KeyboardHandler* keyboard = KeyboardHandler::getInstance();
 
 
-    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(0, 0, 0));
+    Camera camera = Camera(glm::vec3(0.0f, 0.0f, 1000.0f), glm::vec3(0, 0, 0));
     SDL_SetRelativeMouseMode((SDL_bool)true);
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
@@ -108,6 +108,9 @@ int Game::run(){
     // let the mouse be moved to the center.
     keyboard->updateMouse();
 
+    float FrameCounter = 0.0f;
+    float SDLTimeOffset = SDL_GetTicks();
+
     while(gameRunning)
     {
         SDL_Event event;
@@ -141,20 +144,21 @@ int Game::run(){
 
         ErrorCheckValue = glGetError();
 
-        for(int k = 0; k < 20; k++)
-        for(int j = 0; j < 20; j++)
-        for(int i = 0; i < 20; i++)
+        for(int k = 0; k < 50; k++)
+        for(int j = 0; j < 50; j++)
+        for(int i = 0; i < 50; i++)
         {
-            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(2.0f*i, 2.0f*k, 2.0f*j));
-            glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-            glUniform3fv(ColorID, 1, glm::value_ptr(glm::vec3((i/20.0f), (j/20.0f), (k/20.0f)) ));
+//            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(2.0f*i, 2.0f*k, 2.0f*j));
+//            glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+//            glUniform3fv(ColorID, 1, glm::value_ptr(glm::vec3((i/50.0f), (j/50.0f), (k/50.0f)) ));
 
             // Draw the triangle !
-            glDrawArrays(GL_TRIANGLES, 0, 12*3);
+//            glDrawArrays(GL_TRIANGLES, 0, 12*3);
         }
 
         glDisableVertexAttribArray(0);
 
+        std::cout << ++FrameCounter/((SDL_GetTicks() - SDLTimeOffset)/1000) << std::endl;
 
         SDL_GL_SwapWindow(window);
     }

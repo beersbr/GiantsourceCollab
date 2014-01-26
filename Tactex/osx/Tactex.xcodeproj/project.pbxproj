@@ -20,6 +20,7 @@
 		4A46ED676E6752408D6B5684 /* Configurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EEA9234C75D44AE36504 /* Configurator.cpp */; };
 		4A46EEA34B769AAFF8E23E02 /* GLCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46EA4EF3D41B719D17D589 /* GLCommon.cpp */; };
 		4A46EEBA6E0E34F918182721 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 4A46E797BAD8BEBCE6D46917 /* game.config */; };
+		4A46EF9C234ACBEDD7EA75E4 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E1F555782D3708987B7A /* World.cpp */; };
 		FB1C020518827E9B00B0D5C9 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020418827E9B00B0D5C9 /* SDL2_image.framework */; };
 		FB1C020718827EAF00B0D5C9 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020618827EAF00B0D5C9 /* SDL2_mixer.framework */; };
 		FB1C020918827EB700B0D5C9 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1C020818827EB700B0D5C9 /* SDL2.framework */; };
@@ -49,6 +50,7 @@
 /* Begin PBXFileReference section */
 		4A46E0C2A5A5CB6061702CA6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4A46E1A8FE907657C8BC0B6A /* GLCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCommon.h; sourceTree = "<group>"; };
+		4A46E1F555782D3708987B7A /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		4A46E25AC2D8C07C307F9AA6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		4A46E4DB8771A6FBF4DCA2E6 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		4A46E520369112B440FB2D1F /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 		4A46EB8F96B361C8B24B244E /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		4A46EB9537170D1B5CBC1D56 /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		4A46EBA2CECAC8101C88B1B5 /* Configurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configurator.h; sourceTree = "<group>"; };
+		4A46EC48A90CC5DCCF4BAB0C /* World.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
 		4A46EC5A35BBF99A54942DCC /* KeyboardHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardHandler.cpp; sourceTree = "<group>"; };
 		4A46ECC2F7ADD9B59AE11D7C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		4A46EE08C3B0C8522B0EFD78 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
@@ -211,6 +214,8 @@
 				4A46E67EAED350C4C86D0014 /* Entity.h */,
 				4A46E4DB8771A6FBF4DCA2E6 /* Camera.cpp */,
 				4A46EB8F96B361C8B24B244E /* Camera.h */,
+				4A46E1F555782D3708987B7A /* World.cpp */,
+				4A46EC48A90CC5DCCF4BAB0C /* World.h */,
 			);
 			name = src;
 			path = ../../src;
@@ -288,6 +293,7 @@
 				4A46E42C3272B21021D87128 /* CubeTile.cpp in Sources */,
 				4A46ECE2BCC4BB2BEE17FDA1 /* Entity.cpp in Sources */,
 				4A46E239BCCF7BBEE63584C0 /* Camera.cpp in Sources */,
+				4A46EF9C234ACBEDD7EA75E4 /* World.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

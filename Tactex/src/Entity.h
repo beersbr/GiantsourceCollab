@@ -7,6 +7,7 @@
 #define __Entity_H_
 
 #include <glm/glm.hpp>
+#include <vector>
 
 class Entity {
 public:
@@ -18,6 +19,8 @@ public:
     virtual int update() = 0;
 
 public:
+    static std::vector<Entity>* entities;
+
     glm::vec3 pos;
     glm::vec3 size;
 };
