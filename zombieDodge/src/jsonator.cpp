@@ -37,9 +37,12 @@ int Jsonator::GetSize(cJSON *_data) {
     return cJSON_GetArraySize(_data);
 
 }
-cJSON* Jsonator::GetNode(std::string target) {
+cJSON* Jsonator::GetNode(cJSON *_jsonNode, std::string target) {
 
-    cJSON *nodeData = cJSON_GetObjectItem(json,target.c_str());
+    if (_jsonNode == NULL)
+        _jsonNode = json;
+
+    cJSON *nodeData = cJSON_GetObjectItem(_jsonNode,target.c_str());
 
     return nodeData;
 
@@ -48,14 +51,30 @@ cJSON* Jsonator::GetNode(std::string target) {
 std::string Jsonator::GetString(std::string parent,std::string target,cJSON *_data) {
 
     std::string value;
+    cJSON* jData;
+    cJSON* tData;
 
     if (_data == NULL) {
 
-        _data = cJSON_GetObjectItem(json,parent.c_str());
+         jData = json;
+
+    } else {
+
+        jData = _data;
+
+    }
+    if (parent.c_str() != NULL) {
+
+        tData = cJSON_GetObjectItem(jData,parent.c_str());
+    } else {
+        tData = _data;
 
     }
 
-    value = cJSON_GetObjectItem(_data,target.c_str())->valuestring;
+    value = cJSON_GetObjectItem(tData,target.c_str())->valuestring;
+
+
+    //free(jData);
 
     return value;
 }
@@ -64,14 +83,25 @@ std::string Jsonator::GetString(std::string parent,std::string target,cJSON *_da
 int Jsonator::GetInt(std::string parent,std::string target,cJSON *_data) {
 
     int value;
+    cJSON* jData;
+
 
     if (_data == NULL) {
 
-        _data = cJSON_GetObjectItem(json,parent.c_str());
+        jData = json;
+
+    } else {
+
+        jData = _data;
 
     }
 
-    value = cJSON_GetObjectItem(_data,target.c_str())->valueint;
+    cJSON * tData = cJSON_GetObjectItem(jData,parent.c_str());
+    //std::string configUrl = "config/" + _playerTarget + ".config";
+    value = cJSON_GetObjectItem(tData,target.c_str())->valueint;
+
+
+    //free(jData);
 
     return value;
 }
@@ -80,14 +110,27 @@ int Jsonator::GetInt(std::string parent,std::string target,cJSON *_data) {
 double Jsonator::GetDouble(std::string parent,std::string target,cJSON *_data) {
 
     double value;
+    cJSON* jData;
+
 
     if (_data == NULL) {
 
-        _data = cJSON_GetObjectItem(json,parent.c_str());
+        jData = json;
+
+    } else {
+
+        jData = _data;
 
     }
 
-    value = cJSON_GetObjectItem(_data,target.c_str())->valuedouble;
+
+
+    cJSON * tData = cJSON_GetObjectItem(jData,parent.c_str());
+    //std::string configUrl = "config/" + _playerTarget + ".config";
+    value = cJSON_GetObjectItem(tData,target.c_str())->valuedouble;
+
+
+    //free(jData);
 
     return value;
 }

@@ -43,7 +43,7 @@ public:
 
     void ParseIt(char *text);
     void LoadData(std::string filename);
-    cJSON* GetNode(std::string target);
+    cJSON* GetNode(cJSON *_jsonNode, std::string target);
 
     std::string GetString(std::string parent,std::string target,cJSON *_data);
     int GetInt(std::string parent,std::string target,cJSON *_data);

@@ -62,6 +62,8 @@
                 "src": "player1Sprite.png",
                 "w": 41,
                 "h": 101,
+                "rows":1,
+                "cols":2,
                 "hitbox": {
                     "w": 33,
                     "h": 96

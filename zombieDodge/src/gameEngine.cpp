@@ -431,8 +431,8 @@ void gameEngine::Run() {
                 case GAME_OVER:
                     camera.x =0;
                     camera.y=0;
-                    camera.w = WINDOW_WIDTH;
-                    camera.h = WINDOW_HEIGHT;
+                    camera.w = windowWidth;
+                    camera.h = windowHeight;
                     //textColor = { 255, 255, 255 };
                     //LoadText("You Have Lost", textColor);
 
@@ -488,8 +488,8 @@ void gameEngine::Update() {
                 if (currentPlayer->spawned) {
                     currentPlayer->Update();
                 }
-                camera.x = ( currentPlayer->pos->x + currentPlayer->clip.w / 2 ) - WINDOW_WIDTH / 2;
-                camera.y = ( currentPlayer->pos->y + currentPlayer->clip.h / 2 ) - WINDOW_HEIGHT / 2;
+                camera.x = ( currentPlayer->pos->x + currentPlayer->clip.w / 2 ) - windowWidth / 2;
+                camera.y = ( currentPlayer->pos->y + currentPlayer->clip.h / 2 ) - windowHeight / 2;
 
                 //Keep the camera in bounds
                 if( camera.x < 0 )
@@ -624,7 +624,7 @@ void gameEngine::Draw() {
 
     //Draw the image
    // RenderTexture(gameBackground, gameRender, x, y);
-    Render(gameBackground, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, &camera, NULL, NULL, SDL_FLIP_NONE);
+    Render(gameBackground, 0, 0, windowWidth, windowHeight, &camera, NULL, NULL, SDL_FLIP_NONE);
 
     if ( this->gameState == PLAYING) {
 

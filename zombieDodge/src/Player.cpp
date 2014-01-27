@@ -5,26 +5,40 @@ Player::Player()
 {
     std::string _playerTarget = "player1";
 
-    std::string configUrl = "config/" + _playerTarget + ".config";
+    cJSON *playersNode = gameEngine::getInstance()->gameConfig->GetNode(NULL,"players");
+    cJSON *playerConfig =  gameEngine::getInstance()->gameConfig->GetNode(playersNode,"player1");
 
-    config = Configurator::open(configUrl);
+    /*
+    cJSON *playerSprite =  gameEngine::getInstance()->gameConfig->GetNode(playerConfig,"sprite");
+    cJSON *playerSpawn =  gameEngine::getInstance()->gameConfig->GetNode(playerConfig,"spawn");
+    cJSON *playerFx =  gameEngine::getInstance()->gameConfig->GetNode(playerConfig,"fx");
+    cJSON *shootFx =  gameEngine::getInstance()->gameConfig->GetNode(playerFx,"shoot");
+    */
+   // printf("GOT PLAYER CONFIG");
 
-    pos = new Vector(300,300,0);
+
+
+
+    //std::string configUrl = "config/" + _playerTarget + ".config";
+
+    //config = Configurator::open(configUrl);
+
+    pos = new Vector(gameEngine::getInstance()->gameConfig->GetInt("spawn","x",playerConfig),gameEngine::getInstance()->gameConfig->GetInt("spawn","y",playerConfig),0);
    // SDL_Rect clip;
     clip.x = 0;
     clip.y = 0;
-    spritePath =_playerTarget+ "Sprite.png";
-    hitPoints =  atoi((*config)[_playerTarget+"HitPoints"].c_str());
-    spriteFrames =  atoi((*config)[_playerTarget+"SpriteFrames"].c_str());
-    spriteRows =  atoi((*config)[_playerTarget+"SpriteRows"].c_str());
+    spritePath = gameEngine::getInstance()->gameConfig->GetString("sprite","src",playerConfig); //_playerTarget+ "Sprite.png";
+    hitPoints = 0.0;
+    spriteFrames =  gameEngine::getInstance()->gameConfig->GetInt("sprite","cols",playerConfig);
+    spriteRows =  gameEngine::getInstance()->gameConfig->GetInt("sprite","rows",playerConfig);
     exp = 0;
     //clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
     //clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
-    clip.w = 41;
-    clip.h = 101;
+    clip.w = gameEngine::getInstance()->gameConfig->GetInt("sprite","w",playerConfig);
+    clip.h = gameEngine::getInstance()->gameConfig->GetInt("sprite","h",playerConfig);
 
     spawned =false;
-    std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
+    //std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
     playerId = _playerTarget;
 
     config = nullptr;
