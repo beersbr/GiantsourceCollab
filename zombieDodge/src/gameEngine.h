@@ -13,6 +13,7 @@
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
 #include <SDL2_ttf/SDL_ttf.h>
+#include "Jsonator.h"
 #include "Configurator.h"
 #include "InputHandler.h"
 #include "config.h"
@@ -99,6 +100,8 @@ public:
 
     SDL_Texture* gameHUD;
 
+    Jsonator *gameConfig;
+
     TTF_Font *gameFont = NULL;
 
     int levelWidth = 1600;
@@ -106,6 +109,7 @@ public:
     //SDL_Surface* gameBackground;
     int mouseX;
     int mouseY;
+    int windowWidth, windowHeight;
     SDL_Renderer* gameRender;
 
     SDL_Surface* LoadImage(const std::string path);

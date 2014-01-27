@@ -1,0 +1,141 @@
+{
+    "settings": {
+        "title": "Stupid Zombies",
+        "width": 800,
+        "height": 600,
+        "quadrant": {
+            "w": 400,
+            "h": 600
+        },
+        "resourcePath": "resources"
+    },
+    "enemies": {
+        "enemy1": {
+            "level": "all",
+            "name": "Office Zombie",
+            "sprite": {
+                "src": "zombieSprite.png",
+                "w": 70,
+                "h": 70,
+                "hitbox": {
+                    "w": 60,
+                    "h": 60
+                }
+            },
+            "type": "Enemy",
+            "follow": false,
+            "speed": "random",
+            "fx": {
+                "spawn": {
+                    "name": "enemy1Spawn",
+                    "src": "zombieRising.ogg"
+                }
+            }
+        },
+        "enemy2": {
+            "level": "all",
+            "name": "Girl Zombie",
+            "sprite": {
+                "src": "zombie2Sprite.png",
+                "w": 70,
+                "h": 69,
+                "hitbox": {
+                    "w": 43,
+                    "h": 60
+                }
+            },
+            "type": "Enemy",
+            "follow": true,
+            "speed": 200,
+            "fx": {
+                "spawn": {
+                    "name": "enemy2Spawn",
+                    "src": "brains.ogg"
+                }
+            }
+        }
+    },
+    "players": {
+        "player1": {
+            "name": "Phillip",
+            "sprite": {
+                "src": "player1Sprite.png",
+                "w": 41,
+                "h": 101,
+                "hitbox": {
+                    "w": 33,
+                    "h": 96
+                }
+            },
+            "spawn": {
+                "x": 400,
+                "y": 300
+            },
+            "type": "Player",
+            "fx": {
+                "shoot": {
+                    "name": "player1Shoot",
+                    "src": "shotgun.ogg"
+                }
+            }
+        },
+        "player2": {
+            "name": "Jorge",
+            "level": "2",
+            "sprite": {
+                "src": "player2Sprite.png",
+                "w": 62,
+                "h": 101,
+                "hitbox": {
+                    "w": 62,
+                    "h": 90
+                }
+            },
+            "spawn": {
+                "x": 400,
+                "y": 300
+            },
+            "type": "Player",
+            "fx": {
+                "shoot": {
+                    "name": "player2Shoot",
+                    "src": "shotgun.ogg"
+                }
+            }
+        }
+    },
+    "resources": {
+        "gameFx": {
+            "gameover": {
+                "name": "gameOverAudio",
+                "type": "AUDIO",
+                "src": "gameover.ogg"
+            }
+        },
+        "gameImages": {
+            "bullet": {
+                "name": "playerBullet",
+                "level": "all",
+                "src": "bullet.png",
+                "w": 3,
+                "h": 19
+            }
+        },
+        "levels": {
+            "1": {
+                "name": "Swamp",
+                "src": "swamp.jpg"
+            }
+        },
+        "screens": {
+            "welcome": {
+                "name": "Welcome",
+                "src": "welcome.jpg"
+            },
+            "gameover": {
+                "name": "Game Over",
+                "src": "gameover.jpg"
+            }
+        }
+    }
+}

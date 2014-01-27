@@ -263,14 +263,20 @@ bool gameEngine::GameInit () {
 
 }
 bool gameEngine::Setup(){
-    printf("GET CONFIG");
+
    // config = Configurator::open("config/game.config");
-    std::cout << "QINDO QWIDTH  -> " << WINDOW_HEIGHT << std::endl;
-    printf("CAMERA SET");
+
+    gameConfig = new Jsonator();
+    gameConfig->LoadData("config/config.json");
+
+    windowWidth = gameConfig->GetInt("settings","width",NULL);
+    windowHeight = gameConfig->GetInt("settings","height",NULL);
+    //std::cout << "QINDO QWIDTH  -> " << WINDOW_HEIGHT << std::endl;
+    //printf("CAMERA SET");
     camera.x =0;
     camera.y=0;
-    camera.w = WINDOW_WIDTH;
-    camera.h = WINDOW_HEIGHT;
+    camera.w = windowWidth;
+    camera.h = windowHeight;
     gameState = SETUP;
     //Initialization flag
     bool success = true;
@@ -287,11 +293,11 @@ bool gameEngine::Setup(){
     {
         //Create window
         gameWindow = SDL_CreateWindow(
-                WINDOW_CAPTION.c_str(),             // window title
+                gameConfig->GetString("settings","title",NULL).c_str(),             // window title
                 SDL_WINDOWPOS_CENTERED,     // x position, centered
                 SDL_WINDOWPOS_CENTERED,     // y position, centered
-                WINDOW_WIDTH,                        // width, in pixels
-                WINDOW_HEIGHT,                        // height, in pixels
+                windowWidth,                        // width, in pixels
+                windowHeight,                        // height, in pixels
                 NULL
         );
         if( gameWindow == NULL )
@@ -404,6 +410,7 @@ void gameEngine::Run() {
                 }
             }
 
+
             switch(this->gameState) {
 
                 case PLAYING:
@@ -426,8 +433,8 @@ void gameEngine::Run() {
                     camera.y=0;
                     camera.w = WINDOW_WIDTH;
                     camera.h = WINDOW_HEIGHT;
-                    textColor = { 255, 255, 255 };
-                    LoadText("You Have Lost", textColor);
+                    //textColor = { 255, 255, 255 };
+                    //LoadText("You Have Lost", textColor);
 
                   break;
 
@@ -673,7 +680,7 @@ void gameEngine::Draw() {
 
     } else if (gameState == GAME_OVER){
 
-        Render(gameText, 300, 200, 400, 50, NULL, NULL, NULL, SDL_FLIP_NONE);
+        //Render(gameText, 300, 200, 400, 50, NULL, NULL, NULL, SDL_FLIP_NONE);
 
     }
 
