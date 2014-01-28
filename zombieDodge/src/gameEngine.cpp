@@ -594,7 +594,8 @@ void gameEngine::Update() {
                         et = enemies.erase(et);
 
                     }   else {
-                        if((CheckCollision((*et)->GetHitBox(), currentPlayer->GetHitBox() ) ))
+
+                        if( (CheckCollision((*et)->GetHitBox(), currentPlayer->GetHitBox())) && !(*et)->dying)
                         {
                             //printf("GAMEOVER\n");
                             et = enemies.end();
@@ -604,6 +605,7 @@ void gameEngine::Update() {
                             ++et;
 
                         }
+
 
                     }
 
