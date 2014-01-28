@@ -78,7 +78,6 @@ int Game::run(){
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
-
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
@@ -86,7 +85,6 @@ int Game::run(){
     GLuint programID = LoadShaders( "shaders/simpleVertexShader.vs", "shaders/simpleFragmentShader.fs" );
     GLuint MatrixID = glGetUniformLocation(programID, "ProjectionViewModel");
     GLuint ColorID = glGetUniformLocation(programID, "Color");
-
 
     // set up the projection
     glm::mat4 Projection = glm::perspective(45.0f, (static_cast<float>(windowWidth)) / (static_cast<float>(windowHeight)), 0.1f, 1000.0f);
@@ -144,15 +142,17 @@ int Game::run(){
 
         ErrorCheckValue = glGetError();
 
-        for(int k = 0; k < 50; k++)
-        for(int j = 0; j < 50; j++)
-        for(int i = 0; i < 50; i++)
+        const float cubes = 10.0f;
+
+        for(int k = 0; k < cubes; k++)
+        for(int j = 0; j < cubes; j++)
+        for(int i = 0; i < cubes; i++)
         {
 //            glm::mat4 MVP = Projection * View * glm::translate(Model, glm::vec3(2.0f*i, 2.0f*k, 2.0f*j));
 //            glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-//            glUniform3fv(ColorID, 1, glm::value_ptr(glm::vec3((i/50.0f), (j/50.0f), (k/50.0f)) ));
-
-            // Draw the triangle !
+//            glUniform3fv(ColorID, 1, glm::value_ptr(glm::vec3((i/cubes), (j/cubes), (k/cubes)) ));
+//
+//            // Draw the triangle !
 //            glDrawArrays(GL_TRIANGLES, 0, 12*3);
         }
 
