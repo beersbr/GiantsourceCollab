@@ -1,10 +1,10 @@
 #include "Sprite.h"
 #include "gameEngine.h"
-Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w, int h, float _cameraX, float _cameraY)
+Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w, int h, float _cameraX, float _cameraY, bool _loop)
 {
 
     image = NULL;
-
+    loop = _loop;
     image =  gameEngine::getInstance()->LoadTexture(path.c_str());
     renderer = render;
 
@@ -18,7 +18,6 @@ Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w,
     crop.y = 0;
     crop.w = w;
     crop.h = h;
-
     posX = _x;
     posY = _y;
     originX = 0;
@@ -60,7 +59,7 @@ void Sprite::Flip(char _a) {
 Sprite::Sprite(std::string path,float _x, float _y, int w, int h)
 {
 
-    Sprite(gameEngine::getInstance()->gameRender, path, _x, _y, w, h, 0,0);
+    Sprite(gameEngine::getInstance()->gameRender, path, _x, _y, w, h, 0,0,true);
 }
 
 void Sprite::SetUpAnimation(int _frameX, int _frameY)
@@ -74,11 +73,23 @@ void Sprite::PlayAnimation(int begin, int end, int row, float speed)
 
    if (animationDelay+speed < SDL_GetTicks())
     {
-        if (end <= this->currentFrame)
-            this->currentFrame = begin;
-        else
-            this->currentFrame++;
+        if (loop) {
+            if (end <= this->currentFrame)
+                this->currentFrame = begin;
+            else
+                this->currentFrame++;
+        } else {
 
+            if (this->currentFrame != end) {
+                this->currentFrame++;
+
+            } else {
+
+                spriteFinished = true;
+
+            }
+
+        }
         crop.x = currentFrame * (imgWidth/frameX);
         crop.y = (row-1) * (imgHeight/frameY);
         crop.w = imgWidth/frameX;

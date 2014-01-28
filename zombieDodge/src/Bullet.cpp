@@ -34,7 +34,7 @@ bool Bullet::Spawn(Vector &v)
     bool spawned = true;
 
     //Create Sprite
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,"bullet.png", 0, 0, 5,19,0,0);
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"bullet.png", 0, 0, 5,19,0,0,true);
     //Set Sprite Rows / Cols
     sprite->SetUpAnimation(1,1);
     //Set Origin to Sprite
@@ -48,6 +48,14 @@ bool Bullet::Spawn(Vector &v)
     if (target != NULL) {
         //target = _target;
 
+        double angle = atan2(target->y-pos->y, target->x-pos->x);
+
+
+        angle = angle * (180/3.14)+90;
+        //std::cout << "ANGLE  =   " <<  angle  << std::endl;
+        sprite->Rotate(angle);
+
+
         Vector shootDirection = (*target) - (*pos);
 
 
@@ -57,9 +65,9 @@ bool Bullet::Spawn(Vector &v)
 
     } else {
         pos->x = v.x;
-        pos->y =  v.x;
-        std::cout << "BULLET POS =  " <<  pos->x << " / " << pos->y <<  std::endl;
-        printf("CREATE BULLET2");
+        pos->y =  v.y;
+        //std::cout << "BULLET POS =  " <<  pos->x << " / " << pos->y <<  std::endl;
+        //printf("CREATE BULLET2");
 
         switch(static_cast<int>(vel->x)) {
 

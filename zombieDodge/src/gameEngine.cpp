@@ -541,25 +541,31 @@ void gameEngine::Update() {
 
                 enemyCnt++;
 
-                std::cout << enemies.size() << std::endl;
+                //std::cout << enemies.size() << std::endl;
 
                 for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
 
                     (*et)->Update();
 
-                    for(std::vector<Bullet* >::iterator bt = bullets.begin(); bt != bullets.end();) {
+                    if (!(*et)->dying) {
+                        for(std::vector<Bullet* >::iterator bt = bullets.begin(); bt != bullets.end();) {
 
-                        if((CheckCollision((*et)->GetHitBox(), (*bt)->GetHitBox()) ))
-                        {
+                            if((CheckCollision((*et)->GetHitBox(), (*bt)->GetHitBox()) ))
+                            {
 
-                            (*et)->deleteItem = true;
-                              bt = bullets.erase(bt);
-                              bt = bullets.end();
+                                (*et)->Die();
+                                  bt = bullets.erase(bt);
+                                  bt = bullets.end();
 
-                        }  else {
-                            ++bt;
+                            }  else {
+                                ++bt;
+                            }
+
                         }
+                    }
 
+                    if ((*et)->dead) {
+                        (*et)->deleteItem = true;
                     }
 
                     if ((*et)->deleteItem) {
@@ -568,9 +574,9 @@ void gameEngine::Update() {
                     }   else {
                         if((CheckCollision((*et)->GetHitBox(), currentPlayer->GetHitBox() ) ))
                         {
-                            printf("GAMEOVER\n");
+                            //printf("GAMEOVER\n");
                             et = enemies.end();
-                            gameState = GAME_OVER;
+                            if (!godMode) gameState = GAME_OVER;
                         } else {
 
                             ++et;

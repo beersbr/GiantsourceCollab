@@ -81,7 +81,7 @@ bool Player::Spawn()
     spawned = true;
 
     //Create Sprite
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,spritePath, pos->x, pos->y, clip.w,clip.h,0,0);
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,spritePath, pos->x, pos->y, clip.w,clip.h,0,0,true);
     //Set Sprite Rows / Cols
     sprite->SetUpAnimation(2,1);
     //Set Origin to Sprite
@@ -289,6 +289,7 @@ void Player::Shoot(int _x, int _y)
         isShooting = true;
         // spawn a bullet with the direction
         Bullet *bullet = new Bullet(NULL, NULL, _x,_y,0.0);
+        std::cout << "SHOOT BULLET @  x/y =   " <<  _x << " / " << _y << std::endl;
         bullet->Spawn((*pos));
         //gameEngine::getInstance()->addBullet(bullet);
         gameEngine::getInstance()->bullets.push_back(bullet);

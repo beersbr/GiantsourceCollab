@@ -38,7 +38,7 @@ bool Enemy::Spawn()
 {
     bool spawned = false;
 
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-sprite-3.png", pos->x, pos->y, 50,100,0,0);
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-sprite-3.png", pos->x, pos->y, 50,100,0,0,true);
 
     sprite->SetUpAnimation(7,1);
     sprite->SetOrigin(50/2.0f, 100);
@@ -103,6 +103,18 @@ bool Enemy::Spawn()
 
 }
 
+void Enemy::Die() {
+    double curAng = sprite->currentAngle;
+
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-dead.png", pos->x, pos->y, 70,120,0,0,false);
+
+    sprite->SetUpAnimation(6,1);
+    sprite->SetOrigin(70/2.0f, 120);
+    sprite->Rotate(curAng);
+    dying = true;
+
+}
+
 
 void Enemy::Update()
 {
@@ -120,14 +132,25 @@ void Enemy::Update()
 
     }
 
+    if (dying) {
 
-    sprite->PlayAnimation(0, 6, 1, 250);
+        sprite->PlayAnimation(0, 5, 1, 50);
+        if (sprite->spriteFinished) {
 
-    Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
+            dead = true;
 
-    (*this->pos) += updatePos;
+        }
+    } else {
+        sprite->PlayAnimation(0, 6, 1, 250);
+        Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
 
-    sprite->SetPosition(pos->x, pos->y);
+        (*this->pos) += updatePos;
+
+        sprite->SetPosition(pos->x, pos->y);
+    }
+
+
+
 
 }
 
