@@ -3,7 +3,7 @@
 
 Enemy::Enemy()
 {
-    printf( "CREATE ENEMY\n" );
+    //printf( "CREATE ENEMY\n" );
     hitPoints = exp = 0;
     enemyId = "enemy1";
     pos = new Vector();
@@ -115,7 +115,7 @@ void Enemy::Die() {
 
 void Enemy::Update()
 {
-    if (isFollow) {
+    if (isFollow && !dying) {
 
         double angle = atan2(gameEngine::getInstance()->currentPlayer->pos->y-pos->y, gameEngine::getInstance()->currentPlayer->pos->x-pos->x);
         angle = angle * (180/3.14)+180;
@@ -128,22 +128,13 @@ void Enemy::Update()
     }
 
     if (dying) {
-        std::cout << "-------DYING SPRITE-----------" << std::endl;
-        std::cout << "<<-------------------CURRENT FRAME----------->>" << std::endl;
-        std::cout << sprite->currentFrame << std::endl;
-        std::cout << "------------------" << std::endl;
+
         int lastFrame = sprite->currentFrame;
         sprite->PlayAnimation(0, 5, 1, 100);
 
         if (sprite->spriteFinished) {
-            std::cout << "SHOULD BE DEAD" <<  std::endl;
+
             dead = true;
-
-        }  else {
-
-            std::cout << "NOT DEAD" << std::endl;
-
-
         }
     } else {
 

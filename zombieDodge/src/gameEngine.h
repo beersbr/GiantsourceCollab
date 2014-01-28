@@ -49,6 +49,7 @@ public:
     float gameTimer;
     Player* currentPlayer = nullptr;
     int gameState=0;
+    float gameStart = 0;
     int playerCnt =0;
     int enemyCnt = 0;
     int followEnemyCnt = 0;
@@ -79,6 +80,8 @@ public:
     void MenuInput();
     void GameInput();
 
+    int enemySpawnRate = 15;
+    double spawnThreshold = .40;
     //-----------Graphics Functions
 
     //SDL_Window* getWindow();

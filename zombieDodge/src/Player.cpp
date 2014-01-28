@@ -41,6 +41,9 @@ Player::Player()
     spawned =false;
     //std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
     playerId = _playerTarget;
+    enemiesKilled = 0;
+    kdRatio = 0;
+
 
     config = nullptr;
 }
@@ -69,7 +72,8 @@ Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
     playerId = _playerTarget;
     //std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
     config = nullptr;
-
+    enemiesKilled = 0;
+    kdRatio = 0;
 }
 
 

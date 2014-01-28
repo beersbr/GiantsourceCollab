@@ -194,14 +194,14 @@ bool gameEngine::LoadText( std::string textureText, SDL_Color textColor )
 {
     //Get rid of preexisting texture
    if (gameText != NULL) {
-       SDL_DestroyTexture( gameText );
+       //SDL_DestroyTexture( gameText );
        gameText = NULL;
        textWidth = 0;
        textHeight = 0;
 
 
    }
-
+    //printf( "LOADING TEXT");
     //Render text surface
     SDL_Surface* textSurface = TTF_RenderText_Solid( gameFont, textureText.c_str(), textColor );
     if( textSurface == NULL )
@@ -235,11 +235,14 @@ bool gameEngine::LoadText( std::string textureText, SDL_Color textColor )
 bool gameEngine::GameInit () {
 
     bool gameInit = true;
+    gameStart = SDL_GetTicks();
 
     printf( "GAME INIT\n" );
-
+    enemySpawnRate = 12;
     //Load the sound effects
-
+    spawnThreshold = .40;
+    enemyCnt =0;
+    followEnemyCnt = 0;
     //Once a config is in place, grab all the user data from the config and create the new player that way,
     //Config playerConfig = getConfig(_playerTarget);
 
@@ -344,6 +347,11 @@ bool gameEngine::Setup(){
 
                gameFont = TTF_OpenFont( "Arial.ttf", 28 );
 
+                if (gameFont != NULL) {
+
+                    printf("<--------FONT LOADED");
+
+                }
             }
 
             //Initialize SDL_mixer
@@ -383,6 +391,8 @@ void gameEngine::Run() {
                 switch(event.type)
                 {
                     case SDL_KEYDOWN:
+
+
                         InputHandler::getInstance()->keyDown(event.key.keysym.scancode);
                         break;
                     case SDL_KEYUP:
@@ -415,9 +425,6 @@ void gameEngine::Run() {
             switch(this->gameState) {
 
                 case PLAYING:
-
-
-
                     if ((!gameReady)){
                         std::cout << "INIT THE GAME  " <<   std::endl;
                         gameReady = GameInit();
@@ -428,6 +435,7 @@ void gameEngine::Run() {
                         }
 
                      }
+
                  break;
                 case GAME_OVER:
                     camera.x =0;
@@ -518,7 +526,7 @@ void gameEngine::Update() {
                 }
 
 
-                if (enemyCnt> 15) {
+                if (enemyCnt> enemySpawnRate) {
 
                         totalEnemyCnt++;
                         std::string enemyType;
@@ -536,12 +544,25 @@ void gameEngine::Update() {
                         enemies.push_back(e);
                         //delete enemy;
                         e = nullptr;
+                        if ((gameStart / SDL_GetTicks()) < spawnThreshold) {
+                            std::cout << "THRESHOLD " <<spawnThreshold << std::endl;
+                            std::cout << "CHECK " <<gameStart / SDL_GetTicks() << std::endl;
+                           spawnThreshold -= .10;
+
+                            if (enemySpawnRate > 7) {
+
+                                enemySpawnRate--;
+
+                            }
+
+
+                        }
                         enemyCnt = 0;
+
+
                 }
 
                 enemyCnt++;
-
-                //std::cout << enemies.size() << std::endl;
 
                 for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
 
@@ -553,7 +574,8 @@ void gameEngine::Update() {
                             if((CheckCollision((*et)->GetHitBox(), (*bt)->GetHitBox()) ))
                             {
 
-                                (*et)->Die();
+                                  (*et)->Die();
+                                  currentPlayer->enemiesKilled++;
                                   bt = bullets.erase(bt);
                                   bt = bullets.end();
 
@@ -664,13 +686,13 @@ void gameEngine::Draw() {
                 }
 
             }
-
-            //SDL_QueryTexture(gameHUD, NULL, NULL, &iW, &iH);
-            //x = WINDOW_WIDTH / 2 - iW / 2;
-            //y = WINDOW_HEIGHT / 2 - iH / 2;
-
             //Draw the HUD SCREEN
             RenderTexture(gameHUD, gameRender, 0, 0);
+
+            SDL_Color textColor = { 0, 0, 0 };
+            LoadText( "SCORE: "+ std::to_string(currentPlayer->enemiesKilled), textColor );
+
+            Render(gameText, 650, 10, 100, 25, NULL, NULL, NULL, SDL_FLIP_NONE);
 
        }   else {
             std::cout << "GAME NOT READY-> " << std::endl;
@@ -678,6 +700,20 @@ void gameEngine::Draw() {
         }
 
     } else if (gameState == GAME_OVER){
+
+
+        SDL_Color textColor = { 255, 255, 25 };
+        LoadText( "Zombies Killed : "+ std::to_string(currentPlayer->enemiesKilled), textColor );
+
+        Render(gameText, 400, 200, 200, 25, NULL, NULL, NULL, SDL_FLIP_NONE);
+
+        LoadText( "Shots Fired : "+ std::to_string(currentPlayer->shotsFired), textColor );
+
+        Render(gameText, 400, 230, 200, 25, NULL, NULL, NULL, SDL_FLIP_NONE);
+
+        //LoadText( "Accuracy : "+ std::to_string(currentPlayer->enemiesKilled/currentPlayer->shotsFired), textColor );
+
+       //Render(gameText, 500, 260, 200, 25, NULL, NULL, NULL, SDL_FLIP_NONE);
 
         //Render(gameText, 300, 200, 400, 50, NULL, NULL, NULL, SDL_FLIP_NONE);
 
