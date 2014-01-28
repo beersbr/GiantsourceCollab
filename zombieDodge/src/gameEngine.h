@@ -55,7 +55,7 @@ public:
     SDL_Rect camera;
     std::map<std::string, std::string>* config;
     //Globally used font
-    bool godMode = true;
+    bool godMode = false;
 
     //-----------Main Functions
     bool Setup();

@@ -38,10 +38,10 @@ bool Enemy::Spawn()
 {
     bool spawned = false;
 
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-sprite-3.png", pos->x, pos->y, 50,100,0,0,true);
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-sprite-3.png", pos->x, pos->y, 100,50,0,0,true);
 
     sprite->SetUpAnimation(7,1);
-    sprite->SetOrigin(50/2.0f, 100);
+    sprite->SetOrigin(100/2.0f, 50);
 
     spawnFX = Mix_LoadWAV( "zombieRising.wav" );
     if ( spawnFX == NULL)
@@ -51,12 +51,8 @@ bool Enemy::Spawn()
         Mix_VolumeChunk(spawnFX, 50);
 
     }
-
-
-
     hitBox.w = 70;
     hitBox.h = 50;
-
 
     vel = new Vector();
     int start = rand() % 4 +1;
@@ -105,11 +101,12 @@ bool Enemy::Spawn()
 
 void Enemy::Die() {
     double curAng = sprite->currentAngle;
+    sprite = nullptr;
 
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-dead.png", pos->x, pos->y, 70,120,0,0,false);
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-dead.png", pos->x, pos->y, 120,70,0,0,false);
 
     sprite->SetUpAnimation(6,1);
-    sprite->SetOrigin(70/2.0f, 120);
+    sprite->SetOrigin(120/2.0f, 70);
     sprite->Rotate(curAng);
     dying = true;
 
@@ -118,8 +115,6 @@ void Enemy::Die() {
 
 void Enemy::Update()
 {
-
-
     if (isFollow) {
 
         double angle = atan2(gameEngine::getInstance()->currentPlayer->pos->y-pos->y, gameEngine::getInstance()->currentPlayer->pos->x-pos->x);
@@ -133,14 +128,25 @@ void Enemy::Update()
     }
 
     if (dying) {
+        std::cout << "-------DYING SPRITE-----------" << std::endl;
+        std::cout << "<<-------------------CURRENT FRAME----------->>" << std::endl;
+        std::cout << sprite->currentFrame << std::endl;
+        std::cout << "------------------" << std::endl;
+        int lastFrame = sprite->currentFrame;
+        sprite->PlayAnimation(0, 5, 1, 100);
 
-        sprite->PlayAnimation(0, 5, 1, 50);
         if (sprite->spriteFinished) {
-
+            std::cout << "SHOULD BE DEAD" <<  std::endl;
             dead = true;
+
+        }  else {
+
+            std::cout << "NOT DEAD" << std::endl;
+
 
         }
     } else {
+
         sprite->PlayAnimation(0, 6, 1, 250);
         Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
 
@@ -148,10 +154,6 @@ void Enemy::Update()
 
         sprite->SetPosition(pos->x, pos->y);
     }
-
-
-
-
 }
 
 void Enemy::Draw(SDL_Renderer *renderer, SDL_Rect *camera)

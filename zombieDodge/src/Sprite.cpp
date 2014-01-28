@@ -66,6 +66,10 @@ void Sprite::SetUpAnimation(int _frameX, int _frameY)
 {
     frameX = _frameX;
     frameY = _frameY;
+    currentFrame = 0;
+    animationDelay = 0;
+    spriteFinished = false;
+
 }
 
 void Sprite::PlayAnimation(int begin, int end, int row, float speed)
@@ -80,11 +84,9 @@ void Sprite::PlayAnimation(int begin, int end, int row, float speed)
                 this->currentFrame++;
         } else {
 
-            if (this->currentFrame != end) {
-                this->currentFrame++;
+            this->currentFrame++;
 
-            } else {
-
+            if (this->currentFrame == end) {
                 spriteFinished = true;
 
             }
@@ -94,8 +96,6 @@ void Sprite::PlayAnimation(int begin, int end, int row, float speed)
         crop.y = (row-1) * (imgHeight/frameY);
         crop.w = imgWidth/frameX;
         crop.h = imgHeight/frameY;
-
-
         animationDelay = SDL_GetTicks();
     }
 }
@@ -108,7 +108,6 @@ void Sprite::Render(float _x, float _y)
     box.y = _y;
     box.w = crop.w;
     box.h = crop.h;
-
 
     //Render to screen
     SDL_RenderCopyEx(renderer,image, &crop, &box, angle, NULL, flipImage );

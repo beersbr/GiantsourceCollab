@@ -6,17 +6,12 @@ Bullet::Bullet(Vector* origin, Vector *_target,float _x, float _y, float _z)
 {
 
       if (origin != NULL) {
-          printf("CREATE NEW MOUSE BULLET\n");
-          std::cout << "_target " << _target->x << " / " <<  _target->x << std::endl;
-         // std::cout << "vel " << vel->x << " / " << vel->y << std::endl;
-
           pos = new Vector(origin->x, origin->y, origin->z);
           target = new Vector(_target->x, _target->y, _target->z);
           vel = new Vector();
       } else {
           vel = new Vector(_x,_y,_z);
           pos = new Vector();
-
       }
 
 }
@@ -43,31 +38,18 @@ bool Bullet::Spawn(Vector &v)
     spawnFX = Mix_LoadWAV( "shotgun.ogg" );
     Mix_VolumeChunk(spawnFX, 10);
 
-
-    //target = new Vector(target->x,target->y,target->z);
     if (target != NULL) {
-        //target = _target;
-
+        //If shooting at a point on the screen from mouse click
         double angle = atan2(target->y-pos->y, target->x-pos->x);
-
-
         angle = angle * (180/3.14)+90;
-        //std::cout << "ANGLE  =   " <<  angle  << std::endl;
         sprite->Rotate(angle);
-
-
         Vector shootDirection = (*target) - (*pos);
-
-
         Vector tmp =  shootDirection.toUnit() * moveSpeed;
-        //printf("SPAWN MOUSE BULLEt ALMOST");
         (*vel) = tmp;
 
     } else {
         pos->x = v.x;
         pos->y =  v.y;
-        //std::cout << "BULLET POS =  " <<  pos->x << " / " << pos->y <<  std::endl;
-        //printf("CREATE BULLET2");
 
         switch(static_cast<int>(vel->x)) {
 
@@ -83,13 +65,9 @@ bool Bullet::Spawn(Vector &v)
         }
         vel->x = vel->x * moveSpeed;
         vel->y = vel->y * moveSpeed;
-
     }
-
-
     Mix_PlayChannel( -1, spawnFX, 0 );
 
-    //std::cout << "BULLET SPAWNED =  " << spawned<<  std::endl;
     return spawned;
 
 }
@@ -97,37 +75,15 @@ bool Bullet::Spawn(Vector &v)
 
 void Bullet::Update()
 {
-    //float frameMoveSpeed = moveSpeed;
-   // printf( "UPDATE BEULLET--------------------\n" );
-
-     /*
-    if (target != nullptr) {
-
-        Vector shootDirection = (*target) - (*pos);
-
-        (*vel) = shootDirection.toUnit() * moveSpeed;
-
-    }
-    */
     Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
 
     (*this->pos) += updatePos;
+
     //Play Sprite Animation
     sprite->PlayAnimation(0, 0, 1, 200);
 
     //Update Sprite Position
     sprite->SetPosition(pos->x, pos->y);
-
-
-    /*
-  Vector moveOffset = Vector(vel->x,vel->y,vel->z);
-  moveOffset*(gameEngine::getInstance()->gameTimer / 1000);
-
-  //vel *= (gameEngine::getInstance()->gameTimer / 1000);
-
-  (*this->pos) += moveOffset;
-
-  */
 }
 
 void Bullet::Draw(SDL_Renderer *renderer, SDL_Rect *camera)
@@ -136,10 +92,6 @@ void Bullet::Draw(SDL_Renderer *renderer, SDL_Rect *camera)
     cameraOffset.y = camera->y;
 
     sprite->Render(pos->x-camera->x, pos->y-camera->y);
-
-    //gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y,clip.w,clip.h,clip);
-    // gameEngine::getInstance()->RenderTexture(image, pos->x, pos->y);
-
 }
 
 Bullet::~Bullet()
