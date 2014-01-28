@@ -31,7 +31,7 @@ public:
     SDL_Texture* image;
     SDL_Rect crop;
     SDL_Rect rect;
-
+    double currentAngle = 0;
     float cameraX;
     float cameraY;
     double angle = NULL;

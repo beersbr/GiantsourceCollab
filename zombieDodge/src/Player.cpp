@@ -3,10 +3,11 @@
 
 Player::Player()
 {
+    cJSON *playersNode = gameEngine::getInstance()->gameConfig->GetNode(NULL,"players");
     std::string _playerTarget = "player1";
 
-    cJSON *playersNode = gameEngine::getInstance()->gameConfig->GetNode(NULL,"players");
-    cJSON *playerConfig =  gameEngine::getInstance()->gameConfig->GetNode(playersNode,"player1");
+
+    cJSON *playerConfig =  gameEngine::getInstance()->gameConfig->GetNode(playersNode,_playerTarget);
 
     /*
     cJSON *playerSprite =  gameEngine::getInstance()->gameConfig->GetNode(playerConfig,"sprite");
@@ -47,9 +48,9 @@ Player::Player()
 Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
 {
 
-    std::string configUrl = "config/" + _playerTarget + ".config";
+    cJSON *playersNode = gameEngine::getInstance()->gameConfig->GetNode(NULL,"players");
 
-    config = Configurator::open(configUrl);
+    cJSON *playerConfig =  gameEngine::getInstance()->gameConfig->GetNode(playersNode,_playerTarget);
 
     pos = new Vector(_x,_y,_z);
     // SDL_Rect clip;

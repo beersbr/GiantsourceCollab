@@ -252,6 +252,7 @@ bool gameEngine::GameInit () {
 
 
         enemy->Spawn();
+
         enemies.push_back(enemy);
         enemy = nullptr;
 
@@ -516,6 +517,7 @@ void gameEngine::Update() {
 
                 }
 
+
                 if (enemyCnt> 15) {
 
                         totalEnemyCnt++;
@@ -536,21 +538,12 @@ void gameEngine::Update() {
                         e = nullptr;
                         enemyCnt = 0;
                 }
+
                 enemyCnt++;
 
                 std::cout << enemies.size() << std::endl;
 
                 for(std::vector<Enemy*>::iterator et = enemies.begin(); et != enemies.end();) {
-
-                    if ( (*et)->isFollow) {
-
-                        Enemy* em = *et;
-
-                        Vector moveEnemy = ((*currentPlayer->pos) - (*em->pos));
-
-                        (*em->vel) =   ((moveEnemy.toUnit()) * ((*et)->moveSpeed));
-
-                    }
 
                     (*et)->Update();
 

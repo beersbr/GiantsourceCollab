@@ -32,6 +32,8 @@ Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w,
 
 void Sprite::Rotate(double _a) {
 
+       currentAngle = _a;
+
        angle = _a;
 
 

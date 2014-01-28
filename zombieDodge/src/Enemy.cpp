@@ -38,10 +38,10 @@ bool Enemy::Spawn()
 {
     bool spawned = false;
 
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombieSprite.png", pos->x, pos->y, 70,70,0,0);
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,"zombie-sprite-3.png", pos->x, pos->y, 50,100,0,0);
 
-    sprite->SetUpAnimation(4,1);
-    sprite->SetOrigin(70/2.0f, 70);
+    sprite->SetUpAnimation(7,1);
+    sprite->SetOrigin(50/2.0f, 100);
 
     spawnFX = Mix_LoadWAV( "zombieRising.wav" );
     if ( spawnFX == NULL)
@@ -55,7 +55,7 @@ bool Enemy::Spawn()
 
 
     hitBox.w = 70;
-    hitBox.h = 70;
+    hitBox.h = 50;
 
 
     vel = new Vector();
@@ -66,7 +66,7 @@ bool Enemy::Spawn()
 
             pos->x = static_cast<float>(rand() % (WINDOW_WIDTH+gameEngine::getInstance()->camera.x) + 1);
             pos->y =0.0+gameEngine::getInstance()->camera.y;
-            sprite->Rotate(-90);
+            sprite->Rotate(270);
             vel->y = static_cast<float>(rand() % moveSpeed + 1);
 
             break;
@@ -90,7 +90,7 @@ bool Enemy::Spawn()
 
         case 4:
             pos->x =0.0+gameEngine::getInstance()->camera.x;
-            sprite->Flip('h');
+            sprite->Rotate(180);
             pos->y =static_cast<float>(rand() % (WINDOW_HEIGHT+gameEngine::getInstance()->camera.y) + 1);
             vel->x = static_cast<float>(rand() % moveSpeed + 1);
             break;
@@ -106,7 +106,22 @@ bool Enemy::Spawn()
 
 void Enemy::Update()
 {
-    sprite->PlayAnimation(0, 3, 1, 200);
+
+
+    if (isFollow) {
+
+        double angle = atan2(gameEngine::getInstance()->currentPlayer->pos->y-pos->y, gameEngine::getInstance()->currentPlayer->pos->x-pos->x);
+        angle = angle * (180/3.14)+180;
+        sprite->Rotate(angle);
+
+        Vector moveEnemy = ((*gameEngine::getInstance()->currentPlayer->pos) - (*pos));
+
+        (*vel) =   ((moveEnemy.toUnit()) * (moveSpeed));
+
+    }
+
+
+    sprite->PlayAnimation(0, 6, 1, 250);
 
     Vector updatePos = (*vel) * (gameEngine::getInstance()->getTimer() / FRAME_RATE);
 

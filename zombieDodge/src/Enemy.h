@@ -5,6 +5,7 @@
 
 #ifndef __ENEMY_H_
 #define __ENEMY_H_
+#include <stdio.h>
 #include "Entity.h"
 #include "Sprite.h"
 #include <SDL2/SDL.h>

@@ -16,6 +16,7 @@
 		EA3B1B3E188741E9008DD3C9 /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EA3B1B3B188741E9008DD3C9 /* welcome.jpg */; };
 		F5F5A076A898B435614DED30 /* Enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A59011CD6EA9291FA5DD /* Enemy.cpp */; };
 		F5F5A0A24BB0A6ECF76DBCDC /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AE9033696E6BD4364A06 /* Sprite.cpp */; };
+		F5F5A0D10A16ED42A4AE3F2D /* zombie-sprite-3.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A1F9F67C9C78AB57C525 /* zombie-sprite-3.png */; };
 		F5F5A31BE89F758DF209C7E9 /* GameState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9DF5F125D394E080E5F /* GameState.cpp */; };
 		F5F5A453FE99547558D165D5 /* player1.config in Resources */ = {isa = PBXBuildFile; fileRef = F5F5AF0837A9301778CF1842 /* player1.config */; };
 		F5F5A602026545D7BA9752CC /* jsonator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A6D839E5B758A373F6D2 /* jsonator.cpp */; };
@@ -74,6 +75,7 @@
 		EA3B1B3A188741E9008DD3C9 /* swamp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = swamp.jpg; sourceTree = "<group>"; };
 		EA3B1B3B188741E9008DD3C9 /* welcome.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = welcome.jpg; sourceTree = "<group>"; };
 		F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = welcome.jpg; sourceTree = "<group>"; };
+		F5F5A1F9F67C9C78AB57C525 /* zombie-sprite-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zombie-sprite-3.png"; sourceTree = "<group>"; };
 		F5F5A20EAC0481A18C8F310B /* config.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = config.json; sourceTree = "<group>"; };
 		F5F5A305BF2395F554285D0F /* gameEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gameEngine.cpp; sourceTree = "<group>"; };
 		F5F5A31BF2CD6CD483527B54 /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				EA3B1B39188741E9008DD3C9 /* player.png */,
 				EA3B1B3A188741E9008DD3C9 /* swamp.jpg */,
 				EA3B1B3B188741E9008DD3C9 /* welcome.jpg */,
+				F5F5A1F9F67C9C78AB57C525 /* zombie-sprite-3.png */,
 			);
 			name = images;
 			path = ../../images;
@@ -318,6 +321,7 @@
 				F5F5A6AA16D24ED5AC1F4905 /* game.config in Resources */,
 				F5F5A453FE99547558D165D5 /* player1.config in Resources */,
 				F5F5ACF705B9B3233ECCCD84 /* config.json in Resources */,
+				F5F5A0D10A16ED42A4AE3F2D /* zombie-sprite-3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
