@@ -111,7 +111,7 @@ public:
 
     int levelWidth = 1600;
     int levelHeight = 1131;
-    //SDL_Surface* gameBackground;
+
     int mouseX;
     int mouseY;
     int windowWidth, windowHeight;
@@ -129,7 +129,7 @@ public:
     std::vector<Button*> buttons;
     std::vector<Enemy*> enemies;
 
-    std::string selectedPlayer;
+    std::string selectedPlayer = "player1";
 
     void addBullet(Bullet* b);
 

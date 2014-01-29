@@ -104,7 +104,7 @@
             "fx": {
                 "shoot": {
                     "name": "player2Shoot",
-                    "src": "shotgun.ogg"
+                    "src": "laserPulse.ogg"
                 }
             }
         }

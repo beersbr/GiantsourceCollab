@@ -34,8 +34,10 @@ bool Bullet::Spawn(Vector &v)
     sprite->SetUpAnimation(1,1);
     //Set Origin to Sprite
     sprite->SetOrigin(5/2.0f, 19);
-
-    spawnFX = Mix_LoadWAV( "shotgun.ogg" );
+    if (gameEngine::getInstance()->selectedPlayer == "player1")
+        spawnFX = Mix_LoadWAV( "shotgun.ogg" );
+    else
+        spawnFX = Mix_LoadWAV( "laserPulse.ogg" );
     Mix_VolumeChunk(spawnFX, 10);
 
     if (target != NULL) {

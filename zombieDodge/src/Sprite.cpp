@@ -43,12 +43,37 @@ void Sprite::Flip(char _a) {
     switch(_a) {
 
         case 'h':
+            if (isFlipped)  {
+                if (flipDirection == 'h') {
+                    isFlipped = false;
+                    flipDirection = NULL;
+                }
+            } else {
+
+                isFlipped = true;
+                flipDirection = 'h';
+
+            }
             flipImage = SDL_FLIP_HORIZONTAL;
             break;
         case 'v':
-            flipImage = SDL_FLIP_VERTICAL;
+            if (isFlipped)  {
+                if (flipDirection == 'v') {
+                    isFlipped = false;
+                    flipDirection = NULL;
+
+                }
+            } else {
+
+                isFlipped = true;
+                flipDirection = 'v';
+
+            }
+
 
         default:
+            flipDirection = NULL;
+            isFlipped = false;
             flipImage = SDL_FLIP_NONE;
 
 

@@ -164,9 +164,14 @@ void Player::Update()
     }
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_A)){
         moveOffset.x -= frameMoveSpeed;
+        sprite->Flip('h');
     }
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_D)){
         moveOffset.x += frameMoveSpeed;
+        if (sprite->isFlipped)  {
+            //printf("SPRITE FLIPPED \n");
+            sprite->Flip(NULL);
+        }
     }
 
 

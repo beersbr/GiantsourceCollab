@@ -46,6 +46,8 @@ public:
     int imgHeight;
     int currentFrame;
     int animationDelay;
+    bool isFlipped = false;
+    char flipDirection;
 
     int frameX;
     int frameY;

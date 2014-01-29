@@ -1,3 +1,4 @@
+#import <iomanip>
 #import "gameEngine.h"
 
 gameEngine* gameEngine::_instance = nullptr;
@@ -736,13 +737,11 @@ void gameEngine::Draw() {
         LoadText( "Shots Fired : "+ std::to_string(currentPlayer->shotsFired), textColor );
 
         Render(gameText, 400, 230, 200, 25, NULL, NULL, NULL, SDL_FLIP_NONE);
+        const float ratio = (100.f * currentPlayer->enemiesKilled) / currentPlayer->shotsFired;
 
-        //LoadText( "Accuracy : "+ std::to_string(currentPlayer->enemiesKilled/currentPlayer->shotsFired), textColor );
+        LoadText( "Accuracy : "+ std::to_string(ratio), textColor );
 
-       //Render(gameText, 500, 260, 200, 25, NULL, NULL, NULL, SDL_FLIP_NONE);
-
-        //Render(gameText, 300, 200, 400, 50, NULL, NULL, NULL, SDL_FLIP_NONE);
-
+       Render(gameText, 400, 260, 200, 25, NULL, NULL, NULL, SDL_FLIP_NONE);
     }
 
     //Update the screen
