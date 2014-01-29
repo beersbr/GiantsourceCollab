@@ -85,9 +85,12 @@
             "name": "Jorge",
             "level": "2",
             "sprite": {
-                "src": "player2Sprite.png",
+                "src": "player2sprite.png",
                 "w": 62,
                 "h": 101,
+                "rows":1,
+                "cols":2,
+
                 "hitbox": {
                     "w": 62,
                     "h": 90

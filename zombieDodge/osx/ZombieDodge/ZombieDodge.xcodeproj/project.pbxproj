@@ -24,6 +24,7 @@
 		F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AF417D113E62A1EE738B /* Entity.cpp */; };
 		F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */; };
 		F5F5AA9CF4FA6BB44CE61B42 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B9D187737C100A02E35 /* SDL2.framework */; };
+		F5F5AAAEB101915A3A788198 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AF31F394E2E309EBBD99 /* button.cpp */; };
 		F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */; };
 		F5F5ACF705B9B3233ECCCD84 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A20EAC0481A18C8F310B /* config.json */; };
 		F5F5AE4E1CCAA577121D5F31 /* gameEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A305BF2395F554285D0F /* gameEngine.cpp */; };
@@ -96,7 +97,9 @@
 		F5F5AE9033696E6BD4364A06 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
 		F5F5AEBF42237537385C50E2 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		F5F5AEF86F158BF6A5337EAE /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = /Users/Frameworks/SDL2_ttf.framework; sourceTree = "<absolute>"; };
+		F5F5AF024BAC10C1123A0CB1 /* button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = button.h; sourceTree = "<group>"; };
 		F5F5AF0837A9301778CF1842 /* player1.config */ = {isa = PBXFileReference; lastKnownFileType = file.config; path = player1.config; sourceTree = "<group>"; };
+		F5F5AF31F394E2E309EBBD99 /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = button.cpp; sourceTree = "<group>"; };
 		F5F5AF417D113E62A1EE738B /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		F5F5AFCB71E7BAD1863C074E /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
 		FB1B0B5F1877369800A02E35 /* ZombieDodge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieDodge.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -255,6 +258,8 @@
 				F5F5AFCB71E7BAD1863C074E /* cJSON.c */,
 				F5F5A85F2D3A4ACBE7024C89 /* jsonator.h */,
 				F5F5A6D839E5B758A373F6D2 /* jsonator.cpp */,
+				F5F5AF024BAC10C1123A0CB1 /* button.h */,
+				F5F5AF31F394E2E309EBBD99 /* button.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -346,6 +351,7 @@
 				F5F5AEFB56DEE44C0B804E7E /* Bullet.cpp in Sources */,
 				F5F5AEEBB0684334A1C5BC25 /* cJSON.c in Sources */,
 				F5F5A602026545D7BA9752CC /* jsonator.cpp in Sources */,
+				F5F5AAAEB101915A3A788198 /* button.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,7 @@
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
 #include <SDL2_ttf/SDL_ttf.h>
+#include "button.h"
 #include "Jsonator.h"
 #include "Configurator.h"
 #include "InputHandler.h"
@@ -69,6 +70,7 @@ public:
      //----------Interface Functions
     void SetPlayer(std::string playerId);
     float getTimer();
+    void LoadButtons();
     void SetGameState(int state);
     bool LoadText( std::string textureText, SDL_Color textColor );
     void SetColor(SDL_Texture *texture, Uint8 red, Uint8 green, Uint8 blue );
@@ -124,7 +126,11 @@ public:
     bool loadStateResources(int screenId);
     int totalEnemyCnt = 0;
     std::vector<Bullet*> bullets;
+    std::vector<Button*> buttons;
     std::vector<Enemy*> enemies;
+
+    std::string selectedPlayer;
+
     void addBullet(Bullet* b);
 
 

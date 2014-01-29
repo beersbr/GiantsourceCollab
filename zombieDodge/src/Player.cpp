@@ -52,28 +52,30 @@ Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
 {
 
     cJSON *playersNode = gameEngine::getInstance()->gameConfig->GetNode(NULL,"players");
-
     cJSON *playerConfig =  gameEngine::getInstance()->gameConfig->GetNode(playersNode,_playerTarget);
 
-    pos = new Vector(_x,_y,_z);
+    pos = new Vector(gameEngine::getInstance()->gameConfig->GetInt("spawn","x",playerConfig),gameEngine::getInstance()->gameConfig->GetInt("spawn","y",playerConfig),0);
     // SDL_Rect clip;
     clip.x = 0;
     clip.y = 0;
-
-    spritePath =((*config)[_playerTarget+"Image"]).c_str();
-    std::replace(spritePath.begin(), spritePath.end(), '"', ' ');
-    hitPoints =  atoi((*config)[_playerTarget+"HitPoints"].c_str());
-    spriteFrames =  atoi((*config)[_playerTarget+"SpriteFrames"].c_str());
-    spriteRows =  atoi((*config)[_playerTarget+"SpriteRows"].c_str());
+    spritePath = gameEngine::getInstance()->gameConfig->GetString("sprite","src",playerConfig); //_playerTarget+ "Sprite.png";
+    hitPoints = 0.0;
+    spriteFrames =  gameEngine::getInstance()->gameConfig->GetInt("sprite","cols",playerConfig);
+    spriteRows =  gameEngine::getInstance()->gameConfig->GetInt("sprite","rows",playerConfig);
     exp = 0;
-    clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
-    clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
+    //clip.w = atoi((*config)[_playerTarget+"ImageCropWidth"].c_str());
+    //clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
+    clip.w = gameEngine::getInstance()->gameConfig->GetInt("sprite","w",playerConfig);
+    clip.h = gameEngine::getInstance()->gameConfig->GetInt("sprite","h",playerConfig);
+
     spawned =false;
-    playerId = _playerTarget;
     //std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
-    config = nullptr;
+    playerId = _playerTarget;
     enemiesKilled = 0;
     kdRatio = 0;
+
+
+    config = nullptr;
 }
 
 
@@ -182,12 +184,9 @@ void Player::Update()
         Shoot(0, 1);
     }
 
-
-
     if(InputHandler::getInstance()->mouseButtonIsDown()){
 
             MouseShoot();
-
     }
 
 

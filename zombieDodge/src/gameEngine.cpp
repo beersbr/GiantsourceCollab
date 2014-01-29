@@ -96,6 +96,29 @@ void gameEngine::Render(SDL_Texture *texture, int x, int y, int h, int w, SDL_Re
 }
 
 
+void gameEngine::LoadButtons() {
+    std::cout << "LOADING  BUTTONS " << std::endl;
+    switch(gameState)
+
+    {
+        case MENU:
+        std::cout << "LOADING MENU BUTTONS " << std::endl;
+
+
+            Button* player1 = new Button(352, 150, 150, 200, NULL ,"player1");
+            buttons.push_back(player1);
+            player1 = nullptr;
+
+            Button* player2 = new Button(155, 150, 150, 200, NULL ,"player2");
+            buttons.push_back(player2);
+            player2= nullptr;
+            std::cout << "BUTTONS LOADED" << std::endl;
+            break;
+
+    }
+
+}
+
 bool gameEngine::LoadScreen()
 {
 
@@ -117,9 +140,16 @@ bool gameEngine::LoadScreen()
 
     {
         case SETUP:
+
+            gameBackground = LoadTexture("welcome.jpg");
+
+
+            break;
         case MENU:
             gameBackground = LoadTexture("welcome.jpg");
+            LoadButtons();
             break;
+
 
         case PLAYING:
             gameBackground = LoadTexture("citybg.jpg");
@@ -249,18 +279,15 @@ bool gameEngine::GameInit () {
     if (currentPlayer == nullptr) {
         printf( "CREATE PLAYER\n" );
         currentPlayer = new Player();
-
-        currentPlayer->Spawn();
-        Enemy *enemy = new Enemy();
-
-
-        enemy->Spawn();
-
-        enemies.push_back(enemy);
-        enemy = nullptr;
-
     }
+    currentPlayer->Spawn();
+    Enemy *enemy = new Enemy();
 
+
+    enemy->Spawn();
+
+    enemies.push_back(enemy);
+    enemy = nullptr;
     //Also set initial game state object
 
     return gameInit;
@@ -451,9 +478,6 @@ void gameEngine::Run() {
 
 
                     break;
-
-
-
             }
 
             this->Update();
@@ -759,9 +783,39 @@ void gameEngine::MenuInput() {
     if(InputHandler::getInstance()->keyIsDown(SDL_SCANCODE_SPACE)){
         gameReady = false;
         currentPlayer = nullptr;
+        currentPlayer = new Player(400, 600,0, selectedPlayer, 1);
         enemies.clear();
+        buttons.clear();
+        bullets.clear();
         gameState = PLAYING;
         LoadScreen();
+    }
+
+    if(InputHandler::getInstance()->mouseButtonIsDown()){
+
+        for(std::vector<Button*>::iterator it = buttons.begin(); it != buttons.end(); it++) {
+
+            if ((*it)->IsIn(mouseX, mouseY)) {
+                currentPlayer = nullptr;
+                selectedPlayer = (*it)->buttonId;
+                if ((*it)->buttonId == "player1"){
+                    currentPlayer = new Player(400, 600,0, "player1", 1);
+
+                } else if ((*it)->buttonId == "player2"){
+
+                    currentPlayer = new Player(400, 600,0, "player2", 1);
+                }
+                gameReady = false;
+
+                enemies.clear();
+                buttons.end();
+                gameState = PLAYING;
+                LoadScreen();
+
+            }
+
+        }
+
     }
 }
 
