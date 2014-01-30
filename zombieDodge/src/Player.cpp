@@ -67,7 +67,7 @@ Player::Player(float _x, float _y, float _z, std::string _playerTarget, int _hp)
     //clip.h = atoi((*config)[_playerTarget+"ImageCropHeight"].c_str());
     clip.w = gameEngine::getInstance()->gameConfig->GetInt("sprite","w",playerConfig);
     clip.h = gameEngine::getInstance()->gameConfig->GetInt("sprite","h",playerConfig);
-
+    moveSpeed =gameEngine::getInstance()->gameConfig->GetInt("","speed",playerConfig);
     spawned =false;
     //std::cout << "SPRITE PATH =   " <<  spritePath << std::endl;
     playerId = _playerTarget;
@@ -250,8 +250,7 @@ void Player::MouseShoot() {
         // spawn a bullet with the direction
 
         Vector* mVector = new Vector(gameEngine::getInstance()->mouseX+gameEngine::getInstance()->camera.x,gameEngine::getInstance()->mouseY+gameEngine::getInstance()->camera.y,0);
-
-        Bullet *bullet = new Bullet(pos,mVector,NULL, NULL, NULL);
+        Bullet *bullet = new Bullet(pos,mVector,NULL, NULL, NULL, playerId, "player");
 
         bullet->Spawn((*pos));
 
@@ -296,7 +295,7 @@ void Player::Shoot(int _x, int _y)
 
         isShooting = true;
         // spawn a bullet with the direction
-        Bullet *bullet = new Bullet(NULL, NULL, _x,_y,0.0);
+        Bullet *bullet = new Bullet(NULL, NULL, _x,_y,0.0,playerId, "player");
         std::cout << "SHOOT BULLET @  x/y =   " <<  _x << " / " << _y << std::endl;
         bullet->Spawn((*pos));
         //gameEngine::getInstance()->addBullet(bullet);

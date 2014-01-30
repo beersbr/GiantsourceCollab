@@ -15,7 +15,9 @@
 #include <SDL2_image/SDL_image.h>
 #include "Entity.h"
 #include "Sprite.h"
+#include "jsonator.h"
 #include "Bullet.h"
+
 
 
 class Player : public Entity{

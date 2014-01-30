@@ -2,7 +2,7 @@
 #include "gameEngine.h"
 
 
-Bullet::Bullet(Vector* origin, Vector *_target,float _x, float _y, float _z)
+Bullet::Bullet(Vector* origin, Vector *_target,float _x, float _y, float _z,std::string owner, std::string type)
 {
 
       if (origin != NULL) {
@@ -13,6 +13,8 @@ Bullet::Bullet(Vector* origin, Vector *_target,float _x, float _y, float _z)
           vel = new Vector(_x,_y,_z);
           pos = new Vector();
       }
+      ownerId = owner;
+      ownerType = type;
 
 }
 
@@ -27,18 +29,32 @@ SDL_Rect Bullet::GetHitBox() {
 bool Bullet::Spawn(Vector &v)
 {
     bool spawned = true;
-
+    cJSON *playersNode = gameEngine::getInstance()->gameConfig->GetNode(NULL,"players");
+    cJSON *playerConfig =  gameEngine::getInstance()->gameConfig->GetNode(playersNode,ownerId);
+    cJSON *fxNode = gameEngine::getInstance()->gameConfig->GetNode(playerConfig,"fx");
+    bulletConfig = gameEngine::getInstance()->gameConfig->GetNode(fxNode,"shoot");
+    std:: string spritePath =  gameEngine::getInstance()->gameConfig->GetString("","sprite",bulletConfig);
+    // SDL_Rect clip;
+    clip.x = 0;
+    clip.y = 0;
+    moveSpeed =  gameEngine::getInstance()->gameConfig->GetInt("","speed",bulletConfig);
+    int w = gameEngine::getInstance()->gameConfig->GetInt("","w",bulletConfig);
+    int h = gameEngine::getInstance()->gameConfig->GetInt("","h",bulletConfig);
     //Create Sprite
-    sprite = new Sprite( gameEngine::getInstance()->gameRender,"bullet.png", 0, 0, 5,19,0,0,true);
+
+    sprite = new Sprite( gameEngine::getInstance()->gameRender,spritePath, 0, 0, w,h,0,0,true);
     //Set Sprite Rows / Cols
-    sprite->SetUpAnimation(1,1);
+    sprite->SetUpAnimation(gameEngine::getInstance()->gameConfig->GetInt("","rows",bulletConfig),gameEngine::getInstance()->gameConfig->GetInt("","cols",bulletConfig));
     //Set Origin to Sprite
-    sprite->SetOrigin(5/2.0f, 19);
-    if (gameEngine::getInstance()->selectedPlayer == "player1")
-        spawnFX = Mix_LoadWAV( "shotgun.ogg" );
-    else
-        spawnFX = Mix_LoadWAV( "laserPulse.ogg" );
+    sprite->SetOrigin(w/2.0f, h);
+    std::string fxPath = gameEngine::getInstance()->gameConfig->GetString("","src",bulletConfig);
+
+    spawnFX = Mix_LoadWAV( fxPath.c_str() );
+
     Mix_VolumeChunk(spawnFX, 10);
+    playersNode = nullptr;
+    playerConfig = nullptr;
+    fxNode = nullptr;
 
     if (target != NULL) {
         //If shooting at a point on the screen from mouse click
@@ -99,7 +115,11 @@ void Bullet::Draw(SDL_Renderer *renderer, SDL_Rect *camera)
 Bullet::~Bullet()
 {
     delete vel;
+    delete pos;
+    pos = nullptr;
     vel = nullptr;
+    delete bulletConfig;
+    bulletConfig = nullptr;
     Mix_FreeChunk(spawnFX);
 
 

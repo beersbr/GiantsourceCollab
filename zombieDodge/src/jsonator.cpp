@@ -63,14 +63,14 @@ std::string Jsonator::GetString(std::string parent,std::string target,cJSON *_da
         jData = _data;
 
     }
-    if (parent.c_str() != NULL) {
+    if (parent != "") {
 
         tData = cJSON_GetObjectItem(jData,parent.c_str());
     } else {
         tData = _data;
 
     }
-
+   // std::cout << "GET VALUE " << std::endl;
     value = cJSON_GetObjectItem(tData,target.c_str())->valuestring;
 
 
@@ -84,7 +84,7 @@ int Jsonator::GetInt(std::string parent,std::string target,cJSON *_data) {
 
     int value;
     cJSON* jData;
-
+    cJSON* tData;
 
     if (_data == NULL) {
 
@@ -95,8 +95,13 @@ int Jsonator::GetInt(std::string parent,std::string target,cJSON *_data) {
         jData = _data;
 
     }
+    if (parent != "") {
 
-    cJSON * tData = cJSON_GetObjectItem(jData,parent.c_str());
+        tData = cJSON_GetObjectItem(jData,parent.c_str());
+    } else {
+        tData = _data;
+
+    }
     //std::string configUrl = "config/" + _playerTarget + ".config";
     value = cJSON_GetObjectItem(tData,target.c_str())->valueint;
 
@@ -111,7 +116,7 @@ double Jsonator::GetDouble(std::string parent,std::string target,cJSON *_data) {
 
     double value;
     cJSON* jData;
-
+    cJSON* tData;
 
     if (_data == NULL) {
 
@@ -122,10 +127,13 @@ double Jsonator::GetDouble(std::string parent,std::string target,cJSON *_data) {
         jData = _data;
 
     }
+    if (parent != "") {
 
+        tData = cJSON_GetObjectItem(jData,parent.c_str());
+    } else {
+        tData = _data;
 
-
-    cJSON * tData = cJSON_GetObjectItem(jData,parent.c_str());
+    }
     //std::string configUrl = "config/" + _playerTarget + ".config";
     value = cJSON_GetObjectItem(tData,target.c_str())->valuedouble;
 

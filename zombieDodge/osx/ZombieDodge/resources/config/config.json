@@ -58,11 +58,13 @@
     "players": {
         "player1": {
             "name": "Phillip",
+            "speed":10,
             "sprite": {
                 "src": "player1Sprite.png",
                 "w": 41,
                 "h": 101,
                 "rows":1,
+
                 "cols":2,
                 "hitbox": {
                     "w": 33,
@@ -77,13 +79,25 @@
             "fx": {
                 "shoot": {
                     "name": "player1Shoot",
-                    "src": "shotgun.ogg"
+                    "src": "sword.wav",
+                    "sprite": "sword.png",
+                    "w": 20,
+                    "h": 75,
+                    "speed":25,
+                    "rows":1,
+                    "cols":1,
+                    "hitbox": {
+                        "w": 20,
+                        "h": 75
+                    }
+
                 }
             }
         },
         "player2": {
             "name": "Jorge",
             "level": "2",
+            "speed":15,
             "sprite": {
                 "src": "player2sprite.png",
                 "w": 62,
@@ -104,7 +118,21 @@
             "fx": {
                 "shoot": {
                     "name": "player2Shoot",
-                    "src": "laserPulse.ogg"
+                    "src": "laserPulse.ogg",
+
+                        "sprite": "laser.png",
+                        "w": 5,
+                        "h": 19,
+                        "rows":1,
+                        "cols":1,
+                        "speed":50,
+
+                        "hitbox": {
+                            "w": 5,
+                            "h": 19
+                        }
+
+
                 }
             }
         }

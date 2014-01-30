@@ -1,6 +1,5 @@
 #ifndef  __ENGINE_H
 #define __ENGINE_H
-
 #include <iostream>
 #include <stack>
 #include <string>
@@ -19,6 +18,7 @@
 #include "InputHandler.h"
 #include "config.h"
 #include "common.h"
+#include "Mapr.h"
 #include "GameState.h"
 #include "Vector.h"
 #include "Entity.h"
@@ -26,8 +26,6 @@
 #include "Bullet.h"
 #include "Player.h"
 #include "Enemy.h"
-
-
 
 enum GAMESTATES {
 
@@ -109,8 +107,8 @@ public:
 
     TTF_Font *gameFont = NULL;
 
-    int levelWidth = 1600;
-    int levelHeight = 1131;
+    int levelWidth = 1280;
+    int levelHeight = 960;
 
     int mouseX;
     int mouseY;
@@ -128,56 +126,14 @@ public:
     std::vector<Bullet*> bullets;
     std::vector<Button*> buttons;
     std::vector<Enemy*> enemies;
-
+    Mapr* levelMap = nullptr;
     std::string selectedPlayer = "player1";
 
     void addBullet(Bullet* b);
 
 
-    bool CheckCollision( SDL_Rect A, SDL_Rect B )
-    {
-        //The sides of the rectangles
-        int leftA, leftB;
-        int rightA, rightB;
-        int topA, topB;
-        int bottomA, bottomB;
+    bool CheckCollision( SDL_Rect A, SDL_Rect B );
 
-        //Calculate the sides of rect A
-        leftA = A.x;
-        rightA = A.x + A.w;
-        topA = A.y;
-        bottomA = A.y + A.h;
-
-        //Calculate the sides of rect B
-        leftB = B.x;
-        rightB = B.x + B.w;
-        topB = B.y;
-        bottomB = B.y + B.h;
-
-        //If any of the sides from A are outside of B
-        if( bottomA <= topB )
-        {
-            return false;
-        }
-
-        if( topA >= bottomB )
-        {
-            return false;
-        }
-
-        if( rightA <= leftB )
-        {
-            return false;
-        }
-
-        if( leftA >= rightB )
-        {
-            return false;
-        }
-
-        //If none of the sides from A are outside B
-        return true;
-    }
 
 
 private:

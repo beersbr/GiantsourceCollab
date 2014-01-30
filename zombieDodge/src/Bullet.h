@@ -11,10 +11,11 @@
 #include "Entity.h"
 #include "Vector.h"
 #include "Sprite.h"
+#include "jsonator.h"
 
 class Bullet : public Entity {
 public:
-    Bullet(Vector *origin, Vector *target, float _x, float _y, float _z);
+    Bullet(Vector* origin, Vector *_target,float _x, float _y, float _z,std::string owner, std::string type);
     ~Bullet();
 
 
@@ -47,6 +48,9 @@ public:
     int frameBegin;
     int frameX;
     int frameY;
+    cJSON *bulletConfig = nullptr;
+    std::string ownerId;
+    std::string ownerType;
     SDL_Rect clip;
 
 

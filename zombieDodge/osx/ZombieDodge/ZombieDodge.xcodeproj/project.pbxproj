@@ -23,6 +23,8 @@
 		F5F5A6AA16D24ED5AC1F4905 /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A8351A8BD1CEEF9C7F11 /* game.config */; };
 		F5F5A6E733D06DC813E40FC6 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AF417D113E62A1EE738B /* Entity.cpp */; };
 		F5F5A72D659EAEAA9814A57B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */; };
+		F5F5A7318D7597BD9871A253 /* level.json in Resources */ = {isa = PBXBuildFile; fileRef = F5F5AC8821ED4CC6B4B04FC4 /* level.json */; };
+		F5F5A7EC1FE6AD34C281E5FE /* Mapr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A32FC390A1365E9250D3 /* Mapr.cpp */; };
 		F5F5AA9CF4FA6BB44CE61B42 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B9D187737C100A02E35 /* SDL2.framework */; };
 		F5F5AAAEB101915A3A788198 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AF31F394E2E309EBBD99 /* button.cpp */; };
 		F5F5ACC4D4F96B05A40499DD /* welcome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A1B2CA2BA64A85E8D6E2 /* welcome.jpg */; };
@@ -30,6 +32,7 @@
 		F5F5AE4E1CCAA577121D5F31 /* gameEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A305BF2395F554285D0F /* gameEngine.cpp */; };
 		F5F5AEEBB0684334A1C5BC25 /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = F5F5AFCB71E7BAD1863C074E /* cJSON.c */; };
 		F5F5AEFB56DEE44C0B804E7E /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5A31BF2CD6CD483527B54 /* Bullet.cpp */; };
+		F5F5AF62B9FB5E911EDEA890 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5F5ABD563E161C66558657D /* Tile.cpp */; };
 		F5F5AFF050AA68E1DCF3B431 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F5AEF86F158BF6A5337EAE /* SDL2_ttf.framework */; };
 		FB1B0B631877369800A02E35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1B0B621877369800A02E35 /* Cocoa.framework */; };
 		FB1B0B98187736E600A02E35 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB1B0B97187736E600A02E35 /* Main.cpp */; };
@@ -80,7 +83,9 @@
 		F5F5A20EAC0481A18C8F310B /* config.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = config.json; sourceTree = "<group>"; };
 		F5F5A305BF2395F554285D0F /* gameEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gameEngine.cpp; sourceTree = "<group>"; };
 		F5F5A31BF2CD6CD483527B54 /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
+		F5F5A32FC390A1365E9250D3 /* Mapr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mapr.cpp; sourceTree = "<group>"; };
 		F5F5A42FF46CF05D5EAB5A16 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		F5F5A4D06C088C0D0C363DBA /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tile.h; sourceTree = "<group>"; };
 		F5F5A5229579ECEFFED76C5B /* GameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameState.h; sourceTree = "<group>"; };
 		F5F5A59011CD6EA9291FA5DD /* Enemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy.cpp; sourceTree = "<group>"; };
 		F5F5A6D839E5B758A373F6D2 /* jsonator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsonator.cpp; sourceTree = "<group>"; };
@@ -92,6 +97,9 @@
 		F5F5A9CC3C063D05DAEE0AC6 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		F5F5A9DF5F125D394E080E5F /* GameState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameState.cpp; sourceTree = "<group>"; };
 		F5F5AAB51A8EE840022DE35A /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
+		F5F5ABD563E161C66558657D /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tile.cpp; sourceTree = "<group>"; };
+		F5F5AC6828EDF20629F6043A /* Mapr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapr.h; sourceTree = "<group>"; };
+		F5F5AC8821ED4CC6B4B04FC4 /* level.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = level.json; sourceTree = "<group>"; };
 		F5F5ACAD1A2CA0576CDEFB01 /* gameEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameEngine.h; sourceTree = "<group>"; };
 		F5F5AE7FF7B33515326B1A99 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		F5F5AE9033696E6BD4364A06 /* Sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sprite.cpp; sourceTree = "<group>"; };
@@ -152,6 +160,7 @@
 				F5F5A8351A8BD1CEEF9C7F11 /* game.config */,
 				F5F5AF0837A9301778CF1842 /* player1.config */,
 				F5F5A20EAC0481A18C8F310B /* config.json */,
+				F5F5AC8821ED4CC6B4B04FC4 /* level.json */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -260,6 +269,10 @@
 				F5F5A6D839E5B758A373F6D2 /* jsonator.cpp */,
 				F5F5AF024BAC10C1123A0CB1 /* button.h */,
 				F5F5AF31F394E2E309EBBD99 /* button.cpp */,
+				F5F5AC6828EDF20629F6043A /* Mapr.h */,
+				F5F5A32FC390A1365E9250D3 /* Mapr.cpp */,
+				F5F5A4D06C088C0D0C363DBA /* Tile.h */,
+				F5F5ABD563E161C66558657D /* Tile.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -327,6 +340,7 @@
 				F5F5A453FE99547558D165D5 /* player1.config in Resources */,
 				F5F5ACF705B9B3233ECCCD84 /* config.json in Resources */,
 				F5F5A0D10A16ED42A4AE3F2D /* zombie-sprite-3.png in Resources */,
+				F5F5A7318D7597BD9871A253 /* level.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +366,8 @@
 				F5F5AEEBB0684334A1C5BC25 /* cJSON.c in Sources */,
 				F5F5A602026545D7BA9752CC /* jsonator.cpp in Sources */,
 				F5F5AAAEB101915A3A788198 /* button.cpp in Sources */,
+				F5F5A7EC1FE6AD34C281E5FE /* Mapr.cpp in Sources */,
+				F5F5AF62B9FB5E911EDEA890 /* Tile.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
