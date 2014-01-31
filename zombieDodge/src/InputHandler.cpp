@@ -40,3 +40,21 @@ void InputHandler::keyUp(const SDL_Scancode key)
 {
     (*keyState)[key] = false;
 }
+
+
+void InputHandler::mouseButtonDown()
+{
+    mouseDown = true;
+}
+
+void InputHandler::mouseButtonUp()
+{
+    mouseDown = false;
+}
+
+bool InputHandler::mouseButtonIsDown()
+{
+
+    return mouseDown;
+}
+

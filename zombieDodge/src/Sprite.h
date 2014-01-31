@@ -7,7 +7,7 @@
 class Sprite
 {
 public:
-    Sprite(SDL_Renderer* renderer, std::string FilePath, float _x, float _y, int w, int h, float _cameraX, float _cameraY);
+    Sprite(SDL_Renderer* renderer, std::string FilePath, float _x, float _y, int w, int h, float _cameraX, float _cameraY, bool loop);
     Sprite(std::string FilePath, float _x, float _y, int w, int h);
     ~Sprite();
 
@@ -31,7 +31,7 @@ public:
     SDL_Texture* image;
     SDL_Rect crop;
     SDL_Rect rect;
-
+    double currentAngle = 0;
     float cameraX;
     float cameraY;
     double angle = NULL;
@@ -40,11 +40,14 @@ public:
     float posY;
     float originX;
     float originY;
-
+    bool loop = true;
+    bool spriteFinished = false;
     int imgWidth;
     int imgHeight;
     int currentFrame;
     int animationDelay;
+    bool isFlipped = false;
+    char flipDirection;
 
     int frameX;
     int frameY;

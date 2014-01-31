@@ -1,10 +1,10 @@
 #include "Sprite.h"
 #include "gameEngine.h"
-Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w, int h, float _cameraX, float _cameraY)
+Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w, int h, float _cameraX, float _cameraY, bool _loop)
 {
 
     image = NULL;
-
+    loop = _loop;
     image =  gameEngine::getInstance()->LoadTexture(path.c_str());
     renderer = render;
 
@@ -18,7 +18,6 @@ Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w,
     crop.y = 0;
     crop.w = w;
     crop.h = h;
-
     posX = _x;
     posY = _y;
     originX = 0;
@@ -32,6 +31,8 @@ Sprite::Sprite(SDL_Renderer* render,std::string path, float _x, float _y, int w,
 
 void Sprite::Rotate(double _a) {
 
+       currentAngle = _a;
+
        angle = _a;
 
 
@@ -42,12 +43,37 @@ void Sprite::Flip(char _a) {
     switch(_a) {
 
         case 'h':
+            if (isFlipped)  {
+                if (flipDirection == 'h') {
+                    isFlipped = false;
+                    flipDirection = NULL;
+                }
+            } else {
+
+                isFlipped = true;
+                flipDirection = 'h';
+
+            }
             flipImage = SDL_FLIP_HORIZONTAL;
             break;
         case 'v':
-            flipImage = SDL_FLIP_VERTICAL;
+            if (isFlipped)  {
+                if (flipDirection == 'v') {
+                    isFlipped = false;
+                    flipDirection = NULL;
+
+                }
+            } else {
+
+                isFlipped = true;
+                flipDirection = 'v';
+
+            }
+
 
         default:
+            flipDirection = NULL;
+            isFlipped = false;
             flipImage = SDL_FLIP_NONE;
 
 
@@ -58,13 +84,17 @@ void Sprite::Flip(char _a) {
 Sprite::Sprite(std::string path,float _x, float _y, int w, int h)
 {
 
-    Sprite(gameEngine::getInstance()->gameRender, path, _x, _y, w, h, 0,0);
+    Sprite(gameEngine::getInstance()->gameRender, path, _x, _y, w, h, 0,0,true);
 }
 
 void Sprite::SetUpAnimation(int _frameX, int _frameY)
 {
     frameX = _frameX;
     frameY = _frameY;
+    currentFrame = 0;
+    animationDelay = 0;
+    spriteFinished = false;
+
 }
 
 void Sprite::PlayAnimation(int begin, int end, int row, float speed)
@@ -72,17 +102,25 @@ void Sprite::PlayAnimation(int begin, int end, int row, float speed)
 
    if (animationDelay+speed < SDL_GetTicks())
     {
-        if (end <= this->currentFrame)
-            this->currentFrame = begin;
-        else
+        if (loop) {
+            if (end <= this->currentFrame)
+                this->currentFrame = begin;
+            else
+                this->currentFrame++;
+        } else {
+
             this->currentFrame++;
 
+            if (this->currentFrame == end) {
+                spriteFinished = true;
+
+            }
+
+        }
         crop.x = currentFrame * (imgWidth/frameX);
         crop.y = (row-1) * (imgHeight/frameY);
         crop.w = imgWidth/frameX;
         crop.h = imgHeight/frameY;
-
-
         animationDelay = SDL_GetTicks();
     }
 }
@@ -90,20 +128,18 @@ void Sprite::PlayAnimation(int begin, int end, int row, float speed)
 void Sprite::Render(float _x, float _y)
 {
 
+    SDL_Rect box;
+    box.x = _x;
+    box.y = _y;
+    box.w = crop.w;
+    box.h = crop.h;
 
-
-        SDL_Rect box;
-        box.x = posX;
-        box.y = posY;
-        box.w = crop.w;
-        box.h = crop.h;
-
-        //Render to screen
-        SDL_RenderCopyEx(renderer,image, &crop, &box, angle, NULL, flipImage );
-
-
-
+    //Render to screen
+    SDL_RenderCopyEx(renderer,image, &crop, &box, angle, NULL, flipImage );
     //SDL_RenderCopy(renderer,image, &crop, &box);
+
+
+
 
 }
 
@@ -120,32 +156,16 @@ void Sprite::SetY(float _y)
 
     rect.y = static_cast<int>(posY - originY);
 }
- /*
-void Sprite::SetPosition(float _x, float _y)
-{    std::cout << "SET POSITION -> = x=" << _x << "Y = " << _y << std::endl;
-    position->x = _x - originX;
-    position->y = _y - originY;
-
-    //rect.x =static_cast<int>(position->x - originX);
-    //rect.y = static_cast<int>(position->y - originY);
-}
-*/
 
 void Sprite::SetOrigin(float _x, float _y)
 {
 
-    //std::cout << "SET ORIGIN -> VEL = x=" << _x << "Y = " << _y << std::endl;
+
     originX = _x;
     originY = _y;
-    //std::cout << "SET POSITION NOW -> VEL = x=" << _x << "Y = " << _y << std::endl;
-    //std::cout << "SET POSITION SET with X = " << position->x << std::endl;
-    //Vector* pos = GetPosition();
-    //float xPosi = GetX();
-    //std::cout << "SET POSITION xPosi -> x=" << pos->x << std::endl;
-    //SetPosition(position->x, position->y);
-    //position->x -= originX;
-    //position->y -= originY;
-    //std::cout << "SET POSITION SET" << std::endl;
+    posY-= originX;
+    posY-=originY;
+
 }
 
 

@@ -19,14 +19,28 @@ public:
 
     void keyDown(const SDL_Scancode key);
     void keyUp(const SDL_Scancode key);
+
+    bool mouseButtonIsDown();
+
+    void mouseButtonDown();
+    void mouseButtonUp();
+   // void SetMouseXY(int _x, int _y);
+
+
+
+
 private:
 
     InputHandler();
     InputHandler(InputHandler&);
 
     static InputHandler* _instance;
+    int mouseX;
 
+    int mouseY;
+    bool mouseDown = false;
     std::map<SDL_Scancode, bool>* keyState;
+    std::map<int, bool>* mouseState;
 };
 
 

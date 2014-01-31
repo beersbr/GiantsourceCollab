@@ -8,6 +8,8 @@
 
 Entity::Entity()
 {
+
+
     pos = glm::vec3();
     size = glm::vec3();
 }

@@ -5,6 +5,7 @@
 
 #ifndef __ENEMY_H_
 #define __ENEMY_H_
+#include <stdio.h>
 #include "Entity.h"
 #include "Sprite.h"
 #include <SDL2/SDL.h>
@@ -21,8 +22,9 @@ public:
 
     bool Spawn();
     //void Move();
+    void Die();
     void Update(); // because it has to be there
-    void Draw(SDL_Renderer *renderer);
+    void Draw(SDL_Renderer *renderer,SDL_Rect *camera);
     void TakeDamage(int dmg);
     SDL_Rect GetHitBox();
 
@@ -52,6 +54,8 @@ public:
     int frameBegin;
     int frameX;
     int frameY;
+    bool dying = false;
+    bool dead = false;
     bool deleteItem = false;
     SDL_Rect clip;
   

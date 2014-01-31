@@ -1,6 +1,5 @@
 #ifndef  __ENGINE_H
 #define __ENGINE_H
-
 #include <iostream>
 #include <stack>
 #include <string>
@@ -12,10 +11,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#include "button.h"
+#include "Jsonator.h"
 #include "Configurator.h"
 #include "InputHandler.h"
 #include "config.h"
 #include "common.h"
+#include "Mapr.h"
 #include "GameState.h"
 #include "Vector.h"
 #include "Entity.h"
@@ -23,8 +26,6 @@
 #include "Bullet.h"
 #include "Player.h"
 #include "Enemy.h"
-
-
 
 enum GAMESTATES {
 
@@ -47,11 +48,14 @@ public:
     float gameTimer;
     Player* currentPlayer = nullptr;
     int gameState=0;
+    float gameStart = 0;
     int playerCnt =0;
     int enemyCnt = 0;
     int followEnemyCnt = 0;
-
+    SDL_Rect camera;
     std::map<std::string, std::string>* config;
+    //Globally used font
+    bool godMode = false;
 
     //-----------Main Functions
     bool Setup();
@@ -64,23 +68,32 @@ public:
      //----------Interface Functions
     void SetPlayer(std::string playerId);
     float getTimer();
+    void LoadButtons();
     void SetGameState(int state);
+    bool LoadText( std::string textureText, SDL_Color textColor );
+    void SetColor(SDL_Texture *texture, Uint8 red, Uint8 green, Uint8 blue );
 
+    void SetBlendMode(SDL_Texture *texture, SDL_BlendMode blending );
+
+    void SetAlpha(SDL_Texture *texture, Uint8 alpha );
     //-----------Input Functions
     void MenuInput();
     void GameInput();
 
+    int enemySpawnRate = 15;
+    double spawnThreshold = .40;
     //-----------Graphics Functions
 
     //SDL_Window* getWindow();
     SDL_Surface* getGameSurface();
     SDL_Texture* getBackground();
     //SDL_Renderer* getRender();
-
+    SDL_Color textColor;
     //The window we'll be rendering to
     SDL_Window* gameWindow;
-
-    SDL_Texture* PlayerImage;
+     int textWidth;
+    int textHeight;
+    SDL_Texture* gameText;
 
     //The surface contained by the window
     SDL_Surface* gameSurface;
@@ -88,76 +101,39 @@ public:
     //The image we will load and show on the screen
     SDL_Texture* gameBackground;
 
-    //SDL_Surface* gameBackground;
+    SDL_Texture* gameHUD;
 
+    Jsonator *gameConfig;
+
+    TTF_Font *gameFont = NULL;
+
+    int levelWidth = 1280;
+    int levelHeight = 960;
+
+    int mouseX;
+    int mouseY;
+    int windowWidth, windowHeight;
     SDL_Renderer* gameRender;
 
-
-    float CameraX;
-    float CameraY;
-
     SDL_Surface* LoadImage(const std::string path);
-    static SDL_Texture* LoadTexture(const std::string &file, SDL_Renderer *ren);
     SDL_Texture* LoadTexture(const std::string &file);
-    static Vector getPlayerPos();
-    void logSDLError(std::ostream &os, const std::string &msg);
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h);
     void RenderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y);
-    void RenderTexture(SDL_Texture *tex, int x, int y);
-    void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h);
-    void RenderTexture(SDL_Texture *tex, int x, int y, int w, int h, SDL_Rect clip);
+    void Render(SDL_Texture *texture, int x, int y, int h, int w, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip );
     bool LoadScreen();
     bool loadStateResources(int screenId);
     int totalEnemyCnt = 0;
     std::vector<Bullet*> bullets;
+    std::vector<Button*> buttons;
     std::vector<Enemy*> enemies;
+    Mapr* levelMap = nullptr;
+    std::string selectedPlayer = "player1";
+
     void addBullet(Bullet* b);
-    void ApplySurface(float x, float y, SDL_Texture *source, SDL_Renderer *destination);
 
-    bool CheckCollision( SDL_Rect A, SDL_Rect B )
-    {
-        //The sides of the rectangles
-        int leftA, leftB;
-        int rightA, rightB;
-        int topA, topB;
-        int bottomA, bottomB;
 
-        //Calculate the sides of rect A
-        leftA = A.x;
-        rightA = A.x + A.w;
-        topA = A.y;
-        bottomA = A.y + A.h;
+    bool CheckCollision( SDL_Rect A, SDL_Rect B );
 
-        //Calculate the sides of rect B
-        leftB = B.x;
-        rightB = B.x + B.w;
-        topB = B.y;
-        bottomB = B.y + B.h;
-
-        //If any of the sides from A are outside of B
-        if( bottomA <= topB )
-        {
-            return false;
-        }
-
-        if( topA >= bottomB )
-        {
-            return false;
-        }
-
-        if( rightA <= leftB )
-        {
-            return false;
-        }
-
-        if( leftA >= rightB )
-        {
-            return false;
-        }
-
-        //If none of the sides from A are outside B
-        return true;
-    }
 
 
 private:

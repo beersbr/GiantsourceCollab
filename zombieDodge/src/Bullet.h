@@ -11,17 +11,18 @@
 #include "Entity.h"
 #include "Vector.h"
 #include "Sprite.h"
+#include "jsonator.h"
 
 class Bullet : public Entity {
 public:
-    Bullet(float _x, float _y, float _z);
+    Bullet(Vector* origin, Vector *_target,float _x, float _y, float _z,std::string owner, std::string type);
     ~Bullet();
 
 
     bool Spawn(Vector &v);
     //void Move();
     void Update(); // because it has to be there
-    void Draw(SDL_Renderer *renderer);
+    void Draw(SDL_Renderer *renderer, SDL_Rect *camera);
     SDL_Rect GetHitBox();
     SDL_Rect hitBox;
     Mix_Chunk *spawnFX = NULL;
@@ -29,6 +30,7 @@ public:
     int moveSpeed = 50;
     SDL_Texture* image;
     Sprite* sprite;
+    Vector* target = nullptr;
 
     bool spawned = false;
     std::string bulletId;
@@ -46,6 +48,9 @@ public:
     int frameBegin;
     int frameX;
     int frameY;
+    cJSON *bulletConfig = nullptr;
+    std::string ownerId;
+    std::string ownerType;
     SDL_Rect clip;
 
 

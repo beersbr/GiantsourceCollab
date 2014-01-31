@@ -1,16 +1,19 @@
 #version 330 core
 
 // Input vertex data, different for all executions of this shader.
-layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 0) in vec3 position;
+// layout(location = 1) in vec3 vertColor;
+// layout(location = 2) in mat4 model;
 
-// Values that stay constant for the whole mesh.
-uniform mat4 MVP;
-uniform float offset;
+uniform mat4 ProjectionViewModel;
+uniform vec3 Color;
+
+out vec4 colorV;
 
 void main(){
 
-	// Output position of the vertex, in clip space : MVP * positiont;
-	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+    colorV = vec4(Color, 1.0f);
+	gl_Position = ProjectionViewModel * vec4(position, 1);
 
 }
 
